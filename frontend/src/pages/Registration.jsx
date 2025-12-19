@@ -62,6 +62,8 @@ function Registration() {
         } catch (error) {
             console.log(error)
             toast.error("User Registration Failed")
+            setLoading(false);
+
         }
         
     }
@@ -102,5 +104,6 @@ function Registration() {
 }
 
 export default Registration
+
 
 
