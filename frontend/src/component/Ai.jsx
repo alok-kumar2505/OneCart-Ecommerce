@@ -73,7 +73,7 @@ window.speechSynthesis.speak(utterence)
    setActiveAi(false)
   }
   return (
-    <div className='fixed lg:bottom-[20px] md:bottom-[40px] bottom-[80px] left-[2%] ' onClick={()=>{recognition.start();
+    <div className='fixed lg:bottom-5 md:bottom-10 bottom-20 left-[2%] ' onClick={()=>{recognition.start();
     openingSound.play()
     setActiveAi(true)
     }}>

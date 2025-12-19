@@ -61,6 +61,8 @@ function PlaceOrder() {
         
     setLoading(true)
         e.preventDefault()
+
+        
     try {
       let orderItems = []
       for(const items in cartItem){

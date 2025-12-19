@@ -12,6 +12,8 @@ import { signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../../utils/Firebase';
 import { userDataContext } from '../context/UserContext';
 import Loading from '../component/Loading';
+import { toast } from "react-toastify";
+
 
 function Login() {
     let [show,setShow] = useState(false)
@@ -20,6 +22,7 @@ function Login() {
         let {serverUrl} = useContext(authDataContext)
         let {getCurrentUser} = useContext(userDataContext)
         let [loading,setLoading] = useState(false)
+        // console.log("SERVER URL USED:", serverUrl);
 
     let navigate = useNavigate()
 
@@ -30,6 +33,7 @@ function Login() {
             let result = await axios.post(serverUrl + '/api/auth/login',{
                 email,password
             },{withCredentials:true})
+            
             console.log(result.data)
             setLoading(false)
             getCurrentUser()

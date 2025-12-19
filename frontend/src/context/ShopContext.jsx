@@ -32,6 +32,7 @@ function ShopContext({children}) {
     const addtoCart = async (itemId , size) => {
        if (!size) {
       console.log("Select Product Size");
+      toast.error("Select Product Size!")
       return;
     }
 

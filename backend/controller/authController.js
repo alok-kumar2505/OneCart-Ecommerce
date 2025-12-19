@@ -39,6 +39,10 @@ export const registration = async (req,res) => {
 export const login = async (req,res) => {
     try {
         let {email,password} = req.body;
+
+  console.log("USER LOGIN API HIT", req.body);
+  
+
         let user = await User.findOne({email}) 
         if(!user){
             return res.status(404).json({message:"User is not Found"})
@@ -63,16 +67,18 @@ export const login = async (req,res) => {
     }
     
 }
-export const logOut = async (req,res) => {
-try {
-    res.clearCookie("token")
-    return res.status(200).json({message:"logOut successful"})
-} catch (error) {
-    console.log("logOut error")
-    return res.status(500).json({message:`LogOut error ${error}`})
-}
-    
-}
+    export const logOut = async (req,res) => {
+    try {
+        res.clearCookie("token")
+        
+        
+        return res.status(200).json({message:"logOut successful"})
+    } catch (error) {
+        console.log("logOut error")
+        return res.status(500).json({message:`LogOut error ${error}`})
+    }
+        
+    }
 
 
 export const googleLogin = async (req,res) => {
@@ -114,6 +120,7 @@ export const adminLogin = async (req,res) => {
         maxAge: 1 * 24 * 60 * 60 * 1000
     })
     return res.status(200).json(token)
+    
         }
         return res.status(400).json({message:"Invaild creadintials"})
 
