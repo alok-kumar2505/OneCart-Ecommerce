@@ -1,14 +1,20 @@
 import React, { useContext, useState } from 'react'
 import ai from "../assets/ai.png"
+import { userDataContext } from '../context/UserContext'
 import { shopDataContext } from '../context/ShopContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import open from "../assets/open.mp3"
 function Ai() {
   let {showSearch , setShowSearch} = useContext(shopDataContext)
+    const { userData } = useContext(userDataContext); 
+
   let navigate = useNavigate()
   let [activeAi,setActiveAi] = useState(false)
   let openingSound = new Audio(open)
+  if (!userData || "") {
+  return null; 
+  }
 
  function speak(message){
 let utterence=new SpeechSynthesisUtterance(message)
@@ -85,3 +91,4 @@ window.speechSynthesis.speak(utterence)
 }
 
 export default Ai
+
