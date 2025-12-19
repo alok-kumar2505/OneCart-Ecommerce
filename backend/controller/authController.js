@@ -15,7 +15,7 @@ export const registration = async (req,res) => {
          return res.status(400).json({message:"Enter valid Email"})
     }
     if(password.length < 8){
-        return res.status(400).json({message:"Enter Strong Password"})
+        return res.status(400).json({message:"Min password length should be 8 character!"})
     }
     let hashPassword = await bcrypt.hash(password,10)
 
@@ -135,6 +135,7 @@ export const adminLogin = async (req,res) => {
     }
     
 }
+
 
 
 
