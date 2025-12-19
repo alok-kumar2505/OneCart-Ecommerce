@@ -41,8 +41,12 @@ function Login() {
             toast.success("User Login Successful")
             
         } catch (error) {
-            console.log(error)
-            toast.error("User Login Failed")
+            console.log(error);
+
+          const message =error.response?.data?.message || "User Registration Failed";
+
+          toast.error(message);
+          setLoading(false);
         }
     }
      const googlelogin = async () => {
@@ -58,7 +62,12 @@ function Login() {
             navigate("/")
     
             } catch (error) {
-                console.log(error)
+            console.log(error);
+
+              const message = error.response?.data?.message || "User Registration Failed";
+
+          toast.error(message);
+          setLoading(false);
             }
             
         }
@@ -98,4 +107,5 @@ function Login() {
 }
 
 export default Login
+
 
