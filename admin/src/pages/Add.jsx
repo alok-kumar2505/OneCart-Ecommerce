@@ -40,14 +40,7 @@ function Add() {
 
   const handleAddProduct = async (e) => {
   e.preventDefault();
-    if (!image1 || !image2 || !image3 || !image4) {
-    toast.error("Please upload all 4 product images");
-    return;
-  }
-  if(price==""){
-    toast.error("Please fill Product Price field!");
-    return;
-  }
+
   setLoading(true);
 
   try {
@@ -406,3 +399,4 @@ function Add() {
 }
 
 export default Add;
+
