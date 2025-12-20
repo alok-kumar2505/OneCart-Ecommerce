@@ -78,7 +78,7 @@ function Add() {
     setSizes([]);
 
   } catch (error) {
-    console.log("adding error", error);
+    console.log("adding error", error.message);
 
     const message = error.response?.data?.message || "Add Product Failed";
 
@@ -399,4 +399,5 @@ function Add() {
 }
 
 export default Add;
+
 
