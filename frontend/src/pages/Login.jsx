@@ -98,6 +98,8 @@ function Login() {
                   {!show && <IoEyeOutline className='w-[20px] h-[20px] cursor-pointer absolute right-[5%] bottom-[57%]' onClick={()=>setShow(prev => !prev)}/>}
                   {show && <IoEye className='w-[20px] h-[20px] cursor-pointer absolute right-[5%] bottom-[57%]' onClick={()=>setShow(prev => !prev)}/>}
                   <button className='w-[100%] h-[50px] bg-[#6060f5] rounded-lg flex items-center justify-center mt-[20px] text-[17px] font-semibold'>{loading? <Loading/> : "Login"}</button>
+                <p
+              className="cursor-pointer hover:text-blue-500 rounded-lg flex items-center justify-center mt-[20px] text-[17px] " onClick={() => navigate("/forgot-password")}>Forgot Password?</p>
                   <p className='flex  gap-[10px]'>You haven't any account? <span className='text-[#5555f6cf] text-[17px] font-semibold cursor-pointer' onClick={()=>navigate("/signup")}>Create New Account</span></p>
             </div>
         </form>
@@ -107,5 +109,6 @@ function Login() {
 }
 
 export default Login
+
 
 
