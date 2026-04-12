@@ -1,12 +1,48 @@
-# React + Vite
+# Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This folder contains the customer-facing storefront for OneCart.
 
-Currently, two official plugins are available:
+## What It Does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Customer registration and login
+- Google sign-in through Firebase
+- Product browsing and product detail views
+- Cart management and checkout
+- Cash on delivery and Razorpay payment flow
+- Order history
+- Voice-driven navigation helper
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Environment Variables
+
+Create a `.env` file in `frontend/`:
+
+```env
+VITE_FIREBASE_APIKEY=your_firebase_api_key
+VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
+```
+
+## Backend Connection
+
+The app currently points to the deployed backend URL in `src/context/AuthContext.jsx`. Update that value if you want to run the frontend against a local or different backend.
+
+## Main Routes
+
+- `/` - home
+- `/login` - login
+- `/signup` - registration
+- `/about` - about page
+- `/collection` - product collections
+- `/product` - product listing
+- `/productdetail/:productId` - product detail page
+- `/cart` - cart
+- `/placeorder` - checkout
+- `/order` - orders
+
