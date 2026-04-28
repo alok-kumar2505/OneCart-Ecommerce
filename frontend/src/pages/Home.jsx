@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Backgound from '../component/Backgound'
 import Hero from '../component/Hero'
 import Product from './Product'
 import OurPolicy from '../component/OurPolicy'
@@ -26,9 +25,7 @@ function Home() {
   
   return (
     <div className='relative overflow-x-hidden pt-[70px]'>
-    <div className='min-h-[70vh] w-full bg-gradient-to-l from-[#141414] to-[#0c2025] md:min-h-[75vh] lg:min-h-[100vh]'>
-
-      <Backgound heroCount={heroCount}/>
+    <div className='min-h-[70vh] w-full bg-linear-to-l from-[#141414] to-[#0c2025] md:min-h-[75vh] lg:min-h-screen'>
       <Hero
       heroCount={heroCount}
       setHeroCount={setHeroCount}
