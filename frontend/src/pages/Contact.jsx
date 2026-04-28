@@ -5,13 +5,13 @@ import NewLetterBox from '../component/NewLetterBox'
 
 function Contact() {
   return (
-    <div className='w-[99vw] min-h-[100vh] flex items-center justify-center flex-col  bg-gradient-to-l from-[#141414] to-[#0c2025] gap-[50px] pt-[80px]'>
+    <div className='flex min-h-[100vh] w-full flex-col items-center justify-center gap-[50px] bg-gradient-to-l from-[#141414] to-[#0c2025] pt-[80px]'>
       <Title  text1={'CONTACT'} text2={'US'}/>
-      <div className='w-[100%]  flex items-center justify-center flex-col lg:flex-row'>
-        <div className='lg:w-[50%] w-[100%] flex items-center justify-center '>
+      <div className='flex w-full flex-col items-center justify-center gap-[20px] px-4 lg:flex-row'>
+        <div className='flex w-full items-center justify-center lg:w-[50%] '>
           <img src={contact} alt=""  className='lg:w-[70%] w-[80%] shadow-md shadow-black rounded-sm'/>
         </div>
-        <div className='lg:w-[50%] w-[80%] flex items-start justify-center gap-[20px]  flex-col mt-[20px] lg:mt-[0px]'>
+        <div className='flex w-[90%] flex-col items-start justify-center gap-[20px] mt-[20px] lg:mt-[0px] lg:w-[50%]'>
         <p className='lg:w-[80%] w-[100%] text-[white] font-bold lg:text-[18px] text-[15px]'>Our Store</p>
         <p className='lg:w-[80%] w-full text-[white] md:text-[16px] text-[13px]'>
           <p>Dharmsamaj Chowk</p>
@@ -23,7 +23,7 @@ function Contact() {
         </p>
         <p className='lg:w-[80%] w-[100%] text-[15px] text-[white] lg:text-[18px] mt-[10px] font-bold'>Careers at OneCart</p>
         <p className='lg:w-[80%] w-[100%] text-[white] md:text-[16px] text-[13px]'>Learn more about our teams and job openings</p>
-        <button className='px-[30px] py-[20px] flex items-center justify-center text-[white] bg-transparent border active:bg-slate-600 rounded-md' >Explore Jobs</button>
+        <button className='flex items-center justify-center rounded-md border bg-transparent px-[24px] py-[16px] text-[white] active:bg-slate-600 sm:px-[30px] sm:py-[20px]' >Explore Jobs</button>
         </div>
       </div>
       <NewLetterBox/>

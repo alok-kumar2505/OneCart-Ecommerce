@@ -2,6 +2,19 @@
 
 OneCart is a full-stack e-commerce application built with a separate customer storefront, an admin dashboard, and an Express/MongoDB backend.
 
+## Live Demo
+
+Visit the deployed storefront here:
+
+- [OneCart Live Website](https://onecart-ecommerce-frontend.onrender.com/)
+
+## Demo Credentials
+
+Use these credentials to sign in and explore the app:
+
+- Email: `test@gmail.com`
+- Password: `test@123`
+
 The repository is organized as a three-app monorepo:
 
 - `frontend` - customer storefront for browsing products, managing cart items, placing orders, and tracking purchases
@@ -21,6 +34,12 @@ The system supports:
 - Order history for users
 - Product creation, product removal, and order status updates for admins
 - Cloudinary-based image upload for product media
+
+## Quick Access
+
+- Live site: [onecart-ecommerce-frontend.onrender.com](https://onecart-ecommerce-frontend.onrender.com/)
+- Demo email: `test@gmail.com`
+- Demo password: `test@123`
 
 ## Tech Stack
 
