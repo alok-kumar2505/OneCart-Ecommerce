@@ -2,7 +2,8 @@ import React, { useContext } from 'react'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { HiSparkles } from 'react-icons/hi'
+import { FiLogOut } from 'react-icons/fi'
+import logo from '../assets/logo.png'
 
 function Nav() {
   const { serverUrl, getAdminUser } = useContext(authDataContext)
@@ -20,19 +21,9 @@ function Nav() {
     <header className="sticky top-0 z-40 w-full glass-panel border-b border-white/10 backdrop-blur-xl">
       <div className="mx-auto flex h-20 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         
-        {/* Logo Blueprint */}
-        <div className="flex cursor-pointer items-center gap-3" onClick={() => navigate('/')}>
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-600 via-pink-500 to-amber-500 p-0.5 shadow-lg hidden sm:block">
-            <div className="w-full h-full bg-obsidian-950 rounded-[10px] flex items-center justify-center">
-              <HiSparkles className="w-6 h-6 text-amber-400" />
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-display text-xl sm:text-2xl font-bold text-white tracking-wide uppercase leading-none">
-              One<span className="text-amber-500">Cart</span>
-            </span>
-            <span className="text-[10px] font-bold tracking-widest text-pink-400 uppercase mt-0.5">Admin Panel</span>
-          </div>
+        {/* Logo */}
+        <div className="flex cursor-pointer items-center" onClick={() => navigate('/')}>
+          <img src={logo} alt="OneCart" className="h-9 w-auto object-contain" />
         </div>
 
         {/* Action Buttons */}

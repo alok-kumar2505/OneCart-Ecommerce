@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import logo from '../assets/logo.png'
 import { IoSearchOutline, IoClose } from 'react-icons/io5'
 import { FiShoppingCart, FiUser, FiPackage, FiLogOut, FiHome } from 'react-icons/fi'
 import { HiOutlineCollection, HiSparkles } from 'react-icons/hi'
