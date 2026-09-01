@@ -9,8 +9,7 @@ import { FiTarget, FiStar, FiHeart } from 'react-icons/fi'
 function About() {
   return (
     <div className="bg-obsidian-950 text-gray-200 min-h-screen">
-      <Nav />
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-12"><Title text1="About" text2="Us" /></div>
 
         <div className="flex flex-col gap-16 lg:flex-row lg:items-center">

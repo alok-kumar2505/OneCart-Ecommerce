@@ -26,6 +26,32 @@ function PlaceOrder() {
   const onSubmitHandler = async (e) => {
     e.preventDefault()
     setLoading(true)
+
+    const initPay = (order) => {
+      const options = {
+          key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+          amount: order.amount,
+          currency: order.currency,
+          name: "Order Payment",
+          description: "Order Payment",
+          order_id: order.id,
+          receipt: order.receipt,
+          handler: async (response) => {
+              try {
+                  const { data } = await axios.post(serverUrl + '/api/order/verifyrazorpay', response, { withCredentials: true })
+                  if (data.success) {
+                      navigate('/order')
+                      setCartItem({})
+                      toast.success("Payment Successful")
+                  }
+              } catch (error) {
+                  toast.error("Payment failed")
+              }
+          }
+      }
+      const rzp = new window.Razorpay(options)
+      rzp.open()
+    }
     try {
       let orderItems = []
       for (const items in cartItem) {
@@ -43,8 +69,11 @@ function PlaceOrder() {
         const response = await axios.post(serverUrl + '/api/order/place', orderData, { withCredentials: true })
         if (response.data) { setCartItem({}); navigate('/order'); toast.success('Order placed successfully!') }
         else { toast.error('Failed to place order') }
-      } else {
-        toast.info('Payment integration not active in this demo.')
+      } else if (method === 'razorpay') {
+        const response = await axios.post(serverUrl + '/api/order/razorpay', orderData, { withCredentials: true })
+        if (response.data) {
+           initPay(response.data.order)
+        }
       }
     } catch (error) { toast.error('An error occurred.') }
     setLoading(false)
@@ -64,8 +93,7 @@ function PlaceOrder() {
 
   return (
     <div className="bg-obsidian-950 text-gray-200 min-h-screen">
-      <Nav />
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 pb-24 md:pb-12">
+            <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 pb-24 md:pb-12">
         <form onSubmit={onSubmitHandler} className="flex flex-col gap-10 lg:flex-row">
           
           {/* ── Left: Shipping Details ── */}
@@ -102,7 +130,6 @@ function PlaceOrder() {
               
               <div className="flex flex-col gap-4">
                 {[
-                  { id: 'stripe', label: 'Stripe (Credit/Debit)', icon: FiCreditCard, type: 'icon' },
                   { id: 'razorpay', icon: razorpay, type: 'img' },
                   { id: 'cod', label: 'Cash on Delivery', icon: FiDollarSign, type: 'icon' },
                 ].map(opt => (

@@ -10,8 +10,7 @@ import Footer from '../component/Footer'
 function Home() {
   return (
     <div className="bg-obsidian-950 text-gray-200">
-      <Nav />
-      <main>
+            <main>
         <Hero />
         <LatestCollection />
         <BestSeller />

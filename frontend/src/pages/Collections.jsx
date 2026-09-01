@@ -42,8 +42,7 @@ function Collections() {
 
   return (
     <div className="bg-obsidian-950 text-gray-200 min-h-screen">
-      <Nav />
-      <div className="mx-auto flex max-w-7xl flex-col md:flex-row pb-24 md:pb-8 pt-8 px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto flex max-w-7xl flex-col md:flex-row pb-24 md:pb-8 pt-8 px-4 sm:px-6 lg:px-8">
 
         {/* ── Sidebar Filter ── */}
         <aside className="w-full md:sticky md:top-24 md:h-[calc(100vh-8rem)] md:w-64 md:min-w-[16rem] md:overflow-y-auto mb-8 md:mb-0 md:mr-8 z-10">

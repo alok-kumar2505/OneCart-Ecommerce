@@ -26,8 +26,7 @@ function Cart() {
 
   return (
     <div className="bg-obsidian-950 text-gray-200 min-h-screen">
-      <Nav />
-      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8 pb-24 md:pb-12">
+            <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8 pb-24 md:pb-12">
         <div className="mb-12"><Title text1="Your" text2="Shopping Bag" /></div>
 
         {cartData.length === 0 ? (

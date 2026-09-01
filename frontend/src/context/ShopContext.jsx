@@ -15,7 +15,6 @@ function ShopContext({children}) {
     let [cartItem, setCartItem] = useState({});
       let [loading,setLoading] = useState(false)
     let currency = '₹';
-    let delivery_fee = 40;
 
     const getProducts = async () => {
         try {
@@ -141,6 +140,9 @@ function ShopContext({children}) {
 
 
 
+
+    const cartTotal = getCartAmount();
+    const delivery_fee = cartTotal === 0 ? 0 : (cartTotal >= 1000 ? 0 : 50);
 
     let value = {
       products, currency , delivery_fee,getProducts,search,setSearch,showSearch,setShowSearch,cartItem, addtoCart, getCartCount, setCartItem ,updateQuantity,getCartAmount,loading

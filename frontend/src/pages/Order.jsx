@@ -33,8 +33,7 @@ function Order() {
 
   return (
     <div className="bg-obsidian-950 text-gray-200 min-h-screen">
-      <Nav />
-      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8 pb-24 md:pb-12">
+            <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8 pb-24 md:pb-12">
         <div className="mb-10"><Title text1="My" text2="Orders" /></div>
         
         {orderData.length === 0 ? (
