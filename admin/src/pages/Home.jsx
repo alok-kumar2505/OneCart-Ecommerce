@@ -1,49 +1,113 @@
-import React from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Nav from '../component/Nav'
 import Sidebar from '../component/Sidebar'
-import { useState } from 'react'
-import { useContext } from 'react'
 import { authDataContext } from '../context/AuthContext'
-import { useEffect } from 'react'
 import axios from 'axios'
+import { FiPackage, FiShoppingBag, FiTrendingUp, FiUsers } from 'react-icons/fi'
 
 function Home() {
-    const [totalProducts, setTotalProducts] = useState(0)
+  const [totalProducts, setTotalProducts] = useState(0)
   const [totalOrders, setTotalOrders] = useState(0)
-  
   const { serverUrl } = useContext(authDataContext)
 
- const fetchCounts = async () => {
+  const fetchCounts = async () => {
     try {
-      const products = await axios.get(`${serverUrl}/api/product/list`, {} ,{withCredentials:true})
+      const products = await axios.get(`${serverUrl}/api/product/list`, {}, { withCredentials: true })
       setTotalProducts(products.data.length)
-
-      const orders = await axios.post(`${serverUrl}/api/order/list`, {} ,{withCredentials:true})
+      const orders = await axios.post(`${serverUrl}/api/order/list`, {}, { withCredentials: true })
       setTotalOrders(orders.data.length)
     } catch (err) {
-      console.error("Failed to fetch counts", err)
+      console.error('Failed to fetch counts', err)
     }
   }
 
-   useEffect(() => {
-    fetchCounts()
-  }, [])
+  useEffect(() => { fetchCounts() }, [])
+
+  const stats = [
+    {
+      icon: FiShoppingBag,
+      label: 'Total Products',
+      value: totalProducts,
+      color: 'indigo',
+    },
+    {
+      icon: FiPackage,
+      label: 'Total Orders',
+      value: totalOrders,
+      color: 'violet',
+    },
+    {
+      icon: FiTrendingUp,
+      label: 'Revenue',
+      value: '—',
+      color: 'green',
+    },
+    {
+      icon: FiUsers,
+      label: 'Customers',
+      value: '—',
+      color: 'orange',
+    },
+  ]
+
+  const colorMap = {
+    indigo: { bg: 'bg-indigo-50', icon: 'text-indigo-600', border: 'border-indigo-100' },
+    violet: { bg: 'bg-violet-50', icon: 'text-violet-600', border: 'border-violet-100' },
+    green: { bg: 'bg-green-50', icon: 'text-green-600', border: 'border-green-100' },
+    orange: { bg: 'bg-orange-50', icon: 'text-orange-600', border: 'border-orange-100' },
+  }
+
   return (
-   
-    <div className='w-[100vw] h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] text-[white] relative'>
-       <Nav/>
-       <Sidebar/>
+    <div className="min-h-screen bg-[#F8FAFC]">
+      <Nav />
+      <Sidebar />
 
-       <div className='w-[70vw] h-[100vh] absolute left-[25%] flex items-Start justify-start flex-col  gap-[40px] py-[100px]'>
-         <h1 className='text-[35px] text-[#afe2f2]'>OneCart Admin Panel</h1>
-         <div className='flex items-center justify-start gap-[50px] flex-col md:flex-row'>
-          <div  className='text-[#dcfafd] w-[400px] max-w-[90%] h-[200px] bg-[#0000002e] flex items-center justify-center flex-col gap-[20px] rounded-lg shadow-sm shadow-black backdrop:blur-lg  md:text-[25px] text-[20px] border-[1px] border-[#969595]'>Total No. of Products : <span className='px-[20px] py-[10px] bg-[#030e11] rounded-lg flex items-center justify-center border-[1px] border-[#969595]'>{totalProducts}</span></div>
-          <div  className='text-[#dcfafd] w-[400px] max-w-[90%] h-[200px] bg-[#0000002e] flex items-center justify-center flex-col gap-[20px] rounded-lg shadow-sm shadow-black backdrop:blur-lg  md:text-[25px] text-[20px] border-[1px] border-[#969595]'>Total No. of Orderss : <span className='px-[20px] py-[10px] bg-[#030e11] rounded-lg flex items-center justify-center border-[1px] border-[#969595]'>{totalOrders}</span></div>
+      <main className="ml-14 pt-16 md:ml-56">
+        <div className="max-w-5xl px-6 py-10">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <p className="mt-1 text-sm text-gray-500">Welcome back, Admin. Here's an overview of your store.</p>
+          </div>
 
-         </div>
-       </div>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {stats.map(({ icon: Icon, label, value, color }) => {
+              const c = colorMap[color]
+              return (
+                <div
+                  key={label}
+                  className={`flex items-start gap-4 rounded-2xl border ${c.border} bg-white p-5 shadow-sm`}
+                >
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${c.bg} flex-shrink-0`}>
+                    <Icon className={`h-6 w-6 ${c.icon}`} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{label}</p>
+                    <p className="mt-1 text-2xl font-bold text-gray-900">{value}</p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
 
-      
+          {/* Quick Actions */}
+          <div className="mt-10">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-gray-400">Quick Actions</h2>
+            <div className="flex flex-wrap gap-3">
+              <a href="/add" className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors">
+                + Add Product
+              </a>
+              <a href="/orders" className="rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 hover:border-indigo-400 hover:text-indigo-600 transition-colors">
+                View Orders
+              </a>
+              <a href="/lists" className="rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 hover:border-indigo-400 hover:text-indigo-600 transition-colors">
+                Manage Products
+              </a>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   )
 }

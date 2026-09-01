@@ -1,33 +1,41 @@
 import React from 'react'
-import { IoIosAddCircleOutline } from "react-icons/io";
-import { FaRegListAlt } from "react-icons/fa";
-import { SiTicktick } from "react-icons/si";
-import { useNavigate } from 'react-router-dom';
+import { IoIosAddCircleOutline } from 'react-icons/io'
+import { FaRegListAlt } from 'react-icons/fa'
+import { SiTicktick } from 'react-icons/si'
+import { FiHome } from 'react-icons/fi'
+import { useNavigate, useLocation } from 'react-router-dom'
+
+const links = [
+  { icon: FiHome, label: 'Dashboard', path: '/' },
+  { icon: IoIosAddCircleOutline, label: 'Add Product', path: '/add' },
+  { icon: FaRegListAlt, label: 'Product List', path: '/lists' },
+  { icon: SiTicktick, label: 'Orders', path: '/orders' },
+]
 
 function Sidebar() {
-    let navigate = useNavigate()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isActive = (path) => location.pathname === path
+
   return (
-    <div className='w-[18%] min-h-[100vh] border-r-[1px] py-[60px] fixed left-0 top-0'>
-        <div className='flex flex-col gap-4 pt-[40px] pl-[20%] text-[15px]'>
-
-            <div className='flex items-center justify-center md:justify-start gap-3 border border-gray-200 border-r-0 px-3 py-2 cursor-pointer hover:bg-[#2c7b89]' onClick={()=>navigate('/add')}>
-                <IoIosAddCircleOutline className='w-[20px] h-[20px]'/>
-                <p className='hidden md:block'>Add Items</p>
-
-            </div>
-               <div className='flex items-center justify-center md:justify-start gap-3 border border-gray-200 border-r-0 px-3 py-2 cursor-pointer hover:bg-[#2c7b89]' onClick={()=>navigate('/lists')}>
-                <FaRegListAlt className='w-[20px] h-[20px]'/>
-                <p className='hidden md:block'>List Items</p>
-
-            </div>
-               <div className='flex items-center justify-center md:justify-start gap-3 border border-gray-200 border-r-0 px-3 py-2 cursor-pointer hover:bg-[#2c7b89]' onClick={()=>navigate('/orders')}>
-                <SiTicktick className='w-[20px] h-[20px]'/>
-                <p className='hidden md:block'>View Orders</p>
-
-            </div>
-        </div>
-      
-    </div>
+    <aside className="fixed left-0 top-16 z-40 flex h-[calc(100vh-4rem)] w-14 flex-col border-r border-gray-200 bg-white pt-6 md:w-56">
+      <nav className="flex flex-col gap-1 px-2">
+        {links.map(({ icon: Icon, label, path }) => (
+          <button
+            key={path}
+            onClick={() => navigate(path)}
+            className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
+              isActive(path)
+                ? 'bg-indigo-50 text-indigo-700 border-l-4 border-indigo-600'
+                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent'
+            }`}
+          >
+            <Icon className={`h-5 w-5 flex-shrink-0 ${isActive(path) ? 'text-indigo-600' : 'text-gray-400'}`} />
+            <span className="hidden md:block">{label}</span>
+          </button>
+        ))}
+      </nav>
+    </aside>
   )
 }
 
