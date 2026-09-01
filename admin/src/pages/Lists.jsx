@@ -15,7 +15,6 @@ function Lists() {
       const result = await axios.get(serverUrl + '/api/product/list')
       setList(result.data)
     } catch (error) {
-      console.log(error)
     }
   }
 
@@ -24,7 +23,6 @@ function Lists() {
       const result = await axios.post(`${serverUrl}/api/product/remove/${id}`, {}, { withCredentials: true })
       if (result.data) fetchList()
     } catch (error) {
-      console.log(error)
     }
   }
 

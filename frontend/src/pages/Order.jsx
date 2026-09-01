@@ -26,7 +26,7 @@ function Order() {
         })
         setOrderData(allOrdersItem.reverse())
       }
-    } catch (error) { console.log(error) }
+    } catch (error) {  }
   }
 
   useEffect(() => { loadOrderData() }, [])

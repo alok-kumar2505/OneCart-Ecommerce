@@ -20,10 +20,8 @@ function ShopContext({children}) {
     const getProducts = async () => {
         try {
             let result = await axios.get(serverUrl + "/api/product/list")
-            console.log(result.data)
             setProducts(result.data)
         } catch (error) {
-            console.log(error)
         }
         
     }
@@ -31,7 +29,6 @@ function ShopContext({children}) {
 
     const addtoCart = async (itemId , size) => {
        if (!size) {
-      console.log("Select Product Size");
       toast.error("Select Product Size!")
       return;
     }
@@ -56,7 +53,6 @@ function ShopContext({children}) {
       setLoading(true)
       try {
       let result = await axios.post(serverUrl + "/api/cart/add" , {itemId,size} , {withCredentials: true})
-      console.log(result.data)
       toast.success("Product Added")
       setLoading(false)
 
@@ -64,7 +60,6 @@ function ShopContext({children}) {
        
       }
       catch (error) {
-        console.log(error)
         setLoading(false)
         toast.error("Add Cart Error")
        
@@ -80,7 +75,6 @@ function ShopContext({children}) {
 
       setCartItem(result.data)
     } catch (error) {
-      console.log(error)
      
 
 
@@ -96,7 +90,6 @@ function ShopContext({children}) {
       try {
         await axios.post(serverUrl + "/api/cart/update", { itemId, size, quantity }, { withCredentials: true })
       } catch (error) {
-        console.log(error)
         
       }
     }

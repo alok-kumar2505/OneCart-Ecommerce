@@ -13,7 +13,7 @@ function Nav() {
       await axios.get(serverUrl + '/api/auth/logout', { withCredentials: true })
       getAdminUser()
       navigate('/login')
-    } catch (error) { console.log(error) }
+    } catch (error) {  }
   }
 
   return (

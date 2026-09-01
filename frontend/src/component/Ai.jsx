@@ -25,7 +25,6 @@ window.speechSynthesis.speak(utterence)
   const speechRecognition=window.SpeechRecognition || window.webkitSpeechRecognition
   const recognition = new speechRecognition()
    if(!recognition){
-    console.log("not supported")
   }
 
   recognition.onresult = (e)=>{

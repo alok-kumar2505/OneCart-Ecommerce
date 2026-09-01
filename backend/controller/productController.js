@@ -65,7 +65,6 @@ export const addProduct = async (req, res) => {
     return res.status(201).json(product);
 
   } catch (error) {
-    console.log("AddProduct error", error.message);
     return res.status(500).json({ message: "Failed to add product" });
   }
 };
@@ -78,7 +77,6 @@ export const listProduct = async (req,res) => {
         return res.status(200).json(product)
 
     } catch (error) {
-        console.log("ListProduct error")
     return res.status(500).json({message:`ListProduct error ${error}`})
     }
 }
@@ -89,7 +87,6 @@ export const removeProduct = async (req,res) => {
         const product = await Product.findByIdAndDelete(id)
          return res.status(200).json(product)
     } catch (error) {
-        console.log("RemoveProduct error")
     return res.status(500).json({message:`RemoveProduct error ${error}`})
     }
     

@@ -24,7 +24,7 @@ function Nav() {
       await axios.get(serverUrl + '/api/auth/logout', { withCredentials: true })
       await getCurrentUser()
       navigate('/login')
-    } catch (error) { console.log(error) }
+    } catch (error) {  }
   }
 
   const navLinks = [

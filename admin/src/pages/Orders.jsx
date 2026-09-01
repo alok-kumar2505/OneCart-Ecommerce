@@ -22,7 +22,6 @@ function Orders() {
       const result = await axios.post(serverUrl + '/api/order/list', {}, { withCredentials: true })
       setOrders(result.data.reverse())
     } catch (error) {
-      console.log(error)
     }
   }
 
@@ -31,7 +30,6 @@ function Orders() {
       const result = await axios.post(serverUrl + '/api/order/status', { orderId, status: e.target.value }, { withCredentials: true })
       if (result.data) await fetchAllOrders()
     } catch (error) {
-      console.log(error)
     }
   }
 

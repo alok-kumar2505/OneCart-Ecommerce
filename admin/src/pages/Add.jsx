@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react'
-import upload_area from '../assets/upload_area.png'
 import Nav from '../component/Nav'
 import Sidebar from '../component/Sidebar'
 import axios from 'axios'

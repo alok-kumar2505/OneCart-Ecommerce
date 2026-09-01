@@ -32,7 +32,6 @@ export const placeOrder = async (req,res) => {
 
          return res.status(201).json({message:'Order Place'})
     } catch (error) {
-        console.log(error)
         res.status(500).json({message:'Order Place error'})
     }
     
@@ -64,13 +63,11 @@ export const placeOrderRazorpay = async (req,res) => {
          }
          await razorpayInstance.orders.create(options, (error,order)=>{
             if(error) {
-                console.log(error)
                 return res.status(500).json(error)
             }
             res.status(200).json(order)
          })
     } catch (error) {
-        console.log(error)
         res.status(500).json({message:error.message
             })
     }
@@ -93,7 +90,6 @@ export const verifyRazorpay = async (req,res) =>{
             })
         }
     } catch (error) {
-        console.log(error)
          res.status(500).json({message:error.message
             })
     }
@@ -110,7 +106,6 @@ export const userOrders = async (req,res) => {
         const orders = await Order.find({userId})
         return res.status(200).json(orders)
     } catch (error) {
-        console.log(error)
         return res.status(500).json({message:"userOrders error"})
     }
     
@@ -129,7 +124,6 @@ export const allOrders = async (req,res) => {
         const orders = await Order.find({})
         res.status(200).json(orders)
     } catch (error) {
-        console.log(error)
         return res.status(500).json({message:"adminAllOrders error"})
         
     }

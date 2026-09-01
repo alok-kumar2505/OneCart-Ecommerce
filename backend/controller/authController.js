@@ -29,7 +29,6 @@ export const registration = async (req,res) => {
     })
     return res.status(201).json(user)
   } catch (error) {
-    console.log("registration error")
     return res.status(500).json({message:`registration error ${error}`})
   }
     
@@ -40,7 +39,6 @@ export const login = async (req,res) => {
     try {
         let {email,password} = req.body;
 
-  console.log("USER LOGIN API HIT", req.body);
   
 
         let user = await User.findOne({email}) 
@@ -61,7 +59,6 @@ export const login = async (req,res) => {
     return res.status(201).json(user)
 
     } catch (error) {
-         console.log("login error")
     return res.status(500).json({message:`Login error ${error}`})
         
     }
@@ -78,7 +75,6 @@ export const login = async (req,res) => {
         
         return res.status(200).json({message:"logOut successful"})
     } catch (error) {
-        console.log("logOut error")
         return res.status(500).json({message:`LogOut error ${error}`})
     }
         
@@ -105,7 +101,6 @@ export const googleLogin = async (req,res) => {
     return res.status(200).json(user)
 
     } catch (error) {
-         console.log("googleLogin error")
     return res.status(500).json({message:`googleLogin error ${error}`})
     }
     
@@ -129,7 +124,6 @@ export const adminLogin = async (req,res) => {
         return res.status(400).json({message:"Invaild creadintials"})
 
     } catch (error) {
-        console.log("AdminLogin error")
     return res.status(500).json({message:`AdminLogin error ${error}`})
         
     }
