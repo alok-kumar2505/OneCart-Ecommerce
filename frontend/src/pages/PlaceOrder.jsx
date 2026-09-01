@@ -2,8 +2,7 @@ import React, { useContext, useState } from 'react'
 import Title from '../component/Title'
 import CartTotal from '../component/CartTotal'
 import { shopDataContext } from '../context/ShopContext'
-import stripe from '../assets/stripe.png'
-import razorpay from '../assets/razorpay.png'
+import razorpay from '../assets/Razorpay.jpg'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import axios from 'axios'
@@ -103,7 +102,7 @@ function PlaceOrder() {
               
               <div className="flex flex-col gap-4">
                 {[
-                  { id: 'stripe', icon: stripe, type: 'img' },
+                  { id: 'stripe', label: 'Stripe (Credit/Debit)', icon: FiCreditCard, type: 'icon' },
                   { id: 'razorpay', icon: razorpay, type: 'img' },
                   { id: 'cod', label: 'Cash on Delivery', icon: FiDollarSign, type: 'icon' },
                 ].map(opt => (
