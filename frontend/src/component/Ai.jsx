@@ -12,16 +12,6 @@ function Ai() {
   let navigate = useNavigate()
   let [activeAi,setActiveAi] = useState(false)
   let openingSound = new Audio(open)
-  if (!userData || "") {
-  return null; 
-  }
-
- function speak(message){
-let utterence=new SpeechSynthesisUtterance(message)
-window.speechSynthesis.speak(utterence)
-  }
-
-
   const [recognition, setRecognition] = useState(null)
 
   useEffect(() => {
@@ -81,6 +71,16 @@ window.speechSynthesis.speak(utterence)
       setRecognition(recog)
     }
   }, [navigate, showSearch, setShowSearch])
+
+  if (!userData) {
+    return null; 
+  }
+
+  function speak(message){
+    let utterence=new SpeechSynthesisUtterance(message)
+    window.speechSynthesis.speak(utterence)
+  }
+
   return (
     <div className='fixed lg:bottom-5 md:bottom-10 bottom-20 left-[2%] ' onClick={()=>{
       if (recognition) {
