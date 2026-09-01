@@ -1,37 +1,43 @@
 import React from 'react'
-import Title from './Title'
-import { RiExchangeFundsLine } from "react-icons/ri";
-import { TbRosetteDiscountCheckFilled } from "react-icons/tb";
-import { BiSupport } from "react-icons/bi";
+import { RiExchangeFundsLine } from 'react-icons/ri'
+import { TbRosetteDiscountCheckFilled } from 'react-icons/tb'
+import { BiSupport } from 'react-icons/bi'
+
+const policies = [
+  {
+    icon: RiExchangeFundsLine,
+    title: 'Easy Exchange Policy',
+    desc: 'Exchange made easy — quick, simple, and customer-friendly process.',
+  },
+  {
+    icon: TbRosetteDiscountCheckFilled,
+    title: '7-Day Return Policy',
+    desc: 'Shop with confidence — 7-day hassle-free return guarantee.',
+  },
+  {
+    icon: BiSupport,
+    title: 'Best Customer Support',
+    desc: 'Dedicated support team ready to help anytime, anywhere.',
+  },
+]
 
 function OurPolicy() {
   return (
-    <div className='flex min-h-screen w-screen flex-col items-center justify-start gap-8 bg-linear-to-l from-[#141414] to-[#0c2025] px-4 py-10 md:min-h-[70vh] md:gap-12'>
-        <div className='w-full text-center '>
-            <Title text1={"OUR"} text2={"POLICY"}/>
-            <p className='m-auto w-full px-2.5 text-[13px] text-blue-100 md:text-[20px]'>Customer-Friendly Policies – Committed to Your Satisfaction and Safety.</p>
-        </div>
-      <div className='grid w-full gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-12'>
-        <div className='mx-auto flex w-full max-w-[400px] flex-col items-center justify-center gap-2.5 text-center'>
-        <RiExchangeFundsLine  className='md:w-[60px] w-[30px] h-[30px] md:h-[60px] text-[#90b9ff]'/>
-        <p className='font-semibold md:text-[25px] text-[19px] text-[#a5e8f7]'>Easy Exchange Policy</p>
-        <p className='font-semibold md:text-[18px] text-[12px] text-[aliceblue] text-center'>Exchange Made Easy – Quick, Simple, and Customer-Friendly Process.</p>
-
-        </div>
-        <div className='mx-auto flex w-full max-w-[400px] flex-col items-center justify-center gap-2.5 text-center'>
-        <TbRosetteDiscountCheckFilled  className='md:w-[60px] w-[30px] h-[30px] md:h-[60px] text-[#90b9ff]'/>
-        <p className='font-semibold md:text-[25px] text-[19px] text-[#a5e8f7]'>7 Days Return Policy</p>
-        <p className='font-semibold md:text-[18px] text-[12px] text-[aliceblue] text-center'>Shop with Confidence – 7 Days Easy Return Guarantee.</p>
-
-        </div>
-        <div className='mx-auto flex w-full max-w-[400px] flex-col items-center justify-center gap-2.5 text-center'>
-        <BiSupport  className='md:w-[60px] w-[30px] h-[30px] md:h-[60px] text-[#90b9ff]'/>
-        <p className='font-semibold md:text-[25px] text-[19px] text-[#a5e8f7]'>Best Customer Support</p>
-        <p className='font-semibold md:text-[18px] text-[12px] text-[aliceblue] text-center'>Trusted Customer Support – Your Satisfaction Is Our Priority.</p>
-
+    <section className="w-full bg-white px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+          {policies.map(({ icon: Icon, title, desc }) => (
+            <div key={title} className="flex flex-col items-center gap-3 text-center px-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50">
+                <Icon className="h-7 w-7 text-indigo-600" />
+              </div>
+              <p className="text-base font-semibold text-gray-900">{title}</p>
+              <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 

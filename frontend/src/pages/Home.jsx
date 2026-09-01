@@ -5,40 +5,35 @@ import OurPolicy from '../component/OurPolicy'
 import NewLetterBox from '../component/NewLetterBox'
 import Footer from '../component/Footer'
 
-
 function Home() {
-  let heroData=[
-    {text1:"30% OFF Limited Offer",text2:"Style that"},
-    {text1:"Discover the Best of Bold Fashion",text2:"Limited Time Only!"},
-    {text1:"Explore Our Best Collection ",text2:"Shop Now!"},
-    {text1:"Choose your Perfect Fasion Fit",text2:"Now on Sale!"}
+  const heroData = [
+    { text1: '30% OFF — Limited Time', text2: 'Style that speaks for itself.' },
+    { text1: 'Discover Bold Fashion', text2: 'Exclusive picks, just for you.' },
+    { text1: 'Explore Our Best Collection', text2: 'Shop the season\'s finest.' },
+    { text1: 'Your Perfect Fashion Fit', text2: 'Now on Sale — Don\'t miss out.' },
   ]
 
-  let [heroCount,setHeroCount] = useState(0)
+  const [heroCount, setHeroCount] = useState(0)
 
-  useEffect(()=>{
-    let interval = setInterval(()=>{
-      setHeroCount(prevCount => (prevCount === 3 ? 0 : prevCount + 1));
-    },3000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroCount(prev => (prev === 3 ? 0 : prev + 1))
+    }, 4000)
     return () => clearInterval(interval)
-  },[])
-  
+  }, [])
+
   return (
-    <div className='relative overflow-x-hidden pt-[70px]'>
-    <div className='min-h-[70vh] w-full bg-linear-to-l from-[#141414] to-[#0c2025] md:min-h-[75vh] lg:min-h-screen'>
-      <Hero
-      heroCount={heroCount}
-      setHeroCount={setHeroCount}
-      heroData={heroData[heroCount]}
-      />
+    <div className="relative overflow-x-hidden pt-16">
+      {/* Hero */}
+      <Hero heroCount={heroCount} setHeroCount={setHeroCount} heroData={heroData[heroCount]} />
 
-
-     
-    </div>
-    <Product/>
-    <OurPolicy/>
-    <NewLetterBox/>
-    <Footer/>
+      {/* Product sections on light bg */}
+      <div className="bg-[#F8FAFC]">
+        <Product />
+        <OurPolicy />
+        <NewLetterBox />
+        <Footer />
+      </div>
     </div>
   )
 }
