@@ -1,12 +1,29 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import Backgound from './Backgound'
 import { useNavigate } from 'react-router-dom'
 import { shopDataContext } from '../context/ShopContext'
 import { IoSearchOutline } from 'react-icons/io5'
 
-function Hero({ heroData, heroCount, setHeroCount }) {
+function Hero() {
   const navigate = useNavigate()
   const { search, setSearch, setShowSearch } = useContext(shopDataContext)
+  const [heroCount, setHeroCount] = useState(0)
+
+  const heroData = [
+    { text1: 'Dive into', text2: 'What you love' },
+    { text1: 'Indulge', text2: 'Your passions' },
+    { text1: 'Give in to', text2: 'Your desires' },
+    { text1: 'Premium', text2: 'Lifestyle' }
+  ]
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroCount((count) => (count === 3 ? 0 : count + 1))
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const currentHero = heroData[heroCount]
 
   const handleSearch = () => {
     setShowSearch(true)
@@ -35,12 +52,12 @@ function Hero({ heroData, heroCount, setHeroCount }) {
 
         {/* Headline (font-display: Space Grotesk) */}
         <h1 className="font-display max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl animate-fade-in [animation-delay:100ms]">
-          {heroData.text1}
+          {currentHero.text1}
         </h1>
         
         {/* Subheadline (font-sans: Plus Jakarta Sans) */}
         <p className="mt-6 max-w-2xl text-base font-medium text-gray-300 sm:text-lg animate-fade-in [animation-delay:200ms]">
-          {heroData.text2}
+          {currentHero.text2}
         </p>
 
         {/* ── Hero Intent Search Box Blueprint ── */}
