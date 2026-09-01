@@ -3,83 +3,108 @@ import Title from '../component/Title'
 import { shopDataContext } from '../context/ShopContext'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
+import { FiPackage, FiRefreshCw } from 'react-icons/fi'
+import Footer from '../component/Footer'
+
+const statusColors = {
+  'Order Placed': 'bg-blue-50 text-blue-700',
+  'Packing': 'bg-yellow-50 text-yellow-700',
+  'Shipped': 'bg-purple-50 text-purple-700',
+  'Out for delivery': 'bg-orange-50 text-orange-700',
+  'Delivered': 'bg-green-50 text-green-700',
+}
 
 function Order() {
-    let [orderData,setOrderData] = useState([])
-    let {currency} = useContext(shopDataContext)
-    let {serverUrl} = useContext(authDataContext)
+  const [orderData, setOrderData] = useState([])
+  const { currency } = useContext(shopDataContext)
+  const { serverUrl } = useContext(authDataContext)
 
-    const loadOrderData = async () => {
-       try {
-      const result = await axios.post(serverUrl + '/api/order/userorder',{},{withCredentials:true})
-      if(result.data){
-        let allOrdersItem = []
-        result.data.map((order)=>{
-          order.items.map((item)=>{
-            item['status'] = order.status
-            item['payment'] = order.payment
-            item['paymentMethod'] = order.paymentMethod
-            item['date'] = order.date
-            allOrdersItem.push(item)
+  const loadOrderData = async () => {
+    try {
+      const result = await axios.post(serverUrl + '/api/order/userorder', {}, { withCredentials: true })
+      if (result.data) {
+        const allItems = []
+        result.data.forEach(order => {
+          order.items.forEach(item => {
+            allItems.push({
+              ...item,
+              status: order.status,
+              payment: order.payment,
+              paymentMethod: order.paymentMethod,
+              date: order.date,
+            })
           })
         })
-        setOrderData(allOrdersItem.reverse())
+        setOrderData(allItems.reverse())
       }
     } catch (error) {
       console.log(error)
     }
-    }
+  }
 
-useEffect(()=>{
- loadOrderData()
-},[])
-
+  useEffect(() => { loadOrderData() }, [])
 
   return (
-    <div className='w-[99vw] min-h-[100vh] p-[20px] pb-[150px]  overflow-hidden bg-gradient-to-l from-[#141414] to-[#0c2025] '>
-      <div className='h-[8%] w-[100%] text-center mt-[80px]'>
-        <Title text1={'MY'} text2={'ORDER'} />
-      </div>
-      <div className=' w-[100%] h-[92%] flex flex-wrap gap-[20px]'>
-        {
-         orderData.map((item,index)=>(
-            <div key={index} className='w-[100%] h-[10%] border-t border-b '>
-                <div className='w-[100%] h-[80%] flex items-start gap-6 bg-[#51808048]  py-[10px] px-[20px] rounded-2xl relative '>
-                    <img src={item.image1} alt="" className='w-[130px] h-[130px] rounded-md '/>
-                    <div className='flex items-start justify-center flex-col gap-[5px]'>
-                    <p className='md:text-[25px] text-[20px] text-[#f3f9fc]'>{item.name}</p>
-                    <div className='flex items-center gap-[8px]   md:gap-[20px]'>
-                        <p className='md:text-[18px] text-[12px] text-[#aaf4e7]'>{currency} {item.price}</p>
-                      <p className='md:text-[18px] text-[12px] text-[#aaf4e7]'>Quantity: {item.quantity}</p>
-                      <p className='md:text-[18px] text-[12px] text-[#aaf4e7]'>Size: {item.size}</p>
-                    </div>
-                    <div className='flex items-center'>
-                     <p className='md:text-[18px] text-[12px] text-[#aaf4e7]'>Date: <span className='text-[#e4fbff] pl-[10px] md:text-[16px] text-[11px]'>{new Date(item.date).toDateString()}</span></p>
-                    </div>
-                    <div className='flex items-center'>
-                      <p className='md:text-[16px] text-[12px] text-[#aaf4e7]'>Payment Method :{item.paymentMethod}</p>
-                    </div>
-                    <div className='absolute md:left-[55%] md:top-[40%] right-[2%] top-[2%]  '>
-                        <div className='flex items-center gap-[5px]'>
-                      <p className='min-w-2 h-2 rounded-full bg-green-500'></p> 
-                      <p className='md:text-[17px] text-[10px] text-[#f3f9fc]'>{item.status}</p>
+    <div className="min-h-screen bg-[#F8FAFC] pt-16 pb-24 md:pb-8">
+      <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mb-8 text-center">
+          <Title text1="MY" text2="ORDERS" />
+        </div>
 
-                    </div>
+        {orderData.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <FiPackage className="mb-5 h-16 w-16 text-gray-200" />
+            <p className="text-xl font-semibold text-gray-700">No orders yet</p>
+            <p className="mt-2 text-sm text-gray-500">Your completed orders will appear here.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {orderData.map((item, index) => (
+              <div key={index} className="flex items-start gap-4 rounded-2xl bg-white border border-gray-100 shadow-sm p-4 sm:p-5">
+                {/* Image */}
+                <img
+                  src={item.image1}
+                  alt={item.name}
+                  className="h-20 w-20 flex-shrink-0 rounded-xl object-cover"
+                />
 
-                    </div>
-                     <div className='absolute md:right-[5%] right-[1%] md:top-[40%] top-[70%]'> 
-                    <button className='md:px-[15px] px-[5px] py-[3px] md:py-[7px] rounded-md bg-[#101919] text-[#f3f9fc] text-[12px] md:text-[16px] cursor-pointe active:bg-slate-500' onClick={loadOrderData} >Track Order</button>
+                {/* Info */}
+                <div className="flex flex-1 flex-col gap-1.5">
+                  <p className="font-semibold text-gray-900 line-clamp-1">{item.name}</p>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
+                    <span>{currency} {item.price}</span>
+                    <span>Qty: {item.quantity}</span>
+                    <span>Size: {item.size}</span>
                   </div>
-                    </div>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-400">
+                    <span>Date: {new Date(item.date).toDateString()}</span>
+                    <span>Payment: {item.paymentMethod}</span>
+                    <span className={item.payment ? 'text-green-600 font-medium' : 'text-orange-500 font-medium'}>
+                      {item.payment ? 'Paid' : 'Pending'}
+                    </span>
+                  </div>
                 </div>
-               
-            </div>
-         ))
-        }
+
+                {/* Status + Track */}
+                <div className="flex flex-col items-end gap-3 flex-shrink-0">
+                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusColors[item.status] || 'bg-gray-100 text-gray-600'}`}>
+                    {item.status}
+                  </span>
+                  <button
+                    onClick={loadOrderData}
+                    className="flex items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 hover:border-indigo-400 hover:text-indigo-600 transition-colors"
+                  >
+                    <FiRefreshCw className="h-3 w-3" /> Track
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+      <Footer />
     </div>
   )
 }
 
 export default Order
-

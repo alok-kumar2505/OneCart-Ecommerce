@@ -1,51 +1,62 @@
 import React from 'react'
-import logo from "../assets/logo.png"
+import logo from '../assets/logo.png'
+import { useNavigate } from 'react-router-dom'
+
+const companyLinks = ['Home', 'About Us', 'Delivery', 'Privacy Policy']
+const contactInfo = ['+91-9525487783', 'contact@onecart.com', '+1-123-456-7890', 'admin@onecart.com']
+
 function Footer() {
+  const navigate = useNavigate()
   return (
-    <div className='mb-[77px] w-full md:mb-0'>
-        <div className='flex w-full flex-col items-start justify-center gap-[24px] bg-[#dbfcfcec] px-4 py-8 md:flex-row md:items-start md:justify-center md:px-[50px]'>
-            <div className='flex w-full flex-col items-start justify-center gap-[5px] md:w-[30%]'>
-                <div className='mt-[10px] flex items-start justify-start gap-[5px] md:mt-[20px] lg:mt-[40px]'>
-                    <img src={logo} alt=""  className='md:w-[40px] md:h-[40px] w-[30px] h-[30px]'/>
-                    <p className='text-[19px] md:text-[20px] text-[black] '>OneCart</p>
-            
-                </div>
-                <p className='hidden text-[15px] text-[#1e2223] md:block'>OneCart is your all-in-one online shopping destination, offering top-quality products, unbeatable deals, and fast delivery—all backed by trusted service designed to make your life easier every day.</p>
-                    <p className='flex text-[15px] text-[#1e2223] md:hidden'>Fast. Easy. Reliable. OneCart Shopping</p>
-
-                
+    <footer className="w-full bg-gray-900 pb-20 md:pb-0">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
+          {/* Brand */}
+          <div>
+            <div
+              className="flex cursor-pointer items-center gap-2"
+              onClick={() => navigate('/')}
+            >
+              <img src={logo} alt="OneCart" className="h-7 w-7 object-contain" />
+              <span className="text-lg font-bold text-white">
+                One<span className="text-indigo-400">Cart</span>
+              </span>
             </div>
-            <div className='flex w-full flex-col items-start justify-center text-left md:w-[25%] md:items-center md:text-center'>
-                    <div className='mt-[10px] flex items-center justify-center gap-[5px] md:mt-[20px] lg:mt-[40px]'>
-                        <p className='text-[19px] md:text-[20px] text-[#1e2223] font-sans '>COMPANY</p>
+            <p className="mt-4 text-sm leading-relaxed text-gray-400">
+              Your all-in-one online shopping destination. Quality products, unbeatable deals, and fast delivery — all backed by trusted service.
+            </p>
+          </div>
 
-                    </div>
-                    <ul className='space-y-1'>
-                         <li className='text-[15px] text-[#1e2223] hidden md:block cursor-pointer'>Home</li>
-                        <li className='text-[15px] text-[#1e2223] cursor-pointer '>About us</li>
-                        <li className='text-[15px] text-[#1e2223] hidden md:block cursor-pointer'>Delivery</li>
-                        <li className='text-[15px] text-[#1e2223] cursor-pointer'>Privacy Policy</li>
-                    </ul>
-                </div>
+          {/* Company */}
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400">Company</h3>
+            <ul className="mt-4 space-y-2">
+              {companyLinks.map(link => (
+                <li key={link}>
+                  <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors">
+                    {link}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-                <div className='flex w-full flex-col items-start justify-center text-left md:w-[25%] md:items-center md:text-center'>
-                     <div className='mt-[10px] flex items-center justify-center gap-[5px] md:mt-[20px] lg:mt-[40px]'>
-                        <p className='text-[19px] md:text-[20px] text-[#1e2223] font-sans '>GET IN TOUCH</p>
-
-                    </div>
-                     <ul className='space-y-1'>
-                         <li className='text-[15px] text-[#1e2223] '>+91-9525487783</li>
-                        <li className='text-[15px] text-[#1e2223] '>contact@onecart.com</li>
-                        <li className='text-[15px] text-[#1e2223] hidden md:block'>+1-123-456-7890</li>
-                        <li className='text-[15px] text-[#1e2223] hidden md:block'>admin@onecart.com</li>
-                    </ul>
-                </div>
-
+          {/* Contact */}
+          <div>
+            <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400">Get in Touch</h3>
+            <ul className="mt-4 space-y-2">
+              {contactInfo.map(item => (
+                <li key={item} className="text-sm text-gray-300">{item}</li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <div className='h-[1px] w-full bg-slate-400'></div>
-        <div className='flex min-h-[5vh] w-full items-center justify-center bg-[#dbfcfcec] px-4 py-3 text-center text-[13px] sm:text-[14px]'>Copyright 2025@onecart.com-All Rights Reserved</div>
-      
-    </div>
+
+        <div className="mt-10 border-t border-gray-800 pt-6 text-center">
+          <p className="text-xs text-gray-500">© 2025 OneCart. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
   )
 }
 
