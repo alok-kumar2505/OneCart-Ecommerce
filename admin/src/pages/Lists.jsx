@@ -4,7 +4,7 @@ import Sidebar from '../component/Sidebar'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
 import { RiDeleteBin6Line } from 'react-icons/ri'
-import { FiPackage } from 'react-icons/fi'
+import { FiBox } from 'react-icons/fi'
 
 function Lists() {
   const [list, setList] = useState([])
@@ -31,67 +31,69 @@ function Lists() {
   useEffect(() => { fetchList() }, [])
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="bg-obsidian-950 text-gray-200 min-h-screen">
       <Nav />
       <Sidebar />
 
-      <main className="ml-14 pt-16 md:ml-56">
-        <div className="max-w-4xl px-6 py-10">
-          <div className="mb-8 flex items-center justify-between">
+      <main className="ml-16 pt-20 md:ml-64 p-6 md:p-10 pb-24">
+        <div className="max-w-5xl">
+          <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Product List</h1>
-              <p className="mt-1 text-sm text-gray-500">{list.length} products in your store</p>
+              <h1 className="font-display text-2xl font-bold text-white mb-2">Product Catalog</h1>
+              <p className="text-sm text-gray-400">Manage all {list.length} products in your store.</p>
             </div>
             <a
               href="/add"
-              className="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
+              className="inline-flex justify-center items-center px-6 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 text-white font-bold text-sm shadow-lg shadow-violet-600/30 transition-all hover:scale-[1.02]"
             >
               + Add Product
             </a>
           </div>
 
           {list.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl bg-white border border-gray-100 py-24 text-center shadow-sm">
-              <FiPackage className="mb-4 h-12 w-12 text-gray-200" />
-              <p className="text-base font-semibold text-gray-600">No products yet</p>
-              <p className="mt-1 text-sm text-gray-400">Add your first product to get started.</p>
+            <div className="glass-panel rounded-[2.5rem] p-16 text-center border-white/10 mt-10">
+              <div className="w-20 h-20 bg-gradient-to-br from-obsidian-800 to-obsidian-700 rounded-full mx-auto flex items-center justify-center mb-6 shadow-inner border border-white/5">
+                <FiBox className="h-8 w-8 text-amber-500/50" />
+              </div>
+              <p className="font-display text-xl font-bold text-white mb-2">Catalog is empty</p>
+              <p className="text-sm text-gray-400 mb-6 max-w-sm mx-auto">You haven't added any products yet. Start by creating your first product.</p>
+              <a href="/add" className="text-amber-500 hover:text-amber-400 font-bold underline underline-offset-4">Add your first product</a>
             </div>
           ) : (
-            <div className="overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <div className="glass-panel rounded-3xl border-white/10 overflow-hidden">
               {/* Table Header */}
-              <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-4 border-b border-gray-100 bg-gray-50 px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                <span className="w-16">Image</span>
+              <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-6 border-b border-white/10 bg-white/5 px-6 py-4 text-xs font-bold uppercase tracking-widest text-gray-400">
+                <span className="w-14">Image</span>
                 <span>Name</span>
-                <span className="text-center">Category</span>
+                <span className="hidden sm:block text-center">Category</span>
                 <span className="text-center">Price</span>
                 <span className="text-center">Action</span>
               </div>
 
-              <div className="divide-y divide-gray-50">
+              <div className="divide-y divide-white/10">
                 {list.map((item, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-4 px-5 py-4 hover:bg-gray-50 transition-colors"
+                    className="grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-6 px-6 py-5 hover:bg-white/5 transition-colors"
                   >
-                    <img
-                      src={item.image1}
-                      alt={item.name}
-                      className="h-14 w-14 rounded-xl object-cover"
-                    />
-                    <div>
-                      <p className="font-semibold text-gray-900 text-sm line-clamp-1">{item.name}</p>
+                    <div className="h-14 w-14 rounded-xl overflow-hidden bg-obsidian-900 border border-white/5">
+                      <img src={item.image1} alt={item.name} className="h-full w-full object-cover" />
                     </div>
-                    <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 text-center whitespace-nowrap">
+                    <div>
+                      <p className="font-bold text-white text-sm line-clamp-2">{item.name}</p>
+                    </div>
+                    <span className="hidden sm:block rounded-md bg-obsidian-800 border border-white/10 px-3 py-1 text-[10px] font-bold uppercase text-amber-400 text-center whitespace-nowrap">
                       {item.category}
                     </span>
-                    <span className="text-sm font-bold text-gray-900 text-center whitespace-nowrap">
+                    <span className="font-display text-sm font-bold text-white text-center whitespace-nowrap">
                       ₹{item.price}
                     </span>
                     <button
                       onClick={() => removeList(item._id)}
-                      className="flex items-center justify-center rounded-xl p-2 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors"
+                      className="flex items-center justify-center rounded-xl p-2.5 text-gray-500 hover:bg-white/5 hover:text-pink-500 transition-colors mx-auto"
+                      aria-label="Remove Product"
                     >
-                      <RiDeleteBin6Line className="h-4 w-4" />
+                      <RiDeleteBin6Line className="h-5 w-5" />
                     </button>
                   </div>
                 ))}

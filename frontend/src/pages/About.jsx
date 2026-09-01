@@ -1,82 +1,64 @@
 import React from 'react'
 import Title from '../component/Title'
-import about from '../assets/about.jpg'
 import NewLetterBox from '../component/NewLetterBox'
+import about from '../assets/about.jpg'
 import Footer from '../component/Footer'
-import { FiCheckCircle, FiZap, FiHeadphones } from 'react-icons/fi'
-
-const reasons = [
-  {
-    icon: FiCheckCircle,
-    title: 'Quality Assurance',
-    desc: 'We guarantee quality through strict checks, reliable sourcing, and a commitment to customer satisfaction.',
-  },
-  {
-    icon: FiZap,
-    title: 'Convenience',
-    desc: 'Shop easily with fast delivery, simple navigation, secure checkout, and everything you need in one place.',
-  },
-  {
-    icon: FiHeadphones,
-    title: 'Exceptional Support',
-    desc: 'Our dedicated support team ensures quick responses, helpful solutions, and a smooth shopping experience.',
-  },
-]
+import Nav from '../component/Nav'
+import { FiTarget, FiStar, FiHeart } from 'react-icons/fi'
 
 function About() {
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pt-16 pb-24 md:pb-0">
-      {/* About Section */}
-      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <Title text1="ABOUT" text2="US" />
-        </div>
-        <div className="flex flex-col items-center gap-10 lg:flex-row">
-          <div className="flex w-full items-center justify-center lg:w-1/2">
-            <img
-              src={about}
-              alt="About OneCart"
-              className="w-full max-w-md rounded-2xl object-cover shadow-lg"
-            />
+    <div className="bg-obsidian-950 text-gray-200 min-h-screen">
+      <Nav />
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mb-12"><Title text1="About" text2="Us" /></div>
+
+        <div className="flex flex-col gap-16 lg:flex-row lg:items-center">
+          {/* Image */}
+          <div className="lg:w-1/2">
+            <div className="relative rounded-[2.5rem] p-3 glass-panel border-white/10 shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-amber-500/20 rounded-[2.5rem] blur-xl -z-10" />
+              <img src={about} alt="About Us" className="w-full rounded-3xl aspect-[4/3] object-cover" />
+            </div>
           </div>
-          <div className="flex w-full flex-col gap-5 lg:w-1/2">
-            <p className="text-sm leading-relaxed text-gray-600 sm:text-base">
-              OneCart was born for smart, seamless shopping — created to deliver quality products, trending styles, and everyday essentials in one place. With reliable service, fast delivery, and great value, OneCart makes your online shopping experience simple, satisfying, and stress-free.
+
+          {/* Text */}
+          <div className="lg:w-1/2 space-y-6">
+            <h2 className="font-display text-3xl font-bold text-white">Redefining the Shopping Experience</h2>
+            <p className="text-base leading-relaxed text-gray-300">
+              OneCart was born out of a desire to create a shopping destination that seamlessly blends premium quality with effortless convenience. We curate exclusive collections that cater to your unique style.
             </p>
-            <p className="text-sm leading-relaxed text-gray-600 sm:text-base">
-              Built for modern shoppers — combining style, convenience, and affordability. Whether it's fashion, essentials, or trends, we bring everything you need to one trusted platform with fast delivery, easy returns, and a customer-first experience.
+            <p className="text-base leading-relaxed text-gray-300">
+              Our mission is simple: to provide a curated selection of exceptional products while delivering an unparalleled customer experience. We believe that shopping should be an inspiring journey.
             </p>
-            <div className="mt-2 border-l-4 border-indigo-600 pl-4">
-              <p className="text-sm font-bold text-gray-900 sm:text-base">Our Mission</p>
-              <p className="mt-1 text-sm leading-relaxed text-gray-600">
-                To redefine online shopping by delivering quality, affordability, and convenience — connecting customers with trusted products and brands in a seamless experience.
-              </p>
+            
+            <div className="pt-6 border-t border-white/10">
+              <p className="font-display text-xl font-bold text-white mb-4">Why Choose Us</p>
+              <div className="space-y-4">
+                {[
+                  { icon: FiTarget, title: 'Quality Assurance', desc: 'Every product is rigorously vetted for excellence.' },
+                  { icon: FiStar, title: 'Curated Collections', desc: 'Handpicked items designed for modern living.' },
+                  { icon: FiHeart, title: 'Exceptional Service', desc: 'A dedicated team ensuring your absolute satisfaction.' }
+                ].map(({ icon: Icon, title, desc }) => (
+                  <div key={title} className="flex gap-4 items-start">
+                    <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 mt-1">
+                      <Icon className="w-5 h-5 text-violet-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white">{title}</h4>
+                      <p className="text-sm text-gray-400 mt-1">{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Why Choose Us */}
-      <section className="bg-white px-4 py-14 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl">
-          <div className="mb-10 text-center">
-            <Title text1="WHY" text2="CHOOSE US" />
-          </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {reasons.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="flex flex-col items-center gap-4 rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50">
-                  <Icon className="h-6 w-6 text-indigo-600" />
-                </div>
-                <p className="text-base font-bold text-gray-900">{title}</p>
-                <p className="text-sm leading-relaxed text-gray-500">{desc}</p>
-              </div>
-            ))}
-          </div>
+        <div className="mt-20">
+          <NewLetterBox />
         </div>
-      </section>
-
-      <NewLetterBox />
+      </div>
       <Footer />
     </div>
   )

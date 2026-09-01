@@ -1,48 +1,51 @@
 import React, { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import logo from '../assets/logo.png'
-import axios from 'axios'
 import { authDataContext } from '../context/AuthContext'
-import { adminDataContext } from '../context/AdminContext'
-import { toast } from 'react-toastify'
-import { FiLogOut } from 'react-icons/fi'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { HiSparkles } from 'react-icons/hi'
 
 function Nav() {
+  const { serverUrl, getAdminUser } = useContext(authDataContext)
   const navigate = useNavigate()
-  const { serverUrl } = useContext(authDataContext)
-  const { getAdmin } = useContext(adminDataContext)
 
-  const logOut = async () => {
+  const handleLogout = async () => {
     try {
       await axios.get(serverUrl + '/api/auth/logout', { withCredentials: true })
-      toast.success('Logged out successfully')
-      getAdmin()
+      getAdminUser()
       navigate('/login')
-    } catch (error) {
-      toast.error('Logout failed')
-    }
+    } catch (error) { console.log(error) }
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6 shadow-sm">
-      <div
-        className="flex cursor-pointer items-center gap-2"
-        onClick={() => navigate('/')}
-      >
-        <img src={logo} alt="OneCart" className="h-7 w-7 object-contain" />
-        <span className="text-lg font-bold text-gray-900">
-          One<span className="text-indigo-600">Cart</span>
-        </span>
-        <span className="ml-2 rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-semibold text-indigo-700">
-          Admin
-        </span>
+    <header className="sticky top-0 z-40 w-full glass-panel border-b border-white/10 backdrop-blur-xl">
+      <div className="mx-auto flex h-20 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        
+        {/* Logo Blueprint */}
+        <div className="flex cursor-pointer items-center gap-3" onClick={() => navigate('/')}>
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-600 via-pink-500 to-amber-500 p-0.5 shadow-lg hidden sm:block">
+            <div className="w-full h-full bg-obsidian-950 rounded-[10px] flex items-center justify-center">
+              <HiSparkles className="w-6 h-6 text-amber-400" />
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-display text-xl sm:text-2xl font-bold text-white tracking-wide uppercase leading-none">
+              One<span className="text-amber-500">Cart</span>
+            </span>
+            <span className="text-[10px] font-bold tracking-widest text-pink-400 uppercase mt-0.5">Admin Panel</span>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleLogout}
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 text-white font-bold text-xs shadow-lg shadow-violet-600/30 transition-all"
+          >
+            Log Out
+          </button>
+        </div>
+        
       </div>
-      <button
-        onClick={logOut}
-        className="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 hover:border-red-200 hover:bg-red-50 hover:text-red-600 transition-colors"
-      >
-        <FiLogOut className="h-4 w-4" /> Log Out
-      </button>
     </header>
   )
 }

@@ -7,20 +7,22 @@ function CartTotal() {
   const total = subtotal === 0 ? 0 : subtotal + delivery_fee
 
   return (
-    <div className="w-full border border-[#E8E2D9] bg-white p-6">
-      <h3 className="mb-5 text-xs font-bold tracking-[0.25em] uppercase text-[#1A1A1A]">Order Summary</h3>
-      <div className="space-y-3">
-        <div className="flex justify-between text-xs text-[#6B6360]">
-          <span className="tracking-wide">Subtotal</span>
-          <span className="font-medium text-[#1A1A1A]">{currency} {subtotal}.00</span>
+    <div className="w-full glass-panel rounded-2xl p-6">
+      <h3 className="mb-6 font-display text-lg font-bold text-white border-b border-white/10 pb-4">
+        Order Summary
+      </h3>
+      <div className="space-y-4">
+        <div className="flex justify-between text-sm">
+          <span className="text-gray-400">Subtotal</span>
+          <span className="font-bold text-white">{currency} {subtotal}.00</span>
         </div>
-        <div className="flex justify-between text-xs text-[#6B6360]">
-          <span className="tracking-wide">Shipping</span>
-          <span className="font-medium text-[#1A1A1A]">{currency} {delivery_fee}</span>
+        <div className="flex justify-between text-sm">
+          <span className="text-gray-400">Shipping</span>
+          <span className="font-bold text-white">{currency} {delivery_fee}</span>
         </div>
-        <div className="border-t border-[#E8E2D9] pt-3 flex justify-between">
-          <span className="text-xs font-bold tracking-[0.15em] uppercase text-[#1A1A1A]">Total</span>
-          <span className="text-lg font-bold text-[#C9A96E]">{currency} {total}</span>
+        <div className="border-t border-white/10 pt-4 flex justify-between items-center">
+          <span className="font-display font-bold text-white">Total</span>
+          <span className="font-display text-xl font-extrabold gradient-text-gold">{currency} {total}</span>
         </div>
       </div>
     </div>

@@ -1,39 +1,53 @@
-import React from 'react'
-import { IoIosAddCircleOutline } from 'react-icons/io'
-import { FaRegListAlt } from 'react-icons/fa'
-import { SiTicktick } from 'react-icons/si'
-import { FiHome } from 'react-icons/fi'
+import React, { useContext, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-
-const links = [
-  { icon: FiHome, label: 'Dashboard', path: '/' },
-  { icon: IoIosAddCircleOutline, label: 'Add Product', path: '/add' },
-  { icon: FaRegListAlt, label: 'Product List', path: '/lists' },
-  { icon: SiTicktick, label: 'Orders', path: '/orders' },
-]
+import { FiHome, FiPlusSquare, FiList, FiCheckSquare } from 'react-icons/fi'
 
 function Sidebar() {
   const navigate = useNavigate()
   const location = useLocation()
-  const isActive = (path) => location.pathname === path
+  
+  const navItems = [
+    { path: '/', label: 'Dashboard', icon: FiHome },
+    { path: '/add', label: 'Add Items', icon: FiPlusSquare },
+    { path: '/lists', label: 'List Items', icon: FiList },
+    { path: '/orders', label: 'Orders', icon: FiCheckSquare },
+  ]
 
   return (
-    <aside className="fixed left-0 top-16 z-40 flex h-[calc(100vh-4rem)] w-14 flex-col border-r border-gray-200 bg-white pt-6 md:w-56">
-      <nav className="flex flex-col gap-1 px-2">
-        {links.map(({ icon: Icon, label, path }) => (
-          <button
-            key={path}
-            onClick={() => navigate(path)}
-            className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-              isActive(path)
-                ? 'bg-indigo-50 text-indigo-700 border-l-4 border-indigo-600'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent'
-            }`}
-          >
-            <Icon className={`h-5 w-5 flex-shrink-0 ${isActive(path) ? 'text-indigo-600' : 'text-gray-400'}`} />
-            <span className="hidden md:block">{label}</span>
-          </button>
-        ))}
+    <aside className="fixed top-20 bottom-0 left-0 z-30 w-16 md:w-64 glass-panel border-r border-white/10 overflow-y-auto transition-all duration-300">
+      <nav className="flex flex-col gap-2 p-3 md:p-4">
+        {navItems.map(({ path, label, icon: Icon }) => {
+          const isActive = location.pathname === path || (path === '/' && location.pathname === '/home')
+          
+          return (
+            <button
+              key={path}
+              onClick={() => navigate(path)}
+              className={`flex items-center gap-4 rounded-xl px-3 md:px-4 py-3 transition-all duration-300 group ${
+                isActive 
+                  ? 'bg-gradient-to-r from-violet-600/20 to-transparent border border-violet-500/30' 
+                  : 'hover:bg-white/5 border border-transparent'
+              }`}
+            >
+              <Icon 
+                className={`h-5 w-5 flex-shrink-0 transition-colors ${
+                  isActive ? 'text-violet-400' : 'text-gray-500 group-hover:text-gray-300'
+                }`} 
+              />
+              <span 
+                className={`hidden md:block text-sm font-semibold transition-colors ${
+                  isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-200'
+                }`}
+              >
+                {label}
+              </span>
+              
+              {isActive && (
+                <div className="absolute left-0 w-1 h-8 bg-gradient-to-b from-violet-400 to-indigo-500 rounded-r-full hidden md:block" />
+              )}
+            </button>
+          )
+        })}
       </nav>
     </aside>
   )

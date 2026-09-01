@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react'
-import logo from '../assets/logo.png'
 import { IoSearchOutline, IoClose } from 'react-icons/io5'
 import { FiShoppingCart, FiUser, FiPackage, FiLogOut, FiHome } from 'react-icons/fi'
-import { HiOutlineCollection } from 'react-icons/hi'
+import { HiOutlineCollection, HiSparkles } from 'react-icons/hi'
 import { MdContacts } from 'react-icons/md'
 import { userDataContext } from '../context/UserContext'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -37,28 +36,32 @@ function Nav() {
 
   return (
     <>
-      {/* ── Top Navbar ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E8E2D9]">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      {/* ── Header Navigation Blueprint ── */}
+      <header className="sticky top-0 z-40 w-full glass-panel border-b border-white/10 backdrop-blur-xl">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
 
-          {/* Logo */}
-          <div className="flex cursor-pointer items-center gap-2.5" onClick={() => navigate('/')}>
-            <img src={logo} alt="OneCart" className="h-7 w-7 object-contain" />
-            <span className="text-xl font-bold tracking-widest text-[#1A1A1A] uppercase">
-              One<span className="text-[#C9A96E]">Cart</span>
+          {/* Logo Blueprint */}
+          <div className="flex cursor-pointer items-center gap-3" onClick={() => navigate('/')}>
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-600 via-pink-500 to-amber-500 p-0.5 shadow-lg">
+              <div className="w-full h-full bg-obsidian-950 rounded-[10px] flex items-center justify-center">
+                <HiSparkles className="w-6 h-6 text-amber-400" />
+              </div>
+            </div>
+            <span className="font-display text-2xl font-bold text-white tracking-wide uppercase">
+              One<span className="text-amber-500">Cart</span>
             </span>
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map(link => (
               <button
                 key={link.path}
                 onClick={() => navigate(link.path)}
-                className={`px-4 py-2 text-xs font-semibold tracking-widest uppercase transition-colors duration-150 ${
+                className={`px-4 py-2 text-sm font-semibold transition-colors duration-200 ${
                   isActive(link.path)
-                    ? 'text-[#C9A96E] border-b-2 border-[#C9A96E]'
-                    : 'text-[#1A1A1A] hover:text-[#C9A96E]'
+                    ? 'gradient-text font-bold'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 {link.label}
@@ -70,7 +73,7 @@ function Nav() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => { setShowSearch(p => !p); if (!showSearch) navigate('/collection') }}
-              className="p-2 text-[#1A1A1A] hover:text-[#C9A96E] transition-colors"
+              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition-colors"
               aria-label="Search"
             >
               {showSearch ? <IoClose className="h-5 w-5" /> : <IoSearchOutline className="h-5 w-5" />}
@@ -78,49 +81,55 @@ function Nav() {
 
             <button
               onClick={() => navigate('/cart')}
-              className="relative hidden md:flex p-2 text-[#1A1A1A] hover:text-[#C9A96E] transition-colors"
+              className="relative hidden md:flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition-colors"
               aria-label="Cart"
             >
               <FiShoppingCart className="h-5 w-5" />
               {getCartCount() > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center bg-[#C9A96E] text-[10px] font-bold text-white">
+                <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 shadow-md text-[10px] font-bold text-white">
                   {getCartCount()}
                 </span>
               )}
             </button>
 
-            {/* Avatar */}
+            {/* Profile Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setShowProfile(p => !p)}
-                className="flex h-9 w-9 items-center justify-center bg-[#1A1A1A] text-white text-sm font-semibold hover:bg-[#2D2D2D] transition-colors"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 text-white font-bold text-xs shadow-lg shadow-violet-600/30 transition-all"
                 aria-label="Account"
               >
-                {userData?.name ? userData.name.slice(0, 1).toUpperCase() : <FiUser className="h-4 w-4" />}
+                {userData?.name ? (
+                  <span className="truncate max-w-[80px]">{userData.name}</span>
+                ) : (
+                  <>
+                    <FiUser className="h-4 w-4" /> <span>Account</span>
+                  </>
+                )}
               </button>
 
               {showProfile && (
-                <div className="absolute right-0 top-12 w-52 bg-white border border-[#E8E2D9] shadow-lg py-2 animate-slide-down z-50">
+                <div className="absolute right-0 top-14 w-52 rounded-2xl glass-panel border border-white/10 shadow-2xl py-2 animate-slide-down z-50">
                   {userData && (
-                    <div className="px-4 py-2 border-b border-[#E8E2D9] mb-1">
-                      <p className="text-sm font-semibold text-[#1A1A1A] truncate">{userData.name}</p>
-                      <p className="text-xs text-[#6B6360] truncate">{userData.email}</p>
+                    <div className="px-4 py-3 border-b border-white/10 mb-1">
+                      <p className="text-sm font-bold text-white truncate">{userData.name}</p>
+                      <p className="text-xs text-gray-400 truncate mt-0.5">{userData.email}</p>
                     </div>
                   )}
-                  <button onClick={() => { navigate('/order'); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2 text-xs font-medium tracking-wide text-[#1A1A1A] hover:bg-[#FAF8F4] hover:text-[#C9A96E] transition-colors uppercase">
-                    <FiPackage className="h-4 w-4" /> My Orders
+                  <button onClick={() => { navigate('/order'); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
+                    <FiPackage className="h-4 w-4 text-violet-400" /> My Orders
                   </button>
-                  <button onClick={() => { navigate('/about'); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2 text-xs font-medium tracking-wide text-[#1A1A1A] hover:bg-[#FAF8F4] hover:text-[#C9A96E] transition-colors uppercase">
-                    <FiUser className="h-4 w-4" /> About
+                  <button onClick={() => { navigate('/about'); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
+                    <FiUser className="h-4 w-4 text-pink-400" /> About
                   </button>
-                  <div className="my-1 border-t border-[#E8E2D9]" />
+                  <div className="my-1 border-t border-white/10" />
                   {userData ? (
-                    <button onClick={() => { handleLogout(); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2 text-xs font-medium tracking-wide text-[#1A1A1A] hover:bg-[#FAF8F4] transition-colors uppercase">
-                      <FiLogOut className="h-4 w-4" /> Log Out
+                    <button onClick={() => { handleLogout(); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
+                      <FiLogOut className="h-4 w-4 text-gray-400" /> Log Out
                     </button>
                   ) : (
-                    <button onClick={() => { navigate('/login'); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2 text-xs font-medium tracking-wide text-[#C9A96E] hover:bg-[#FAF8F4] transition-colors uppercase">
-                      <FiUser className="h-4 w-4" /> Log In
+                    <button onClick={() => { navigate('/login'); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/5 transition-colors">
+                      <FiUser className="h-4 w-4 text-amber-400" /> Log In
                     </button>
                   )}
                 </div>
@@ -129,28 +138,35 @@ function Nav() {
           </div>
         </div>
 
-        {/* Search Bar */}
+        {/* Search Bar - Adapted from blueprint */}
         {showSearch && (
-          <div className="border-t border-[#E8E2D9] bg-white px-4 py-3 animate-slide-down">
-            <div className="mx-auto flex max-w-2xl items-center gap-3 border border-[#E8E2D9] bg-[#FAF8F4] px-4 py-2.5 focus-within:border-[#C9A96E] transition-colors">
-              <IoSearchOutline className="h-4 w-4 flex-shrink-0 text-[#6B6360]" />
-              <input
-                type="text"
-                placeholder="Search for products..."
-                className="flex-1 bg-transparent text-sm text-[#1A1A1A] placeholder-[#6B6360] outline-none"
-                onChange={(e) => setSearch(e.target.value)}
-                value={search}
-                autoFocus
-              />
-              {search && <button onClick={() => setSearch('')} className="text-[#6B6360] hover:text-[#1A1A1A]"><IoClose className="h-4 w-4" /></button>}
+          <div className="absolute left-0 right-0 top-full glass-panel border-b border-white/10 p-4 animate-slide-down z-30">
+            <div className="max-w-4xl mx-auto relative">
+              <div className="relative glass-panel rounded-2xl p-2 shadow-2xl border-white/15 focus-within:border-violet-500/60 focus-within:ring-4 focus-within:ring-violet-500/20 transition-all">
+                <div className="flex items-center gap-3">
+                  <IoSearchOutline className="w-5 h-5 text-violet-400 ml-3 flex-shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="Search for products..."
+                    className="w-full bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none py-2"
+                    onChange={(e) => setSearch(e.target.value)}
+                    value={search}
+                    autoFocus
+                  />
+                  {search && <button onClick={() => setSearch('')} className="p-2 text-gray-500 hover:text-white"><IoClose className="h-4 w-4" /></button>}
+                  <button onClick={() => navigate('/collection')} className="hidden sm:block px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 via-pink-600 to-amber-500 text-white font-bold text-xs shadow-lg shadow-violet-600/25">
+                    Search
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
       </header>
 
       {/* ── Mobile Bottom Tab Bar ── */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-[#E8E2D9]">
-        <div className="flex items-center justify-around px-2 py-2">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden glass-panel border-t border-white/10 backdrop-blur-xl">
+        <div className="flex items-center justify-around px-2 py-3">
           {[
             { icon: FiHome, label: 'Home', path: '/' },
             { icon: HiOutlineCollection, label: 'Shop', path: '/collection' },
@@ -160,14 +176,14 @@ function Nav() {
             <button
               key={path}
               onClick={() => navigate(path)}
-              className={`relative flex flex-col items-center gap-0.5 px-3 py-1 transition-colors ${
-                isActive(path) ? 'text-[#C9A96E]' : 'text-[#6B6360] hover:text-[#1A1A1A]'
+              className={`relative flex flex-col items-center gap-1 px-3 py-1 transition-colors ${
+                isActive(path) ? 'text-white' : 'text-gray-500 hover:text-gray-300'
               }`}
             >
-              <Icon className="h-5 w-5" />
-              <span className="text-[10px] font-semibold tracking-wide uppercase">{label}</span>
+              <Icon className={`h-5 w-5 ${isActive(path) ? 'text-violet-400' : ''}`} />
+              <span className={`text-[10px] font-semibold ${isActive(path) ? 'text-white' : ''}`}>{label}</span>
               {badge > 0 && (
-                <span className="absolute -top-0.5 right-1 flex h-4 w-4 items-center justify-center bg-[#C9A96E] text-[9px] font-bold text-white">
+                <span className="absolute -top-1 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-[9px] font-bold text-white shadow-md">
                   {badge}
                 </span>
               )}

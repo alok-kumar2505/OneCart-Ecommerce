@@ -20,14 +20,19 @@ function RelatedProduct({ category, subCategory, currentProductId }) {
   if (related.length === 0) return null
 
   return (
-    <section className="w-full bg-[#FAF8F4] px-4 py-14 sm:px-6 lg:px-8">
+    <section className="w-full relative z-10 px-4 py-20 sm:px-6 lg:px-8">
+      {/* Background with slight glassmorphic separation */}
+      <div className="absolute inset-0 bg-obsidian-900/50 backdrop-blur-sm -z-10 border-t border-white/10" />
+      
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10 text-center">
-          <Title text1="RELATED" text2="PRODUCTS" />
+        <div className="mb-14 text-center">
+          <Title text1="Related" text2="Products" />
         </div>
-        <div className="grid grid-cols-1 gap-6 place-items-center sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {related.map((item, i) => (
-            <Card key={i} id={item._id} name={item.name} price={item.price} image={item.image1} />
+            <div key={i} className="animate-fade-in" style={{ animationDelay: `${i * 100}ms` }}>
+              <Card id={item._id} name={item.name} price={item.price} image={item.image1} />
+            </div>
           ))}
         </div>
       </div>

@@ -12,17 +12,23 @@ function BestSeller() {
   }, [products])
 
   return (
-    <section className="w-full bg-[#FAF8F4] px-4 py-16 sm:px-6 lg:px-8">
+    <section className="w-full relative z-10 px-4 py-20 sm:px-6 lg:px-8">
+      {/* Background with slight glassmorphic separation */}
+      <div className="absolute inset-0 bg-obsidian-900/50 backdrop-blur-sm -z-10" />
+      
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <Title text1="BEST" text2="SELLERS" />
-          <p className="mx-auto mt-4 max-w-xl text-xs tracking-wide text-[#6B6360] sm:text-sm">
-            Tried, tested and loved — our all-time customer favourites.
+        <div className="mb-14 text-center">
+          <Title text1="Best" text2="Sellers" />
+          <p className="mx-auto mt-4 max-w-xl text-sm text-gray-400">
+            Tried, tested, and loved. Discover our most popular pieces.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-6 place-items-center sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {bestSeller.map((item, i) => (
-            <Card key={i} name={item.name} id={item._id} price={item.price} image={item.image1} />
+            <div key={i} className="animate-fade-in" style={{ animationDelay: `${i * 100}ms` }}>
+              <Card name={item.name} id={item._id} price={item.price} image={item.image1} />
+            </div>
           ))}
         </div>
       </div>

@@ -1,32 +1,111 @@
 @import "tailwindcss";
 
-:root {
-  --color-charcoal:       #1A1A1A;
-  --color-charcoal-light: #2D2D2D;
-  --color-gold:           #C9A96E;
-  --color-gold-dark:      #A8895A;
-  --color-gold-light:     #E8D5B0;
-  --color-ivory:          #FAF8F4;
-  --color-ivory-dark:     #F0ECE4;
-  --color-surface:        #FFFFFF;
-  --color-text:           #1A1A1A;
-  --color-text-secondary: #6B6360;
-  --color-border:         #E8E2D9;
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+@theme {
+  --color-obsidian-950: #070709;
+  --color-obsidian-900: #0B0B0E;
+  --color-obsidian-800: #121217;
+  --color-obsidian-700: #1A1A22;
+  --color-obsidian-600: #252530;
+
+  --color-gold-400: #FCD34D;
+  --color-gold-500: #F59E0B;
+  --color-gold-600: #D97706;
+
+  --color-violet-400: #A78BFA;
+  --color-violet-500: #8B5CF6;
+  --color-violet-600: #7C3AED;
+
+  --color-emerald-400: #34D399;
+  --color-emerald-500: #10B981;
+
+  --font-sans: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+
+  @keyframes glow {
+    0% { box-shadow: 0 0 15px rgba(139, 92, 246, 0.3); }
+    100% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.5); }
+  }
 }
 
-*, *::before, *::after { box-sizing: border-box; }
-
-body {
-  font-family: var(--font-sans);
-  background-color: var(--color-ivory);
-  color: var(--color-text);
-  -webkit-font-smoothing: antialiased;
-  margin: 0;
+@layer base {
+  body {
+    background-color: var(--color-obsidian-950);
+    color: #F3F4F6;
+    overflow-x: hidden;
+  }
 }
 
-img { display: block; max-width: 100%; }
+/* Glassmorphic Panel (Cards, Navigation, Modals) */
+.glass-panel {
+  background: rgba(18, 18, 23, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
 
+/* Interactive Glass Card with Violet Hover Glow */
+.glass-panel-interactive {
+  background: rgba(18, 18, 23, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel-interactive:hover {
+  background: rgba(26, 26, 34, 0.9);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Glass Input Control */
+.glass-input {
+  background: rgba(11, 11, 14, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #F9FAFB;
+  backdrop-filter: blur(8px);
+}
+
+.glass-input:focus {
+  outline: none;
+  border-color: #8B5CF6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+/* Gradient Text Accents */
+.gradient-text {
+  background: linear-gradient(135deg, #F59E0B 0%, #EC4899 50%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Dark Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0B0E;
+}
+::-webkit-scrollbar-thumb {
+  background: #252530;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8B5CF6;
+}
+
+/* ─── Animations ─────────────────────────────────────────────── */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -39,9 +118,14 @@ img { display: block; max-width: 100%; }
 .animate-fade-in    { animation: fadeIn 0.35s ease both; }
 .animate-slide-down { animation: slideDown 0.2s ease both; }
 
+/* ─── Toastify Override ─────────────────────────────────────── */
 .Toastify__toast {
   font-family: var(--font-sans) !important;
-  border-radius: 0 !important;
+  background: rgba(18, 18, 23, 0.95) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #F3F4F6 !important;
+  border-radius: 0.75rem !important; /* Tailwind rounded-xl */
   font-size: 13px !important;
-  border-left: 3px solid var(--color-gold) !important;
+  border-left: 3px solid #8B5CF6 !important;
 }

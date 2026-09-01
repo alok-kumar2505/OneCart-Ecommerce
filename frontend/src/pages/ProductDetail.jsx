@@ -6,6 +6,7 @@ import { FiShoppingCart, FiTruck, FiRefreshCw, FiShield } from 'react-icons/fi'
 import RelatedProduct from '../component/RelatedProduct'
 import Loading from '../component/Loading'
 import Footer from '../component/Footer'
+import Nav from '../component/Nav'
 
 function ProductDetail() {
   const { productId } = useParams()
@@ -25,76 +26,93 @@ function ProductDetail() {
     }
   }, [productId, products])
 
-  if (!productData) return <div className="opacity-0" />
+  if (!productData) return <div className="bg-obsidian-950 min-h-screen" />
 
   return (
-    <div className="min-h-screen bg-[#FAF8F4] pt-16 pb-24 md:pb-8">
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-10 lg:flex-row">
+    <div className="bg-obsidian-950 text-gray-200 min-h-screen">
+      <Nav />
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        
+        {/* Breadcrumb */}
+        <div className="mb-8">
+          <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400">
+            {productData.category} <span className="text-gray-600 mx-2">/</span> <span className="gradient-text-gold">{productData.subCategory}</span>
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-12 lg:flex-row">
 
           {/* ── Images ── */}
           <div className="flex flex-col-reverse gap-4 lg:flex-row lg:w-1/2">
             {/* Thumbnails */}
-            <div className="flex flex-row gap-2 lg:flex-col">
+            <div className="flex flex-row gap-3 lg:flex-col overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 scrollbar-hide">
               {images.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => setImage(img)}
-                  className={`h-16 w-16 flex-shrink-0 overflow-hidden border-2 transition-all ${
-                    image === img ? 'border-[#C9A96E]' : 'border-[#E8E2D9] hover:border-[#C9A96E]/50'
+                  className={`relative w-20 h-24 flex-shrink-0 overflow-hidden rounded-xl transition-all duration-300 ${
+                    image === img ? 'ring-2 ring-violet-500 ring-offset-2 ring-offset-obsidian-950' : 'opacity-60 hover:opacity-100'
                   }`}
                 >
                   <img src={img} alt="" className="h-full w-full object-cover" />
+                  {image !== img && <div className="absolute inset-0 bg-black/20" />}
                 </button>
               ))}
             </div>
 
             {/* Main image */}
-            <div className="flex-1 overflow-hidden bg-white border border-[#E8E2D9]">
-              <img
-                src={image}
-                alt={productData.name}
-                className="h-full max-h-[500px] w-full object-cover object-center transition-all duration-300 lg:max-h-none"
-              />
+            <div className="flex-1 overflow-hidden rounded-3xl glass-panel p-2">
+              <div className="relative w-full h-full aspect-[4/5] overflow-hidden rounded-2xl bg-obsidian-900">
+                <img
+                  src={image}
+                  alt={productData.name}
+                  className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
+                />
+              </div>
             </div>
           </div>
 
           {/* ── Details ── */}
-          <div className="flex flex-col gap-5 lg:w-1/2 lg:pt-2">
+          <div className="flex flex-col gap-8 lg:w-1/2">
             <div>
-              <p className="mb-2 text-[10px] font-semibold tracking-[0.3em] uppercase text-[#C9A96E]">
-                {productData.category} / {productData.subCategory}
-              </p>
-              <h1 className="text-2xl font-bold tracking-wide text-[#1A1A1A] sm:text-3xl">{productData.name}</h1>
-              <div className="mt-3 flex items-center gap-2">
-                {[...Array(4)].map((_, i) => <FaStar key={i} className="h-3.5 w-3.5 text-[#C9A96E]" />)}
-                <FaStarHalfAlt className="h-3.5 w-3.5 text-[#C9A96E]" />
-                <span className="text-xs text-[#6B6360]">(124 reviews)</span>
+              <h1 className="font-display text-3xl font-bold text-white sm:text-4xl leading-tight">{productData.name}</h1>
+              <div className="mt-4 flex items-center gap-3">
+                <div className="flex items-center gap-1">
+                  {[...Array(4)].map((_, i) => <FaStar key={i} className="h-4 w-4 text-amber-500" />)}
+                  <FaStarHalfAlt className="h-4 w-4 text-amber-500" />
+                </div>
+                <span className="text-sm font-medium text-gray-400 bg-white/5 px-2.5 py-1 rounded-md border border-white/5">(124 reviews)</span>
               </div>
             </div>
 
             {/* Price */}
-            <div className="border-t border-b border-[#E8E2D9] py-4">
-              <p className="text-2xl font-bold tracking-wide text-[#C9A96E]">{currency} {productData.price}</p>
+            <div className="glass-panel rounded-2xl p-6 border-white/10 border-l-4 border-l-violet-500">
+              <p className="font-display text-4xl font-extrabold text-white">
+                {currency}{productData.price}
+                <span className="text-lg font-medium text-gray-500 line-through ml-4">{currency}{Math.floor(productData.price * 1.3)}</span>
+              </p>
             </div>
 
             {/* Description */}
-            <p className="text-sm leading-relaxed text-[#6B6360]">
-              {productData.description} — Stylish, breathable cotton shirt with a modern slim fit. Easy to wash, super comfortable, and designed for effortless everyday style.
+            <p className="text-base leading-relaxed text-gray-300">
+              {productData.description} — Crafted with meticulous attention to detail, this piece offers an unparalleled blend of comfort and luxury. Perfect for those who demand excellence in their everyday style.
             </p>
 
             {/* Size */}
             <div>
-              <p className="mb-3 text-[10px] font-bold tracking-[0.25em] uppercase text-[#1A1A1A]">Select Size</p>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-xs font-bold tracking-[0.1em] uppercase text-white">Select Size</p>
+                <button className="text-xs font-medium text-violet-400 hover:text-violet-300 underline underline-offset-4">Size Guide</button>
+              </div>
+              <div className="flex flex-wrap gap-3">
                 {productData.sizes.map((s, i) => (
                   <button
                     key={i}
                     onClick={() => setSize(s)}
-                    className={`min-w-[3rem] border-2 px-4 py-2 text-xs font-bold tracking-wide transition-all ${
+                    className={`h-12 min-w-[3rem] rounded-xl px-5 text-sm font-bold transition-all duration-300 ${
                       size === s
-                        ? 'border-[#C9A96E] bg-[#C9A96E] text-[#1A1A1A]'
-                        : 'border-[#E8E2D9] bg-white text-[#1A1A1A] hover:border-[#C9A96E]'
+                        ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/30'
+                        : 'glass-panel text-gray-300 hover:text-white hover:border-violet-500/50'
                     }`}
                   >
                     {s}
@@ -107,20 +125,22 @@ function ProductDetail() {
             <button
               onClick={() => addtoCart(productData._id, size)}
               disabled={loading}
-              className="flex items-center justify-center gap-2 border border-[#1A1A1A] bg-[#1A1A1A] py-4 text-xs font-bold tracking-[0.2em] uppercase text-white hover:bg-[#2D2D2D] transition-colors disabled:opacity-70 sm:w-auto sm:px-12"
+              className="mt-2 flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-amber-500 to-gold-400 py-4.5 text-sm font-extrabold uppercase text-obsidian-950 shadow-xl shadow-amber-500/20 hover:scale-[1.02] transition-transform disabled:opacity-70 disabled:hover:scale-100"
             >
-              {loading ? <Loading /> : (<><FiShoppingCart className="h-4 w-4" /> Add to Cart</>)}
+              {loading ? <Loading /> : (<><FiShoppingCart className="h-5 w-5" /> Add to Shopping Bag</>)}
             </button>
 
             {/* Policies */}
-            <div className="border-t border-[#E8E2D9] pt-4 space-y-3">
+            <div className="glass-panel rounded-2xl p-6 mt-2 space-y-4">
               {[
                 { icon: FiShield, text: '100% Original product — guaranteed authentic.' },
-                { icon: FiTruck, text: 'Cash on delivery available on this product.' },
+                { icon: FiTruck, text: 'Express delivery available on this product.' },
                 { icon: FiRefreshCw, text: 'Easy return & exchange within 7 days.' },
               ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-start gap-3 text-xs text-[#6B6360]">
-                  <Icon className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-[#C9A96E]" />
+                <div key={text} className="flex items-center gap-4 text-sm text-gray-300">
+                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-4 w-4 text-emerald-400" />
+                  </div>
                   <span>{text}</span>
                 </div>
               ))}
@@ -129,26 +149,26 @@ function ProductDetail() {
         </div>
 
         {/* ── Tabs ── */}
-        <div className="mt-14">
-          <div className="flex border-b border-[#E8E2D9]">
+        <div className="mt-20">
+          <div className="flex gap-4 border-b border-white/10 pb-4">
             {['description', 'reviews'].map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${
+                className={`px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 ${
                   activeTab === tab
-                    ? 'border-b-2 border-[#C9A96E] text-[#C9A96E]'
-                    : 'text-[#6B6360] hover:text-[#1A1A1A]'
+                    ? 'bg-white/10 text-white border border-white/5'
+                    : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
                 }`}
               >
                 {tab === 'reviews' ? 'Reviews (124)' : 'Description'}
               </button>
             ))}
           </div>
-          <div className="mt-6 border border-[#E8E2D9] bg-white p-6 text-sm leading-relaxed text-[#6B6360]">
+          <div className="mt-6 glass-panel rounded-2xl p-8 text-base leading-relaxed text-gray-300">
             {activeTab === 'description'
-              ? 'Upgrade your wardrobe with this stylish slim-fit cotton shirt, available now on OneCart. Crafted from breathable, high-quality fabric, it offers all-day comfort and effortless style.'
-              : 'Customer reviews coming soon. Be the first to share your experience with this product!'}
+              ? 'Upgrade your wardrobe with this stylish slim-fit cotton shirt, available now on OneCart. Crafted from breathable, high-quality fabric, it offers all-day comfort and effortless style. Designed with modern aesthetics in mind, this piece seamlessly transitions from casual daywear to sophisticated evening attire.'
+              : 'Customer reviews coming soon. Be the first to share your experience with this product! Our community values your opinion.'}
           </div>
         </div>
       </div>

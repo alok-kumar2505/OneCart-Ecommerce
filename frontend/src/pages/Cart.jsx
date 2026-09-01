@@ -7,6 +7,7 @@ import { FiShoppingBag } from 'react-icons/fi'
 import CartTotal from '../component/CartTotal'
 import { toast } from 'react-toastify'
 import Footer from '../component/Footer'
+import Nav from '../component/Nav'
 
 function Cart() {
   const { products, currency, cartItem, updateQuantity } = useContext(shopDataContext)
@@ -24,45 +25,62 @@ function Cart() {
   }, [cartItem])
 
   return (
-    <div className="min-h-screen bg-[#FAF8F4] pt-16 pb-24 md:pb-8">
-      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mb-10 text-center"><Title text1="YOUR" text2="CART" /></div>
+    <div className="bg-obsidian-950 text-gray-200 min-h-screen">
+      <Nav />
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8 pb-24 md:pb-12">
+        <div className="mb-12"><Title text1="Your" text2="Shopping Bag" /></div>
 
         {cartData.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-24 text-center border border-[#E8E2D9] bg-white">
-            <FiShoppingBag className="mb-5 h-14 w-14 text-[#E8D5B0]" />
-            <p className="text-sm font-bold tracking-widest uppercase text-[#1A1A1A]">Your cart is empty</p>
-            <p className="mt-2 text-xs tracking-wide text-[#6B6360]">Discover our collections and add something beautiful.</p>
+          <div className="glass-panel rounded-[2.5rem] p-16 text-center border-white/10 my-10">
+            <div className="w-24 h-24 bg-gradient-to-br from-obsidian-800 to-obsidian-700 rounded-full mx-auto flex items-center justify-center mb-6 shadow-inner border border-white/5">
+              <FiShoppingBag className="h-10 w-10 text-amber-500/50" />
+            </div>
+            <p className="font-display text-2xl font-bold text-white mb-3">Your bag is empty</p>
+            <p className="text-sm text-gray-400 mb-8 max-w-sm mx-auto">Discover our exclusive collections and add something beautiful to your bag.</p>
             <button
               onClick={() => navigate('/collection')}
-              className="mt-6 border border-[#1A1A1A] bg-[#1A1A1A] px-8 py-3 text-xs font-bold tracking-[0.2em] uppercase text-white hover:bg-[#2D2D2D] transition-colors"
+              className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 text-white font-bold text-sm shadow-lg shadow-violet-600/30 transition-all hover:scale-[1.02]"
             >
               Browse Collections
             </button>
           </div>
         ) : (
-          <div className="flex flex-col gap-8 lg:flex-row">
+          <div className="flex flex-col gap-10 lg:flex-row">
             {/* ── Items ── */}
-            <div className="flex-1 space-y-3">
+            <div className="flex-1 space-y-4">
               {cartData.map((item, index) => {
                 const p = products.find(prod => prod._id === item._id)
                 if (!p) return null
                 return (
-                  <div key={index} className="flex items-start gap-4 bg-white border border-[#E8E2D9] p-4">
-                    <img src={p.image1} alt={p.name} className="h-24 w-24 flex-shrink-0 object-cover" />
-                    <div className="flex flex-1 flex-col gap-2">
-                      <p className="text-sm font-semibold text-[#1A1A1A] leading-snug line-clamp-2">{p.name}</p>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-bold text-[#C9A96E]">{currency} {p.price}</span>
-                        <span className="border border-[#E8E2D9] px-2 py-0.5 text-xs text-[#6B6360]">{item.size}</span>
+                  <div key={index} className="glass-panel-interactive flex flex-col sm:flex-row items-start sm:items-center gap-6 rounded-2xl p-4">
+                    <div className="relative h-28 w-24 flex-shrink-0 rounded-xl overflow-hidden bg-obsidian-900 border border-white/5">
+                      <img src={p.image1} alt={p.name} className="h-full w-full object-cover" />
+                    </div>
+                    
+                    <div className="flex-1 min-w-0 flex flex-col gap-2">
+                      <div className="flex justify-between items-start gap-4">
+                        <p className="font-sans font-bold text-white text-base leading-snug line-clamp-2">{p.name}</p>
+                        <button
+                          onClick={() => { updateQuantity(item._id, item.size, 0); toast.info('Item removed') }}
+                          className="p-2 text-gray-500 hover:text-pink-500 hover:bg-white/5 rounded-xl transition-colors"
+                          aria-label="Remove item"
+                        >
+                          <RiDeleteBin6Line className="h-5 w-5" />
+                        </button>
                       </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[10px] tracking-wide uppercase text-[#6B6360]">Qty</span>
+                      
+                      <div className="flex items-center gap-3">
+                        <span className="font-display font-extrabold text-white text-lg">{currency}{p.price}</span>
+                        <span className="bg-obsidian-800 border border-white/10 px-2.5 py-1 rounded-md text-xs font-bold text-amber-400">{item.size}</span>
+                      </div>
+                      
+                      <div className="flex items-center gap-3 mt-1">
+                        <span className="text-xs font-bold uppercase tracking-wider text-gray-500">Qty</span>
                         <input
                           type="number"
                           min={1}
                           defaultValue={item.quantity}
-                          className="h-8 w-16 border border-[#E8E2D9] bg-[#FAF8F4] px-2 text-sm font-medium text-[#1A1A1A] outline-none focus:border-[#C9A96E] text-center transition-colors"
+                          className="glass-input h-9 w-20 rounded-lg px-3 text-sm font-bold text-center appearance-none"
                           onChange={(e) =>
                             e.target.value !== '' && e.target.value !== '0'
                               ? updateQuantity(item._id, item.size, Number(e.target.value))
@@ -71,26 +89,25 @@ function Cart() {
                         />
                       </div>
                     </div>
-                    <button
-                      onClick={() => { updateQuantity(item._id, item.size, 0); toast.info('Item removed') }}
-                      className="p-2 text-[#A09890] hover:text-[#1A1A1A] transition-colors"
-                    >
-                      <RiDeleteBin6Line className="h-4 w-4" />
-                    </button>
                   </div>
                 )
               })}
             </div>
 
             {/* ── Summary ── */}
-            <div className="lg:w-72">
+            <div className="lg:w-80 flex-shrink-0">
               <CartTotal />
               <button
-                className="mt-3 w-full border border-[#1A1A1A] bg-[#1A1A1A] py-4 text-xs font-bold tracking-[0.2em] uppercase text-white hover:bg-[#2D2D2D] transition-colors"
+                className="mt-6 w-full rounded-2xl bg-gradient-to-r from-amber-500 to-gold-400 py-4.5 text-sm font-extrabold uppercase text-obsidian-950 shadow-xl shadow-amber-500/20 hover:scale-[1.02] transition-transform"
                 onClick={() => navigate('/placeorder')}
               >
                 Proceed to Checkout
               </button>
+              
+              <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-500">
+                <FiShoppingBag className="w-4 h-4 text-emerald-400" />
+                <span>Secure SSL encrypted checkout</span>
+              </div>
             </div>
           </div>
         )}
