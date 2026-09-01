@@ -8,34 +8,32 @@ const contactInfo = ['+91-9525487783', 'contact@onecart.com', '+1-123-456-7890',
 function Footer() {
   const navigate = useNavigate()
   return (
-    <footer className="w-full bg-gray-900 pb-20 md:pb-0">
+    <footer className="w-full bg-[#1A1A1A] pb-20 md:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        {/* Top border gold line */}
+        <div className="mb-10 h-px w-full bg-[#C9A96E]/30" />
+
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
           {/* Brand */}
           <div>
-            <div
-              className="flex cursor-pointer items-center gap-2"
-              onClick={() => navigate('/')}
-            >
-              <img src={logo} alt="OneCart" className="h-7 w-7 object-contain" />
-              <span className="text-lg font-bold text-white">
-                One<span className="text-indigo-400">Cart</span>
+            <div className="flex cursor-pointer items-center gap-2.5 mb-4" onClick={() => navigate('/')}>
+              <img src={logo} alt="OneCart" className="h-6 w-6 object-contain" />
+              <span className="text-base font-bold tracking-widest uppercase text-white">
+                One<span className="text-[#C9A96E]">Cart</span>
               </span>
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-gray-400">
-              Your all-in-one online shopping destination. Quality products, unbeatable deals, and fast delivery — all backed by trusted service.
+            <p className="text-xs leading-relaxed text-white/40">
+              Your all-in-one online shopping destination. Quality products, unbeatable deals, and fast delivery — backed by trusted service.
             </p>
           </div>
 
           {/* Company */}
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400">Company</h3>
-            <ul className="mt-4 space-y-2">
+            <h3 className="mb-4 text-[10px] font-bold tracking-[0.3em] uppercase text-[#C9A96E]">Company</h3>
+            <ul className="space-y-2.5">
               {companyLinks.map(link => (
                 <li key={link}>
-                  <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors">
-                    {link}
-                  </a>
+                  <a href="#" className="text-xs text-white/50 tracking-wide hover:text-white transition-colors">{link}</a>
                 </li>
               ))}
             </ul>
@@ -43,17 +41,17 @@ function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400">Get in Touch</h3>
-            <ul className="mt-4 space-y-2">
+            <h3 className="mb-4 text-[10px] font-bold tracking-[0.3em] uppercase text-[#C9A96E]">Get in Touch</h3>
+            <ul className="space-y-2.5">
               {contactInfo.map(item => (
-                <li key={item} className="text-sm text-gray-300">{item}</li>
+                <li key={item} className="text-xs text-white/50 tracking-wide">{item}</li>
               ))}
             </ul>
           </div>
         </div>
 
-        <div className="mt-10 border-t border-gray-800 pt-6 text-center">
-          <p className="text-xs text-gray-500">© 2025 OneCart. All rights reserved.</p>
+        <div className="mt-10 border-t border-white/5 pt-6 text-center">
+          <p className="text-[10px] tracking-widest text-white/20 uppercase">© 2025 OneCart. All rights reserved.</p>
         </div>
       </div>
     </footer>

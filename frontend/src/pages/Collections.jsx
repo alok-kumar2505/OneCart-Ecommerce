@@ -16,12 +16,8 @@ function Collections() {
   const [subCategory, setSubCategory] = useState([])
   const [sortType, setSortType] = useState('relevant')
 
-  const toggleCategory = (val) => {
-    setCategory(prev => prev.includes(val) ? prev.filter(i => i !== val) : [...prev, val])
-  }
-  const toggleSubCategory = (val) => {
-    setSubCategory(prev => prev.includes(val) ? prev.filter(i => i !== val) : [...prev, val])
-  }
+  const toggleCategory = (val) => setCategory(p => p.includes(val) ? p.filter(i => i !== val) : [...p, val])
+  const toggleSubCategory = (val) => setSubCategory(p => p.includes(val) ? p.filter(i => i !== val) : [...p, val])
 
   const applyFilter = () => {
     let copy = products.slice()
@@ -32,7 +28,7 @@ function Collections() {
   }
 
   const sortProducts = () => {
-    let copy = filterProduct.slice()
+    const copy = filterProduct.slice()
     if (sortType === 'low-high') setFilterProduct(copy.sort((a, b) => a.price - b.price))
     else if (sortType === 'high-low') setFilterProduct(copy.sort((a, b) => b.price - a.price))
     else applyFilter()
@@ -43,58 +39,51 @@ function Collections() {
   useEffect(() => { applyFilter() }, [category, subCategory, search, showSearch])
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pt-16 pb-24 md:pb-8">
+    <div className="min-h-screen bg-[#FAF8F4] pt-16 pb-24 md:pb-8">
       <div className="mx-auto flex max-w-7xl flex-col md:flex-row">
 
         {/* ── Sidebar Filter ── */}
-        <aside className="w-full border-b border-gray-200 bg-white md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:w-64 md:min-w-[16rem] md:overflow-y-auto md:border-b-0 md:border-r md:border-gray-200">
-          {/* Mobile toggle */}
+        <aside className="w-full border-b border-[#E8E2D9] bg-white md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:w-60 md:min-w-[15rem] md:overflow-y-auto md:border-b-0 md:border-r md:border-[#E8E2D9]">
           <button
-            className="flex w-full items-center justify-between px-5 py-4 text-sm font-semibold text-gray-900 md:hidden"
+            className="flex w-full items-center justify-between px-5 py-4 text-xs font-bold tracking-[0.2em] uppercase text-[#1A1A1A] md:hidden"
             onClick={() => setShowFilter(p => !p)}
           >
-            <span className="flex items-center gap-2">
-              <FiFilter className="h-4 w-4 text-indigo-600" /> Filters
-            </span>
-            {showFilter ? <FaChevronDown className="h-3 w-3 text-gray-400" /> : <FaChevronRight className="h-3 w-3 text-gray-400" />}
+            <span className="flex items-center gap-2"><FiFilter className="h-4 w-4 text-[#C9A96E]" /> Filters</span>
+            {showFilter ? <FaChevronDown className="h-3 w-3 text-[#A09890]" /> : <FaChevronRight className="h-3 w-3 text-[#A09890]" />}
           </button>
 
-          <div className={`px-5 py-4 space-y-6 ${showFilter ? 'block' : 'hidden'} md:block`}>
-            {/* Category */}
+          <div className={`px-5 py-6 space-y-7 ${showFilter ? 'block' : 'hidden'} md:block`}>
             <div>
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">Category</h3>
-              <div className="space-y-2">
+              <h3 className="mb-4 text-[10px] font-bold tracking-[0.3em] uppercase text-[#C9A96E]">Category</h3>
+              <div className="space-y-3">
                 {categories.map(cat => (
-                  <label key={cat} className="flex cursor-pointer items-center gap-3 group">
+                  <label key={cat} className="flex cursor-pointer items-center gap-3">
                     <input
                       type="checkbox"
-                      value={cat}
                       checked={category.includes(cat)}
                       onChange={() => toggleCategory(cat)}
-                      className="h-4 w-4 rounded border-gray-300 accent-indigo-600 cursor-pointer"
+                      className="h-3.5 w-3.5 accent-[#C9A96E] cursor-pointer"
                     />
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900">{cat}</span>
+                    <span className="text-xs tracking-wide text-[#1A1A1A]">{cat}</span>
                   </label>
                 ))}
               </div>
             </div>
 
-            <div className="border-t border-gray-100" />
+            <div className="border-t border-[#E8E2D9]" />
 
-            {/* Sub-category */}
             <div>
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">Sub-Category</h3>
-              <div className="space-y-2">
+              <h3 className="mb-4 text-[10px] font-bold tracking-[0.3em] uppercase text-[#C9A96E]">Sub-Category</h3>
+              <div className="space-y-3">
                 {subCategories.map(sub => (
-                  <label key={sub} className="flex cursor-pointer items-center gap-3 group">
+                  <label key={sub} className="flex cursor-pointer items-center gap-3">
                     <input
                       type="checkbox"
-                      value={sub}
                       checked={subCategory.includes(sub)}
                       onChange={() => toggleSubCategory(sub)}
-                      className="h-4 w-4 rounded border-gray-300 accent-indigo-600 cursor-pointer"
+                      className="h-3.5 w-3.5 accent-[#C9A96E] cursor-pointer"
                     />
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900">{sub}</span>
+                    <span className="text-xs tracking-wide text-[#1A1A1A]">{sub}</span>
                   </label>
                 ))}
               </div>
@@ -104,14 +93,13 @@ function Collections() {
 
         {/* ── Product Grid ── */}
         <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <Title text1="ALL" text2="COLLECTIONS" />
-              <p className="mt-1 text-sm text-gray-500">{filterProduct.length} products found</p>
+              <p className="mt-1 text-xs tracking-wide text-[#6B6360]">{filterProduct.length} products</p>
             </div>
             <select
-              className="h-10 rounded-xl border border-gray-200 bg-white px-4 text-sm text-gray-700 shadow-sm outline-none hover:border-indigo-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer"
+              className="h-10 border border-[#E8E2D9] bg-white px-4 text-xs tracking-wide text-[#1A1A1A] outline-none hover:border-[#C9A96E] focus:border-[#C9A96E] transition-colors cursor-pointer"
               onChange={(e) => setSortType(e.target.value)}
             >
               <option value="relevant">Sort: Relevant</option>
@@ -121,16 +109,16 @@ function Collections() {
           </div>
 
           {filterProduct.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 place-items-center sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-              {filterProduct.map((item, index) => (
-                <Card key={index} id={item._id} name={item.name} price={item.price} image={item.image1} />
+            <div className="grid grid-cols-1 gap-6 place-items-center sm:grid-cols-2 lg:grid-cols-3">
+              {filterProduct.map((item, i) => (
+                <Card key={i} id={item._id} name={item.name} price={item.price} image={item.image1} />
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-24 text-center">
-              <div className="mb-4 text-5xl">🔍</div>
-              <p className="text-lg font-semibold text-gray-700">No products found</p>
-              <p className="mt-2 text-sm text-gray-500">Try adjusting your filters or search term.</p>
+            <div className="flex flex-col items-center justify-center py-24 text-center border border-[#E8E2D9] bg-white">
+              <p className="text-4xl mb-5 text-[#E8D5B0]">✦</p>
+              <p className="text-sm font-semibold tracking-widest uppercase text-[#1A1A1A]">No products found</p>
+              <p className="mt-2 text-xs tracking-wide text-[#6B6360]">Try adjusting your filters or search term.</p>
             </div>
           )}
         </main>

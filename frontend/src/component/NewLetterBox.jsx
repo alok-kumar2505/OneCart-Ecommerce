@@ -1,37 +1,32 @@
 import React from 'react'
 
 function NewLetterBox() {
-  const handleSubmit = (e) => {
-    e.preventDefault()
-  }
-
+  const handleSubmit = (e) => e.preventDefault()
   return (
-    <section className="w-full bg-indigo-600 px-4 py-16 sm:px-6 lg:px-8">
+    <section className="w-full bg-[#1A1A1A] px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-xs font-semibold uppercase tracking-widest text-indigo-200">Newsletter</p>
-        <h2 className="mt-3 text-2xl font-bold text-white sm:text-3xl">
-          Subscribe &amp; get <span className="text-indigo-200">20% off</span>
+        <p className="text-xs font-semibold tracking-[0.3em] uppercase text-[#C9A96E]">Exclusive Access</p>
+        <h2 className="mt-4 text-2xl font-bold tracking-wide text-white sm:text-3xl">
+          Subscribe &amp; Get <span className="text-[#C9A96E]">20% Off</span>
         </h2>
-        <p className="mt-3 text-sm text-indigo-200 sm:text-base">
-          Exclusive deals, early access to new collections, and special offers — delivered to your inbox.
+        <p className="mt-3 text-xs tracking-wide text-white/50 sm:text-sm">
+          Early access to new collections, exclusive deals, and curated style — delivered to your inbox.
         </p>
         <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-3 sm:flex-row">
           <input
             type="email"
             placeholder="Enter your email address"
-            className="flex-1 rounded-xl border border-indigo-400 bg-white/10 px-4 py-3 text-sm text-white placeholder-indigo-300 outline-none focus:border-white focus:bg-white/20 transition-colors"
+            className="flex-1 border border-white/10 bg-white/5 px-5 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-[#C9A96E] transition-colors"
             required
           />
           <button
             type="submit"
-            className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50 transition-colors active:scale-95"
+            className="border border-[#C9A96E] bg-[#C9A96E] px-8 py-3 text-xs font-semibold tracking-[0.2em] uppercase text-[#1A1A1A] hover:bg-[#A8895A] hover:border-[#A8895A] transition-colors"
           >
             Subscribe
           </button>
         </form>
-        <p className="mt-4 text-xs text-indigo-300">
-          No spam, ever. Unsubscribe anytime.
-        </p>
+        <p className="mt-4 text-xs text-white/25 tracking-wide">No spam. Unsubscribe anytime.</p>
       </div>
     </section>
   )

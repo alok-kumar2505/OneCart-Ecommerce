@@ -7,20 +7,20 @@ function CartTotal() {
   const total = subtotal === 0 ? 0 : subtotal + delivery_fee
 
   return (
-    <div className="w-full rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-      <h3 className="mb-4 text-lg font-bold text-gray-900">Order Summary</h3>
+    <div className="w-full border border-[#E8E2D9] bg-white p-6">
+      <h3 className="mb-5 text-xs font-bold tracking-[0.25em] uppercase text-[#1A1A1A]">Order Summary</h3>
       <div className="space-y-3">
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>Subtotal</span>
-          <span className="font-medium text-gray-900">{currency} {subtotal}.00</span>
+        <div className="flex justify-between text-xs text-[#6B6360]">
+          <span className="tracking-wide">Subtotal</span>
+          <span className="font-medium text-[#1A1A1A]">{currency} {subtotal}.00</span>
         </div>
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>Shipping Fee</span>
-          <span className="font-medium text-gray-900">{currency} {delivery_fee}</span>
+        <div className="flex justify-between text-xs text-[#6B6360]">
+          <span className="tracking-wide">Shipping</span>
+          <span className="font-medium text-[#1A1A1A]">{currency} {delivery_fee}</span>
         </div>
-        <div className="border-t border-gray-100 pt-3 flex justify-between">
-          <span className="font-bold text-gray-900">Total</span>
-          <span className="font-bold text-indigo-600 text-lg">{currency} {total}</span>
+        <div className="border-t border-[#E8E2D9] pt-3 flex justify-between">
+          <span className="text-xs font-bold tracking-[0.15em] uppercase text-[#1A1A1A]">Total</span>
+          <span className="text-lg font-bold text-[#C9A96E]">{currency} {total}</span>
         </div>
       </div>
     </div>

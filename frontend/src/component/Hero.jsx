@@ -1,55 +1,53 @@
 import React from 'react'
-import { FaCircle } from 'react-icons/fa'
 import Backgound from './Backgound'
 import { useNavigate } from 'react-router-dom'
 
 function Hero({ heroData, heroCount, setHeroCount }) {
   const navigate = useNavigate()
   return (
-    <div className="relative h-[72vh] w-full overflow-hidden sm:h-[78vh] lg:h-screen">
-      {/* Background */}
+    <div className="relative h-[72vh] w-full overflow-hidden sm:h-[80vh] lg:h-screen">
       <div className="absolute inset-0">
         <Backgound heroCount={heroCount} />
       </div>
-
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+      {/* Dark overlay — heavier for luxury feel */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-transparent" />
 
       {/* Content */}
-      <div className="absolute left-6 top-1/4 z-10 max-w-[90%] sm:left-10 sm:max-w-[65%] md:max-w-[55%] lg:left-16 lg:top-[28%] lg:max-w-[44%]">
-        <p className="mb-2 inline-block rounded-full bg-indigo-600/90 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white">
+      <div className="absolute left-6 top-1/4 z-10 max-w-[90%] sm:left-10 sm:max-w-[65%] md:max-w-[52%] lg:left-16 lg:top-[28%] lg:max-w-[42%]">
+        {/* Tag */}
+        <p className="mb-4 text-xs font-semibold tracking-[0.25em] uppercase text-[#C9A96E]">
           New Season
         </p>
-        <h1 className="mt-3 text-3xl font-extrabold leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+        <h1 className="text-3xl font-bold leading-tight tracking-wide text-white sm:text-4xl md:text-5xl lg:text-6xl">
           {heroData.text1}
         </h1>
-        <p className="mt-2 text-lg font-medium text-white/80 sm:text-xl">
+        <p className="mt-3 text-base font-light tracking-wide text-white/70 sm:text-lg">
           {heroData.text2}
         </p>
-        <div className="mt-6 flex items-center gap-3">
+        <div className="mt-8 flex items-center gap-4">
           <button
             onClick={() => navigate('/collection')}
-            className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:bg-indigo-700 hover:shadow-indigo-500/30 active:scale-95"
+            className="border border-[#C9A96E] bg-[#C9A96E] px-8 py-3 text-xs font-semibold tracking-[0.2em] uppercase text-[#1A1A1A] transition-all hover:bg-[#A8895A] hover:border-[#A8895A] active:scale-95"
           >
             Shop Now
           </button>
           <button
             onClick={() => navigate('/collection')}
-            className="rounded-xl border border-white/40 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20"
+            className="border border-white/50 px-8 py-3 text-xs font-semibold tracking-[0.2em] uppercase text-white transition-all hover:border-white hover:bg-white/10"
           >
-            View Collections
+            Explore
           </button>
         </div>
       </div>
 
       {/* Dot indicators */}
-      <div className="absolute bottom-8 left-6 z-10 flex items-center gap-2.5 sm:left-10 lg:left-16">
-        {[0, 1, 2, 3].map((i) => (
+      <div className="absolute bottom-8 left-6 z-10 flex items-center gap-3 sm:left-10 lg:left-16">
+        {[0, 1, 2, 3].map(i => (
           <button
             key={i}
             onClick={() => setHeroCount(i)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              heroCount === i ? 'w-6 bg-indigo-400' : 'w-2 bg-white/50 hover:bg-white/80'
+            className={`h-px transition-all duration-500 ${
+              heroCount === i ? 'w-8 bg-[#C9A96E]' : 'w-4 bg-white/40 hover:bg-white/70'
             }`}
           />
         ))}
