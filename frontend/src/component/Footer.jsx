@@ -7,7 +7,7 @@ function Footer() {
         
         {/* Logo & Description */}
         <div className="lg:pr-8">
-          <h2 className="font-playfair text-3xl tracking-[0.15em] mb-6">VELORA</h2>
+          <h2 className="font-playfair text-3xl tracking-[0.15em] mb-6">ONECART</h2>
           <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
             Luxury fashion platform engineered with AI personal styling and high-end editorial curation.
           </p>
@@ -59,7 +59,7 @@ function Footer() {
       {/* Bottom Bar */}
       <div className="max-w-[1440px] mx-auto border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="text-gray-500 text-xs text-center md:text-left">
-          © 2026 VELORA LUXURY FASHION INC. ALL RIGHTS RESERVED.
+          © 2026 ONECART LUXURY FASHION INC. ALL RIGHTS RESERVED.
         </p>
         <div className="flex flex-wrap justify-center gap-6 text-gray-500 text-[10px] font-bold tracking-widest uppercase">
           <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

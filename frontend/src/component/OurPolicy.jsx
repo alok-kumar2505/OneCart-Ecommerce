@@ -1,7 +1,6 @@
 import React from 'react'
 import { LuShieldCheck } from 'react-icons/lu'
-import { HiOutlineSparkles } from 'react-icons/hi'
-import { FiCheckCircle } from 'react-icons/fi'
+import { FiRefreshCw, FiCheckCircle } from 'react-icons/fi'
 
 function OurPolicy() {
   return (
@@ -10,7 +9,7 @@ function OurPolicy() {
       {/* Testimonial Section */}
       <div className="py-24 px-4 sm:px-8 max-w-4xl mx-auto text-center border-b border-gray-200">
         <h2 className="font-playfair text-3xl sm:text-4xl md:text-5xl text-black leading-tight italic mb-8">
-          “VELORA redefines modern luxury by seamlessly fusing haute-couture Italian craftsmanship with groundbreaking artificial intelligence.”
+          “OneCart redefines modern luxury by seamlessly fusing premium craftsmanship with everyday accessibility.”
         </h2>
         <p className="text-[#8B1B1B] text-[10px] font-bold tracking-[0.2em] uppercase flex items-center justify-center gap-2">
           <span>+</span> VOGUE EDITORIAL REVIEW 2026 <span>+</span>
@@ -23,23 +22,23 @@ function OurPolicy() {
           
           <div className="flex flex-col items-center pt-8 md:pt-0 md:px-8">
             <LuShieldCheck className="w-10 h-10 text-[#8B1B1B] mb-6 stroke-1" />
-            <h3 className="text-black font-bold text-[11px] tracking-widest uppercase mb-4">100% Authentic Tailoring</h3>
+            <h3 className="text-black font-bold text-[11px] tracking-widest uppercase mb-4">100% Authentic Quality</h3>
             <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
-              Crafted with premium Italian virgin wool & Giza Egyptian cotton.
+              Crafted with premium materials and exceptional attention to detail.
             </p>
           </div>
 
           <div className="flex flex-col items-center pt-8 md:pt-0 md:px-8">
-            <HiOutlineSparkles className="w-10 h-10 text-[#8B1B1B] mb-6 stroke-1" />
-            <h3 className="text-black font-bold text-[11px] tracking-widest uppercase mb-4">AI Fit Advisor</h3>
+            <FiRefreshCw className="w-10 h-10 text-[#8B1B1B] mb-6 stroke-1" />
+            <h3 className="text-black font-bold text-[11px] tracking-widest uppercase mb-4">7 Days Return Policy</h3>
             <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
-              Personalized size recommendations calculated for every silhouette.
+              We offer a hassle-free return and exchange policy for your peace of mind.
             </p>
           </div>
 
           <div className="flex flex-col items-center pt-8 md:pt-0 md:px-8">
             <FiCheckCircle className="w-10 h-10 text-[#8B1B1B] mb-6 stroke-1" />
-            <h3 className="text-black font-bold text-[11px] tracking-widest uppercase mb-4">Secure Payment & Express Shipping</h3>
+            <h3 className="text-black font-bold text-[11px] tracking-widest uppercase mb-4">Secure Payment & Shipping</h3>
             <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
               Encrypted Razorpay checkout & complimentary express delivery.
             </p>

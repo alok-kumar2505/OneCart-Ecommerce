@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { shopDataContext } from '../context/ShopContext'
 import { useNavigate } from 'react-router-dom'
 import { FiHeart } from 'react-icons/fi'
@@ -8,11 +8,20 @@ function BestSeller() {
   const { products, currency } = useContext(shopDataContext)
   const [bestSeller, setBestSeller] = useState([])
   const navigate = useNavigate()
+  const scrollRef = useRef(null)
 
   useEffect(() => {
     const bestProduct = products.filter((item) => item.bestseller)
-    setBestSeller(bestProduct.slice(0, 4))
+    setBestSeller(bestProduct.slice(0, 10)) // show more to enable scrolling
   }, [products])
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const { scrollLeft, clientWidth } = scrollRef.current
+      const scrollTo = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth
+      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' })
+    }
+  }
 
   return (
     <div className="bg-[#F9F9F9] py-16 px-4 sm:px-8 max-w-[1440px] mx-auto relative border-t border-gray-200">
@@ -30,9 +39,17 @@ function BestSeller() {
       </div>
 
       <div className="relative">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div 
+          ref={scrollRef} 
+          className="flex overflow-x-auto gap-6 snap-x snap-mandatory hide-scrollbar" 
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
           {bestSeller.map((item, index) => (
-            <div key={index} className="group cursor-pointer bg-white" onClick={() => navigate(`/productdetail/${item._id}`)}>
+            <div 
+              key={index} 
+              className="flex-none w-[85vw] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] snap-start group cursor-pointer bg-white" 
+              onClick={() => navigate(`/productdetail/${item._id}`)}
+            >
               {/* Image Container */}
               <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 mb-4">
                 <img src={item.image1} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -50,7 +67,7 @@ function BestSeller() {
               </div>
               
               {/* Details */}
-              <div className="px-2">
+              <div className="px-2 pb-4">
                 <p className="text-gray-500 text-[10px] font-bold tracking-widest uppercase mb-1">{item.category}</p>
                 <h3 className="font-playfair text-lg text-black mb-2 line-clamp-2 leading-snug">{item.name}</h3>
                 
@@ -63,25 +80,30 @@ function BestSeller() {
                     </>
                   )}
                 </div>
-                
-                {/* Color Swatches */}
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-black border border-gray-200"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-white border border-gray-300"></div>
-                </div>
               </div>
             </div>
           ))}
         </div>
         
         {/* Slider Navigation Arrows */}
-        <button className="hidden lg:flex absolute -right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg items-center justify-center text-gray-600 hover:text-black hover:scale-110 transition-all z-10 border border-gray-100">
+        <button 
+          onClick={() => scroll('right')}
+          className="hidden lg:flex absolute -right-6 top-1/3 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg items-center justify-center text-gray-600 hover:text-black hover:scale-110 transition-all z-10 border border-gray-100"
+        >
           <IoChevronForwardOutline className="w-6 h-6" />
         </button>
-        <button className="hidden lg:flex absolute -left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg items-center justify-center text-gray-600 hover:text-black hover:scale-110 transition-all z-10 border border-gray-100">
+        <button 
+          onClick={() => scroll('left')}
+          className="hidden lg:flex absolute -left-6 top-1/3 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg items-center justify-center text-gray-600 hover:text-black hover:scale-110 transition-all z-10 border border-gray-100"
+        >
           <IoChevronBackOutline className="w-6 h-6" />
         </button>
       </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+      `}} />
     </div>
   )
 }

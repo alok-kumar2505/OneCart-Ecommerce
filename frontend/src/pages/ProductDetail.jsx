@@ -41,7 +41,7 @@ function ProductDetail() {
         <div className="p-8 md:p-16 lg:p-24 flex flex-col justify-center">
           
           {/* Brand/Label */}
-          <p className="text-[#8B1B1B] text-[10px] font-bold tracking-[0.2em] uppercase mb-4">VELORA</p>
+          <p className="text-[#8B1B1B] text-[10px] font-bold tracking-[0.2em] uppercase mb-4">ONECART</p>
           
           {/* Title */}
           <h1 className="font-playfair text-3xl sm:text-4xl text-black leading-tight mb-4">
@@ -57,7 +57,7 @@ function ProductDetail() {
               </div>
               <span className="text-gray-500 text-xs">(18)</span>
             </div>
-            <span className="text-gray-400 text-[10px] uppercase tracking-widest">SKU: VEL-{productData._id.substring(0, 6)}</span>
+            <span className="text-gray-400 text-[10px] uppercase tracking-widest">SKU: OC-{productData._id.substring(0, 6)}</span>
           </div>
 
           {/* Price */}

@@ -9,7 +9,6 @@ import { auth, provider } from '../../utils/Firebase'
 import { userDataContext } from '../context/UserContext'
 import { toast } from 'react-toastify'
 import Loading from '../component/Loading'
-import { HiSparkles } from 'react-icons/hi'
 
 function Registration() {
   const [show, setShow] = useState(false)
@@ -42,77 +41,67 @@ function Registration() {
   }
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-obsidian-950 text-gray-200 px-4 py-12 relative overflow-hidden">
-      {/* Ambient Glows */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none" />
-
+    <div className="flex min-h-screen w-full items-center justify-center bg-[#F9F9F9] px-4 py-12 relative">
       <div className="w-full max-w-md relative z-10">
+        
+        {/* Brand */}
         <div className="mb-8 flex cursor-pointer items-center justify-center gap-3" onClick={() => navigate('/')}>
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 via-pink-500 to-amber-500 p-0.5 shadow-lg">
-            <div className="w-full h-full bg-obsidian-950 rounded-[10px] flex items-center justify-center">
-              <HiSparkles className="w-5 h-5 text-amber-400" />
-            </div>
-          </div>
-          <span className="font-display text-2xl font-bold tracking-wide uppercase text-white">
-            One<span className="text-amber-500">Cart</span>
-          </span>
+          <span className="font-playfair text-3xl tracking-[0.15em] text-black">ONECART</span>
         </div>
 
-        <div className="glass-panel rounded-3xl p-8 sm:p-10 border-white/10 shadow-2xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-obsidian-900/80 to-obsidian-950/90 -z-10" />
+        <div className="bg-white p-8 sm:p-10 border border-gray-200 shadow-sm relative overflow-hidden text-center">
 
-          <h1 className="font-display text-2xl font-bold text-white mb-2">Create Account</h1>
-          <p className="text-sm text-gray-400 mb-8">Join the exclusive world of OneCart</p>
+          <h1 className="font-playfair text-2xl text-black mb-2">Create Account</h1>
+          <p className="text-sm text-gray-500 mb-8">Join the exclusive world of OneCart</p>
 
-          <form onSubmit={handleSignup} className="space-y-5">
+          <form onSubmit={handleSignup} className="space-y-5 text-left">
             <div>
-              <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-400">Full Name</label>
-              <input type="text" placeholder="Your name" className="glass-input w-full rounded-xl px-5 py-3.5 text-sm" required onChange={(e) => setName(e.target.value)} value={name} />
+              <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-black">Full Name</label>
+              <input type="text" placeholder="Your name" className="w-full border border-gray-300 px-5 py-3.5 text-sm focus:outline-none focus:border-black transition-colors" required onChange={(e) => setName(e.target.value)} value={name} />
             </div>
             
             <div>
-              <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-400">Email Address</label>
-              <input type="email" placeholder="you@example.com" className="glass-input w-full rounded-xl px-5 py-3.5 text-sm" required onChange={(e) => setEmail(e.target.value)} value={email} />
+              <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-black">Email Address</label>
+              <input type="email" placeholder="you@example.com" className="w-full border border-gray-300 px-5 py-3.5 text-sm focus:outline-none focus:border-black transition-colors" required onChange={(e) => setEmail(e.target.value)} value={email} />
             </div>
             
             <div>
-              <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-400">Password</label>
+              <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-black">Password</label>
               <div className="relative">
-                <input type={show ? 'text' : 'password'} placeholder="••••••••" className="glass-input w-full rounded-xl px-5 py-3.5 pr-12 text-sm" required onChange={(e) => setPassword(e.target.value)} value={password} />
-                <button type="button" onClick={() => setShow(p => !p)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors">
+                <input type={show ? 'text' : 'password'} placeholder="••••••••" className="w-full border border-gray-300 px-5 py-3.5 pr-12 text-sm focus:outline-none focus:border-black transition-colors" required onChange={(e) => setPassword(e.target.value)} value={password} />
+                <button type="button" onClick={() => setShow(p => !p)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black transition-colors">
                   {show ? <IoEye className="h-5 w-5" /> : <IoEyeOutline className="h-5 w-5" />}
                 </button>
               </div>
             </div>
             
-            <button type="submit" disabled={loading} className="mt-4 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 py-4 text-sm font-bold text-white shadow-lg shadow-violet-600/30 hover:scale-[1.02] transition-transform disabled:opacity-70 disabled:hover:scale-100">
+            <button type="submit" disabled={loading} className="mt-6 flex w-full items-center justify-center bg-black py-4 text-xs font-bold tracking-widest uppercase text-white hover:bg-gray-800 transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
               {loading ? <Loading /> : 'Create Account'}
             </button>
           </form>
 
           <div className="my-8 flex items-center gap-4">
-            <div className="flex-1 border-t border-white/10" />
-            <span className="text-[10px] tracking-widest uppercase text-gray-500">Or continue with</span>
-            <div className="flex-1 border-t border-white/10" />
+            <div className="flex-1 border-t border-gray-200" />
+            <span className="text-[10px] tracking-widest uppercase text-gray-400">Or continue with</span>
+            <div className="flex-1 border-t border-gray-200" />
           </div>
 
           <button 
             onClick={googleSignup} 
             disabled={loading}
             type="button" 
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-bold text-white hover:bg-white/10 transition-colors disabled:opacity-70"
+            className="flex w-full items-center justify-center gap-3 border border-gray-300 bg-white px-4 py-3.5 text-xs font-bold tracking-widest uppercase text-black hover:bg-gray-50 transition-colors disabled:opacity-70"
           >
             {loading ? <Loading /> : (
               <>
-                <img src={google} alt="Google" className="h-5 w-5" /> Google
+                <img src={google} alt="Google" className="h-4 w-4" /> Google
               </>
             )}
           </button>
 
-          <p className="mt-8 text-center text-sm text-gray-400">
+          <p className="mt-8 text-center text-xs text-gray-500">
             Already have an account?{' '}
-            <span className="cursor-pointer font-bold text-amber-500 hover:text-amber-400 transition-colors" onClick={() => navigate('/login')}>Sign in</span>
+            <span className="cursor-pointer font-bold tracking-widest uppercase text-black hover:text-gray-600 transition-colors" onClick={() => navigate('/login')}>Sign in</span>
           </p>
         </div>
       </div>

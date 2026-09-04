@@ -1,13 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react'
-import ai from "../assets/ai.png"
 import { userDataContext } from '../context/UserContext'
 import { shopDataContext } from '../context/ShopContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import open from "../assets/open.mp3"
+import { FiMic } from 'react-icons/fi'
+
 function Ai() {
   let {showSearch , setShowSearch} = useContext(shopDataContext)
-    const { userData } = useContext(userDataContext); 
+  const { userData } = useContext(userDataContext); 
 
   let navigate = useNavigate()
   let [activeAi,setActiveAi] = useState(false)
@@ -30,8 +31,8 @@ function Ai() {
           speak("closing search")
           setShowSearch(false) 
         }
-        else if(transcript.toLowerCase().includes("collection") || transcript.toLowerCase().includes("collections") || transcript.toLowerCase().includes("product") || transcript.toLowerCase().includes("products")){
-          speak("opening collection page")
+        else if(transcript.toLowerCase().includes("collection") || transcript.toLowerCase().includes("collections") || transcript.toLowerCase().includes("product") || transcript.toLowerCase().includes("products") || transcript.toLowerCase().includes("shop")){
+          speak("opening shop")
           navigate("/collection")
         }
         else if(transcript.toLowerCase().includes("about") || transcript.toLowerCase().includes("aboutpage") ){
@@ -44,23 +45,28 @@ function Ai() {
           navigate("/")
           setShowSearch(false) 
         }
-        else if(transcript.toLowerCase().includes("cart")  || transcript.toLowerCase().includes("kaat")  || transcript.toLowerCase().includes("caat")){
-          speak("opening your cart")
+        else if(transcript.toLowerCase().includes("cart")  || transcript.toLowerCase().includes("kaat")  || transcript.toLowerCase().includes("caat") || transcript.toLowerCase().includes("bag")){
+          speak("opening your bag")
           navigate("/cart")
           setShowSearch(false) 
         }
-        else if(transcript.toLowerCase().includes("contact")){
+        else if(transcript.toLowerCase().includes("contact") || transcript.toLowerCase().includes("support")){
           speak("opening contact page")
           navigate("/contact")
           setShowSearch(false) 
         }
         else if(transcript.toLowerCase().includes("order") || transcript.toLowerCase().includes("myorders") || transcript.toLowerCase().includes("orders") || transcript.toLowerCase().includes("my order")){
-          speak("opening your orders page")
+          speak("opening your orders")
           navigate("/order")
           setShowSearch(false) 
         }
+        else if(transcript.toLowerCase().includes("checkout") || transcript.toLowerCase().includes("place order")){
+          speak("opening checkout")
+          navigate("/placeorder")
+          setShowSearch(false) 
+        }
         else{
-          toast.error("Try Again")
+          toast.error("Command not recognized. Try 'cart', 'shop', or 'orders'.")
         }
       }
 
@@ -82,7 +88,7 @@ function Ai() {
   }
 
   return (
-    <div className='fixed lg:bottom-5 md:bottom-10 bottom-20 left-[2%] ' onClick={()=>{
+    <div className='fixed lg:bottom-8 md:bottom-10 bottom-24 right-8 z-50' onClick={()=>{
       if (recognition) {
         recognition.start();
         openingSound.play();
@@ -91,12 +97,11 @@ function Ai() {
         toast.error("Voice commands are not supported in your browser.");
       }
     }}>
-      <img src={ai} alt="" className={`w-[100px] cursor-pointer ${activeAi ? 'translate-x-[10%] translate-y-[-10%] scale-125 ' : 'translate-x-[0] translate-y-[0] scale-100'} transition-transform` } style={{
-        filter: ` ${activeAi?"drop-shadow(0px 0px 30px #00d2fc)":"drop-shadow(0px 0px 20px black)"}`
-      }}/>
+      <div className={`w-14 h-14 rounded-full bg-black text-white flex items-center justify-center cursor-pointer shadow-lg border-2 border-white transition-all duration-300 hover:scale-110 ${activeAi ? 'animate-pulse scale-110 bg-[#8B1B1B]' : ''}`}>
+        <FiMic className={`w-6 h-6 ${activeAi ? 'text-white animate-bounce' : 'text-white'}`} />
+      </div>
     </div>
   )
 }
 
 export default Ai
-

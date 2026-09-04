@@ -57,20 +57,25 @@ function Nav() {
 
           {/* Left Nav */}
           <nav className="hidden lg:flex items-center gap-6">
-            {['SHOP', 'NEW ARRIVALS', 'TRENDING', 'MY WARDROBE'].map((item) => (
+            {[
+              { name: 'SHOP', path: '/collection' },
+              { name: 'ABOUT US', path: '/about' },
+              { name: 'CONTACT', path: '/contact' },
+              { name: 'ORDERS', path: '/order' }
+            ].map((item) => (
               <button
-                key={item}
-                onClick={() => navigate('/collection')}
+                key={item.name}
+                onClick={() => navigate(item.path)}
                 className="text-[11px] font-bold tracking-widest text-gray-800 hover:text-black transition-colors"
               >
-                {item}
+                {item.name}
               </button>
             ))}
           </nav>
 
           {/* Center Logo */}
           <div className="flex cursor-pointer items-center lg:absolute lg:left-1/2 lg:-translate-x-1/2" onClick={() => navigate('/')}>
-             <span className="font-playfair text-3xl tracking-[0.15em] text-black">VELORA</span>
+             <span className="font-playfair text-3xl tracking-[0.15em] text-black">ONECART</span>
           </div>
 
           {/* Right Actions */}
