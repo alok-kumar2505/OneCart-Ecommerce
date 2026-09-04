@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { shopDataContext } from '../context/ShopContext'
-import Title from './Title'
 import Card from './Card'
+import { HiSparkles } from 'react-icons/hi'
+import { IoChevronForwardOutline } from 'react-icons/io5'
 
 function RelatedProduct({ category, subCategory, currentProductId }) {
   const { products } = useContext(shopDataContext)
@@ -9,34 +10,50 @@ function RelatedProduct({ category, subCategory, currentProductId }) {
 
   useEffect(() => {
     if (products.length > 0) {
-      let copy = products.slice()
-        .filter(i => i.category === category)
-        .filter(i => i.subCategory === subCategory)
-        .filter(i => i._id !== currentProductId)
-      setRelated(copy.slice(0, 4))
+      let productscopy = products.slice()
+      productscopy = productscopy.filter((item) => category === item.category)
+      productscopy = productscopy.filter((item) => subCategory === item.subCategory)
+      productscopy = productscopy.filter((item) => currentProductId !== item._id) // exclude current product
+      setRelated(productscopy.slice(0, 4))
     }
   }, [products, category, subCategory, currentProductId])
 
   if (related.length === 0) return null
 
   return (
-    <section className="w-full relative z-10 px-4 py-20 sm:px-6 lg:px-8">
-      {/* Background with slight glassmorphic separation */}
-      <div className="absolute inset-0 bg-obsidian-900/50 backdrop-blur-sm -z-10 border-t border-white/10" />
-      
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-14 text-center">
-          <Title text1="Related" text2="Products" />
+    <div className="bg-[#F9F9F9] border-t border-gray-200">
+      <div className="max-w-[1440px] mx-auto py-20 px-4 sm:px-8 relative">
+        <div className="mb-12">
+          <p className="text-[#8B1B1B] text-[10px] font-bold tracking-[0.2em] uppercase flex items-center gap-2 mb-2">
+            SIMILAR ITEMS
+          </p>
+          <h2 className="font-playfair text-3xl sm:text-4xl text-black mb-4">Complete This Look</h2>
+          <p className="text-gray-500 text-sm max-w-3xl leading-relaxed">
+            To complete this look, we recommend pairing the featured item with tailored minimalist complementary pieces. The monochromatic color palette maintains an effortless luxury silhouette.
+          </p>
         </div>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {related.map((item, i) => (
-            <div key={i} className="animate-fade-in" style={{ animationDelay: `${i * 100}ms` }}>
-              <Card id={item._id} name={item.name} price={item.price} image={item.image1} />
-            </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {related.map((item, index) => (
+            <Card 
+              key={index} 
+              id={item._id} 
+              name={item.name} 
+              price={item.price} 
+              image={item.image1} 
+              category={item.category}
+              oldPrice={item.oldPrice || Math.round(item.price * 1.2)} 
+            />
           ))}
         </div>
+        
+        {related.length > 3 && (
+          <button className="hidden lg:flex absolute -right-6 top-[60%] -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg items-center justify-center text-gray-600 hover:text-black hover:scale-110 transition-all z-10 border border-gray-100">
+            <IoChevronForwardOutline className="w-6 h-6" />
+          </button>
+        )}
       </div>
-    </section>
+    </div>
   )
 }
 

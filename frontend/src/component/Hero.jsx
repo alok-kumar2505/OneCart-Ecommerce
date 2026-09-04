@@ -1,29 +1,16 @@
-import React, { useContext, useState, useEffect } from 'react'
-import Backgound from './Backgound'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { HiSparkles } from 'react-icons/hi'
+import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5'
 import { shopDataContext } from '../context/ShopContext'
-import { IoSearchOutline } from 'react-icons/io5'
 
 function Hero() {
   const navigate = useNavigate()
-  const { search, setSearch, setShowSearch } = useContext(shopDataContext)
-  const [heroCount, setHeroCount] = useState(0)
+  const { setShowSearch } = useContext(shopDataContext)
+  const [currentSlide, setCurrentSlide] = useState(0)
 
-  const heroData = [
-    { text1: 'Dive into', text2: 'What you love' },
-    { text1: 'Indulge', text2: 'Your passions' },
-    { text1: 'Give in to', text2: 'Your desires' },
-    { text1: 'Premium', text2: 'Lifestyle' }
-  ]
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setHeroCount((count) => (count === 3 ? 0 : count + 1))
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [])
-
-  const currentHero = heroData[heroCount]
+  // Use a placeholder high-quality fashion image for the background
+  const bgImage = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop"
 
   const handleSearch = () => {
     setShowSearch(true)
@@ -31,81 +18,85 @@ function Hero() {
   }
 
   return (
-    <div className="relative h-[72vh] w-full overflow-hidden sm:h-[80vh] lg:h-[85vh]">
-      <div className="absolute inset-0">
-        <Backgound heroCount={heroCount} />
-      </div>
+    <div className="relative w-full h-[85vh] min-h-[600px] overflow-hidden bg-gray-100">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 scale-105"
+        style={{ backgroundImage: `url('${bgImage}')` }}
+      />
       
-      {/* Dark Obsidian Overlay for Luxury Glassmorphic Design */}
-      <div className="absolute inset-0 bg-obsidian-950/70" />
-      <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/20 to-transparent" />
+      {/* Overlay to ensure text readability */}
+      <div className="absolute inset-0 bg-black/20" />
 
-      {/* Content */}
-      <div className="absolute inset-0 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 text-center z-10 mt-10">
+      {/* Main Content */}
+      <div className="absolute inset-0 flex flex-col justify-center items-start px-8 sm:px-16 md:px-24 max-w-[1440px] mx-auto z-10">
         
-        {/* Tag */}
-        <div className="inline-block px-4 py-1.5 rounded-full glass-panel border-amber-500/40 mb-6 animate-fade-in">
-          <span className="text-xs font-bold tracking-[0.25em] uppercase gradient-text-gold">
-            New Season Arrival
-          </span>
-        </div>
-
-        {/* Headline (font-display: Space Grotesk) */}
-        <h1 className="font-display max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl animate-fade-in [animation-delay:100ms]">
-          {currentHero.text1}
-        </h1>
-        
-        {/* Subheadline (font-sans: Plus Jakarta Sans) */}
-        <p className="mt-6 max-w-2xl text-base font-medium text-gray-300 sm:text-lg animate-fade-in [animation-delay:200ms]">
-          {currentHero.text2}
+        {/* Top Label */}
+        <p className="text-[#C0A062] text-xs font-bold tracking-[0.2em] uppercase mb-4 drop-shadow-sm">
+          The Quiet Luxury Collection
         </p>
 
-        {/* ── Hero Intent Search Box Blueprint ── */}
-        <div className="w-full max-w-2xl mx-auto relative mt-10 animate-fade-in [animation-delay:300ms]">
-          <div className="relative glass-panel rounded-2xl p-2.5 shadow-2xl border-white/15 focus-within:border-violet-500/60 focus-within:ring-4 focus-within:ring-violet-500/20 transition-all duration-300">
-            <div className="flex items-center gap-3">
-              <IoSearchOutline className="w-6 h-6 text-violet-400 ml-3 flex-shrink-0" />
-              <input
-                type="text"
-                placeholder="Search exclusive collections..."
-                className="w-full bg-transparent text-white placeholder-gray-500 text-base focus:outline-none py-2"
-                onChange={(e) => setSearch(e.target.value)}
-                value={search}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              />
-              <button 
-                onClick={handleSearch}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 via-pink-600 to-amber-500 text-white font-bold text-sm shadow-lg shadow-violet-600/25 hover:scale-[1.02] transition-transform flex-shrink-0"
-              >
-                Search
-              </button>
-            </div>
-          </div>
-        </div>
+        {/* Main Heading */}
+        <h1 className="font-playfair text-5xl sm:text-6xl md:text-7xl lg:text-[80px] text-white leading-none mb-6 drop-shadow-md">
+          AUTUMN / WINTER 2026
+        </h1>
+        
+        {/* Subtitle */}
+        <p className="text-white text-base md:text-lg max-w-xl mb-10 font-medium drop-shadow-md">
+          Minimal silhouettes engineered in Italian double-faced wool, Egyptian poplin, and supple lambskin.
+        </p>
 
-        {/* Action Buttons */}
-        <div className="mt-8 flex items-center gap-4 animate-fade-in [animation-delay:400ms]">
-          <button
+        {/* Buttons */}
+        <div className="flex flex-wrap items-center gap-4">
+          <button 
             onClick={() => navigate('/collection')}
-            className="px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 font-bold text-sm transition-all shadow-lg"
+            className="bg-[#8B1B1B] hover:bg-[#6c1414] text-white px-8 py-3.5 text-xs font-bold tracking-[0.15em] uppercase transition-colors"
           >
-            Explore All
+            Explore Collection
+          </button>
+          
+          <button 
+            onClick={handleSearch}
+            className="flex items-center gap-2 bg-transparent border border-white text-white hover:bg-white/10 px-8 py-3.5 text-xs font-bold tracking-[0.15em] uppercase transition-colors backdrop-blur-sm"
+          >
+            <HiSparkles className="h-4 w-4" />
+            Style with AI
           </button>
         </div>
       </div>
 
-      {/* Dot indicators */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3 glass-panel px-4 py-2 rounded-full">
-        {[0, 1, 2, 3].map(i => (
-          <button
-            key={i}
-            onClick={() => setHeroCount(i)}
-            className={`h-1.5 rounded-full transition-all duration-500 ${
-              heroCount === i ? 'w-6 bg-gradient-to-r from-violet-500 to-pink-500' : 'w-1.5 bg-white/30 hover:bg-white/60'
-            }`}
-            aria-label={`Go to slide ${i + 1}`}
+      {/* Navigation Arrows */}
+      <button className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white backdrop-blur-md transition-colors z-20">
+        <IoChevronBackOutline className="w-5 h-5" />
+      </button>
+      <button className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white backdrop-blur-md transition-colors z-20">
+        <IoChevronForwardOutline className="w-5 h-5" />
+      </button>
+
+      {/* Pagination Dots */}
+      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20">
+        {[0, 1, 2].map((idx) => (
+          <button 
+            key={idx}
+            onClick={() => setCurrentSlide(idx)}
+            className={`w-2 h-2 rounded-full transition-all ${currentSlide === idx ? 'bg-[#8B1B1B] w-6' : 'bg-white/70 hover:bg-white'}`}
+            aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
+      </div>
+
+      {/* Bottom Marquee Banner */}
+      <div className="absolute bottom-0 w-full bg-[#111111] border-t border-[#333] py-2 z-20">
+        <div className="marquee-container">
+          <div className="marquee-content text-[#C0A062] text-[10px] font-bold tracking-[0.2em] uppercase flex whitespace-nowrap">
+            <span className="mx-4">+ BESPOKE HAUTE COUTURE TAILORING</span>
+            <span className="mx-4">+ 100% ETHICAL EGYPTIAN POPLIN & ITALIAN LEATHER</span>
+            <span className="mx-4">+ COMPLIMENTARY 14-DAY RETURNS PRIVILEGE</span>
+            <span className="mx-4">+ BESPOKE HAUTE COUTURE TAILORING</span>
+            <span className="mx-4">+ 100% ETHICAL EGYPTIAN POPLIN & ITALIAN LEATHER</span>
+            <span className="mx-4">+ COMPLIMENTARY 14-DAY RETURNS PRIVILEGE</span>
+          </div>
+        </div>
       </div>
     </div>
   )

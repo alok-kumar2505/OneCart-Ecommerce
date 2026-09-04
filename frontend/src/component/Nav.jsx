@@ -1,9 +1,8 @@
-import React, { useContext, useState } from 'react'
-import logo from '../assets/logo.png'
+import React, { useContext, useState, useEffect } from 'react'
 import { IoSearchOutline, IoClose } from 'react-icons/io5'
-import { FiShoppingCart, FiUser, FiPackage, FiLogOut, FiHome } from 'react-icons/fi'
-import { HiOutlineCollection, HiSparkles } from 'react-icons/hi'
-import { MdContacts } from 'react-icons/md'
+import { FiShoppingCart, FiUser, FiPackage, FiLogOut, FiHeart, FiBell } from 'react-icons/fi'
+import { HiSparkles } from 'react-icons/hi'
+import { RiDeleteBin6Line } from 'react-icons/ri'
 import { userDataContext } from '../context/UserContext'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
@@ -13,12 +12,22 @@ import { shopDataContext } from '../context/ShopContext'
 function Nav() {
   const { getCurrentUser, userData } = useContext(userDataContext)
   const { serverUrl } = useContext(authDataContext)
-  const { showSearch, setShowSearch, search, setSearch, getCartCount } = useContext(shopDataContext)
+  const { showSearch, setShowSearch, search, setSearch, getCartCount, cartItem, products, currency, updateQuantity, getCartAmount } = useContext(shopDataContext)
   const [showProfile, setShowProfile] = useState(false)
+  const [showCartSidebar, setShowCartSidebar] = useState(false)
+  const [cartData, setCartData] = useState([])
   const navigate = useNavigate()
   const location = useLocation()
 
-  const isActive = (path) => location.pathname === path
+  useEffect(() => {
+    const tempData = []
+    for (const items in cartItem) {
+      for (const item in cartItem[items]) {
+        if (cartItem[items][item] > 0) tempData.push({ _id: items, size: item, quantity: cartItem[items][item] })
+      }
+    }
+    setCartData(tempData)
+  }, [cartItem])
 
   const handleLogout = async () => {
     try {
@@ -28,163 +37,218 @@ function Nav() {
     } catch (error) {  }
   }
 
-  const navLinks = [
-    { label: 'Home', path: '/' },
-    { label: 'Collections', path: '/collection' },
-    { label: 'About', path: '/about' },
-    { label: 'Contact', path: '/contact' },
-  ]
+  const handleSearchSubmit = () => {
+    if (search.trim()) {
+      setShowSearch(false)
+      navigate('/collection')
+    }
+  }
 
   return (
     <>
-      {/* ── Header Navigation Blueprint ── */}
-      <header className="sticky top-0 z-40 w-full glass-panel border-b border-white/10 backdrop-blur-xl">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      {/* ── Top Announcement Banner ── */}
+      <div className="w-full bg-black text-white text-[10px] font-bold tracking-widest text-center py-2 uppercase">
+        Complimentary shipping & duties on all orders above ₹2,999
+      </div>
 
-          {/* Logo */}
-          <div className="flex cursor-pointer items-center" onClick={() => navigate('/')}>
-             <img src={logo} alt="OneCart" className="h-10 w-auto object-contain" />
-          </div>
+      {/* ── Main Header Navigation ── */}
+      <header className="w-full bg-white border-b border-gray-200">
+        <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-4 sm:px-8">
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map(link => (
+          {/* Left Nav */}
+          <nav className="hidden lg:flex items-center gap-6">
+            {['SHOP', 'NEW ARRIVALS', 'TRENDING', 'MY WARDROBE'].map((item) => (
               <button
-                key={link.path}
-                onClick={() => navigate(link.path)}
-                className={`px-4 py-2 text-sm font-semibold transition-colors duration-200 ${
-                  isActive(link.path)
-                    ? 'gradient-text font-bold'
-                    : 'text-gray-400 hover:text-white'
-                }`}
+                key={item}
+                onClick={() => navigate('/collection')}
+                className="text-[11px] font-bold tracking-widest text-gray-800 hover:text-black transition-colors"
               >
-                {link.label}
+                {item}
               </button>
             ))}
           </nav>
 
+          {/* Center Logo */}
+          <div className="flex cursor-pointer items-center lg:absolute lg:left-1/2 lg:-translate-x-1/2" onClick={() => navigate('/')}>
+             <span className="font-playfair text-3xl tracking-[0.15em] text-black">VELORA</span>
+          </div>
+
           {/* Right Actions */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => { setShowSearch(p => !p); if (!showSearch) navigate('/collection') }}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition-colors"
-              aria-label="Search"
-            >
-              {showSearch ? <IoClose className="h-5 w-5" /> : <IoSearchOutline className="h-5 w-5" />}
-            </button>
-
-            <button
-              onClick={() => navigate('/cart')}
-              className="relative hidden md:flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition-colors"
-              aria-label="Cart"
-            >
-              <FiShoppingCart className="h-5 w-5" />
-              {getCartCount() > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 shadow-md text-[10px] font-bold text-white">
-                  {getCartCount()}
-                </span>
-              )}
-            </button>
-
-            {/* Profile Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setShowProfile(p => !p)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 text-white font-bold text-xs shadow-lg shadow-violet-600/30 transition-all"
-                aria-label="Account"
-              >
-                {userData?.name ? (
-                  <span className="truncate max-w-[80px]">{userData.name}</span>
-                ) : (
-                  <>
-                    <FiUser className="h-4 w-4" /> <span>Account</span>
-                  </>
+          <div className="flex items-center gap-5">
+            {/* Icons */}
+            <div className="flex items-center gap-4 text-gray-800">
+              <button onClick={() => setShowSearch(true)} aria-label="Search">
+                <IoSearchOutline className="h-5 w-5 hover:text-black transition-colors" />
+              </button>
+              <button aria-label="Wishlist" className="hidden sm:block">
+                <FiHeart className="h-5 w-5 hover:text-black transition-colors" />
+              </button>
+              <button aria-label="Notifications" className="hidden sm:block">
+                <FiBell className="h-5 w-5 hover:text-black transition-colors" />
+              </button>
+              
+              <button onClick={() => setShowCartSidebar(true)} className="relative" aria-label="Cart">
+                <FiShoppingCart className="h-5 w-5 hover:text-black transition-colors" />
+                {getCartCount() > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center bg-[#8B1B1B] text-[9px] font-bold text-white rounded-full">
+                    {getCartCount()}
+                  </span>
                 )}
               </button>
+            </div>
 
-              {showProfile && (
-                <div className="absolute right-0 top-14 w-52 rounded-2xl glass-panel border border-white/10 shadow-2xl py-2 animate-slide-down z-50">
-                  {userData && (
-                    <div className="px-4 py-3 border-b border-white/10 mb-1">
-                      <p className="text-sm font-bold text-white truncate">{userData.name}</p>
-                      <p className="text-xs text-gray-400 truncate mt-0.5">{userData.email}</p>
+            {/* Auth Buttons / Profile */}
+            <div className="hidden md:flex items-center gap-2 ml-2">
+              {userData ? (
+                <div className="relative">
+                  <button onClick={() => setShowProfile(p => !p)} className="text-[11px] font-bold tracking-widest text-gray-800 hover:text-black transition-colors">
+                    {userData.name?.toUpperCase() || 'ACCOUNT'}
+                  </button>
+                  {showProfile && (
+                    <div className="absolute right-0 top-10 w-48 bg-white border border-gray-200 shadow-xl py-2 z-50">
+                      <button onClick={() => { navigate('/order'); setShowProfile(false) }} className="w-full text-left px-4 py-2 text-xs font-semibold hover:bg-gray-50">My Orders</button>
+                      <button onClick={() => { navigate('/about'); setShowProfile(false) }} className="w-full text-left px-4 py-2 text-xs font-semibold hover:bg-gray-50">About</button>
+                      <div className="my-1 border-t border-gray-100" />
+                      <button onClick={() => { handleLogout(); setShowProfile(false) }} className="w-full text-left px-4 py-2 text-xs font-semibold text-red-600 hover:bg-gray-50">Log Out</button>
                     </div>
                   )}
-                  <button onClick={() => { navigate('/order'); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
-                    <FiPackage className="h-4 w-4 text-violet-400" /> My Orders
-                  </button>
-                  <button onClick={() => { navigate('/about'); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
-                    <FiUser className="h-4 w-4 text-pink-400" /> About
-                  </button>
-                  <div className="my-1 border-t border-white/10" />
-                  {userData ? (
-                    <button onClick={() => { handleLogout(); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
-                      <FiLogOut className="h-4 w-4 text-gray-400" /> Log Out
-                    </button>
-                  ) : (
-                    <button onClick={() => { navigate('/login'); setShowProfile(false) }} className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/5 transition-colors">
-                      <FiUser className="h-4 w-4 text-amber-400" /> Log In
-                    </button>
-                  )}
                 </div>
+              ) : (
+                <>
+                  <button onClick={() => navigate('/login')} className="bg-black text-white px-4 py-1.5 text-[11px] font-bold tracking-widest hover:bg-gray-800 transition-colors">
+                    LOG IN
+                  </button>
+                  <button onClick={() => navigate('/signup')} className="bg-white text-black border border-black px-4 py-1.5 text-[11px] font-bold tracking-widest hover:bg-gray-50 transition-colors">
+                    REGISTER
+                  </button>
+                </>
               )}
             </div>
           </div>
         </div>
+      </header>
 
-        {/* Search Bar - Adapted from blueprint */}
-        {showSearch && (
-          <div className="absolute left-0 right-0 top-full glass-panel border-b border-white/10 p-4 animate-slide-down z-30">
-            <div className="max-w-4xl mx-auto relative">
-              <div className="relative glass-panel rounded-2xl p-2 shadow-2xl border-white/15 focus-within:border-violet-500/60 focus-within:ring-4 focus-within:ring-violet-500/20 transition-all">
-                <div className="flex items-center gap-3">
-                  <IoSearchOutline className="w-5 h-5 text-violet-400 ml-3 flex-shrink-0" />
-                  <input
-                    type="text"
-                    placeholder="Search for products..."
-                    className="w-full bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none py-2"
-                    onChange={(e) => setSearch(e.target.value)}
-                    value={search}
-                    autoFocus
-                  />
-                  {search && <button onClick={() => setSearch('')} className="p-2 text-gray-500 hover:text-white"><IoClose className="h-4 w-4" /></button>}
-                  <button onClick={() => navigate('/collection')} className="hidden sm:block px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 via-pink-600 to-amber-500 text-white font-bold text-xs shadow-lg shadow-violet-600/25">
-                    Search
+      {/* ── Search Modal ── */}
+      {showSearch && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
+          {/* Dimmed Background */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowSearch(false)} />
+          
+          {/* Modal Content */}
+          <div className="relative w-full max-w-2xl bg-white p-8 shadow-2xl z-10 animate-fade-in">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="font-playfair text-2xl tracking-wide">CATALOG SEARCH</h2>
+              <button onClick={() => setShowSearch(false)} className="text-gray-500 hover:text-black">
+                <IoClose className="h-6 w-6" />
+              </button>
+            </div>
+            
+            <div className="relative border border-gray-300 p-3 mb-4 flex items-center">
+              <IoSearchOutline className="w-5 h-5 text-gray-400 mr-3" />
+              <input
+                type="text"
+                placeholder="Search catalog or ask AI (e.g., 'Black leather jacket under 15000')"
+                className="w-full bg-transparent text-black placeholder-gray-400 text-sm focus:outline-none"
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
+                autoFocus
+              />
+            </div>
+            
+            <div className="flex gap-4 mb-8">
+              <button onClick={handleSearchSubmit} className="bg-black text-white text-xs font-bold tracking-widest px-6 py-3 hover:bg-gray-800">
+                SEARCH CATALOG
+              </button>
+            </div>
+            
+            <div>
+              <p className="text-[10px] font-bold text-gray-500 tracking-widest uppercase mb-3">POPULAR SUGGESTIONS:</p>
+              <div className="flex flex-wrap gap-2">
+                {['Leather Jackets', 'Poplin Shirts', 'Pleated Trousers', 'Silk Slip Dress', 'Chelsea Boots'].map(tag => (
+                  <button key={tag} onClick={() => { setSearch(tag); handleSearchSubmit() }} className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs px-3 py-1.5 transition-colors">
+                    {tag}
                   </button>
-                </div>
+                ))}
               </div>
             </div>
           </div>
-        )}
-      </header>
-
-      {/* ── Mobile Bottom Tab Bar ── */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden glass-panel border-t border-white/10 backdrop-blur-xl">
-        <div className="flex items-center justify-around px-2 py-3">
-          {[
-            { icon: FiHome, label: 'Home', path: '/' },
-            { icon: HiOutlineCollection, label: 'Shop', path: '/collection' },
-            { icon: FiShoppingCart, label: 'Cart', path: '/cart', badge: getCartCount() },
-            { icon: MdContacts, label: 'Contact', path: '/contact' },
-          ].map(({ icon: Icon, label, path, badge }) => (
-            <button
-              key={path}
-              onClick={() => navigate(path)}
-              className={`relative flex flex-col items-center gap-1 px-3 py-1 transition-colors ${
-                isActive(path) ? 'text-white' : 'text-gray-500 hover:text-gray-300'
-              }`}
-            >
-              <Icon className={`h-5 w-5 ${isActive(path) ? 'text-violet-400' : ''}`} />
-              <span className={`text-[10px] font-semibold ${isActive(path) ? 'text-white' : ''}`}>{label}</span>
-              {badge > 0 && (
-                <span className="absolute -top-1 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-[9px] font-bold text-white shadow-md">
-                  {badge}
-                </span>
-              )}
-            </button>
-          ))}
         </div>
-      </nav>
+      )}
+
+      {/* ── Slide-out Shopping Cart Sidebar ── */}
+      {showCartSidebar && (
+        <div className="fixed inset-0 z-[100] flex justify-end">
+          {/* Dimmed Background */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowCartSidebar(false)} />
+          
+          {/* Sidebar Content */}
+          <div className="relative w-full max-w-md bg-white h-full flex flex-col shadow-2xl z-10 animate-fade-in translate-x-0 transition-transform duration-300">
+            {/* Header */}
+            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+              <h2 className="font-playfair text-xl tracking-wide">SHOPPING BAG ({getCartCount()})</h2>
+              <button onClick={() => setShowCartSidebar(false)} className="text-gray-500 hover:text-black">
+                <IoClose className="h-6 w-6" />
+              </button>
+            </div>
+            
+            {/* Items */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {cartData.length === 0 ? (
+                <p className="text-center text-gray-500 mt-10">Your shopping bag is empty.</p>
+              ) : (
+                cartData.map((item, index) => {
+                  const p = products.find(prod => prod._id === item._id)
+                  if (!p) return null
+                  return (
+                    <div key={index} className="flex gap-4 border-b border-gray-100 pb-6">
+                      <div className="w-20 h-28 bg-gray-100 flex-shrink-0">
+                        <img src={p.image1} alt={p.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1 flex flex-col">
+                        <div className="flex justify-between items-start">
+                          <p className="text-sm font-bold text-gray-900 leading-tight mb-1">{p.name}</p>
+                          <button onClick={() => updateQuantity(item._id, item.size, 0)} className="text-gray-400 hover:text-red-500 ml-2">
+                            <RiDeleteBin6Line className="h-4 w-4" />
+                          </button>
+                        </div>
+                        <p className="text-xs text-gray-500 mb-2">Size: {item.size} | Color: Default</p>
+                        <p className="text-sm font-bold mb-3">{currency}{p.price}</p>
+                        
+                        <div className="flex items-center border border-gray-300 w-24 rounded-sm">
+                          <button onClick={() => updateQuantity(item._id, item.size, item.quantity - 1)} className="px-2 py-1 text-gray-600 hover:bg-gray-100">-</button>
+                          <span className="flex-1 text-center text-xs font-bold">{item.quantity}</span>
+                          <button onClick={() => updateQuantity(item._id, item.size, item.quantity + 1)} className="px-2 py-1 text-gray-600 hover:bg-gray-100">+</button>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+            
+            {/* Footer */}
+            {cartData.length > 0 && (
+              <div className="border-t border-gray-200 p-6 bg-white">
+                <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
+                  <p>SUBTOTAL</p>
+                  <p>{currency}{getCartAmount()}</p>
+                </div>
+                <div className="flex justify-between items-center text-base font-bold text-black mb-6">
+                  <p>TOTAL</p>
+                  <p>{currency}{getCartAmount()}</p>
+                </div>
+                <button 
+                  onClick={() => { setShowCartSidebar(false); navigate('/placeorder') }}
+                  className="w-full bg-black hover:bg-gray-800 text-white font-bold text-xs tracking-widest py-4 uppercase"
+                >
+                  PROCEED TO CHECKOUT
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </>
   )
 }

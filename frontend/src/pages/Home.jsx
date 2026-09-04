@@ -1,5 +1,4 @@
 import React from 'react'
-import Nav from '../component/Nav'
 import Hero from '../component/Hero'
 import LatestCollection from '../component/LatestCollection'
 import BestSeller from '../component/BestSeller'
@@ -9,8 +8,8 @@ import Footer from '../component/Footer'
 
 function Home() {
   return (
-    <div className="bg-obsidian-950 text-gray-200">
-            <main>
+    <div className="bg-[#F9F9F9] min-h-screen">
+      <main>
         <Hero />
         <LatestCollection />
         <BestSeller />

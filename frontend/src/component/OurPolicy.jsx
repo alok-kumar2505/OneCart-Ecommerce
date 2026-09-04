@@ -1,37 +1,54 @@
 import React from 'react'
-import { RiExchangeFundsLine } from 'react-icons/ri'
-import { TbRosetteDiscountCheckFilled } from 'react-icons/tb'
-import { BiSupport } from 'react-icons/bi'
-
-const policies = [
-  { icon: RiExchangeFundsLine, title: 'Easy Exchange', desc: 'Quick, simple, and customer-friendly exchange process.' },
-  { icon: TbRosetteDiscountCheckFilled, title: '7-Day Returns', desc: 'Shop with confidence — hassle-free return guarantee.' },
-  { icon: BiSupport, title: 'Premium Support', desc: 'Dedicated team ready to assist anytime, anywhere.' },
-]
+import { LuShieldCheck } from 'react-icons/lu'
+import { HiOutlineSparkles } from 'react-icons/hi'
+import { FiCheckCircle } from 'react-icons/fi'
 
 function OurPolicy() {
   return (
-    <section className="w-full px-4 py-24 sm:px-6 lg:px-8 relative z-10">
-      <div className="mx-auto max-w-6xl">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {policies.map(({ icon: Icon, title, desc }, i) => (
-            <div 
-              key={title} 
-              className="glass-panel-interactive flex flex-col items-center gap-4 rounded-3xl p-10 text-center group"
-            >
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full blur-lg opacity-50 group-hover:opacity-100 transition-opacity" />
-                <div className="relative h-16 w-16 rounded-2xl glass-panel flex items-center justify-center border border-white/10 group-hover:border-violet-500/50 transition-colors">
-                  <Icon className="h-8 w-8 text-amber-400 group-hover:text-amber-300 transition-colors" />
-                </div>
-              </div>
-              <h3 className="font-display text-lg font-bold text-white mt-2">{title}</h3>
-              <p className="text-sm leading-relaxed text-gray-400">{desc}</p>
-            </div>
-          ))}
+    <div className="bg-[#F9F9F9] border-t border-gray-200">
+      
+      {/* Testimonial Section */}
+      <div className="py-24 px-4 sm:px-8 max-w-4xl mx-auto text-center border-b border-gray-200">
+        <h2 className="font-playfair text-3xl sm:text-4xl md:text-5xl text-black leading-tight italic mb-8">
+          “VELORA redefines modern luxury by seamlessly fusing haute-couture Italian craftsmanship with groundbreaking artificial intelligence.”
+        </h2>
+        <p className="text-[#8B1B1B] text-[10px] font-bold tracking-[0.2em] uppercase flex items-center justify-center gap-2">
+          <span>+</span> VOGUE EDITORIAL REVIEW 2026 <span>+</span>
+        </p>
+      </div>
+
+      {/* Policy Features Section */}
+      <div className="bg-white py-20 px-4 sm:px-8">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center divide-y md:divide-y-0 md:divide-x divide-gray-200">
+          
+          <div className="flex flex-col items-center pt-8 md:pt-0 md:px-8">
+            <LuShieldCheck className="w-10 h-10 text-[#8B1B1B] mb-6 stroke-1" />
+            <h3 className="text-black font-bold text-[11px] tracking-widest uppercase mb-4">100% Authentic Tailoring</h3>
+            <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
+              Crafted with premium Italian virgin wool & Giza Egyptian cotton.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center pt-8 md:pt-0 md:px-8">
+            <HiOutlineSparkles className="w-10 h-10 text-[#8B1B1B] mb-6 stroke-1" />
+            <h3 className="text-black font-bold text-[11px] tracking-widest uppercase mb-4">AI Fit Advisor</h3>
+            <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
+              Personalized size recommendations calculated for every silhouette.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center pt-8 md:pt-0 md:px-8">
+            <FiCheckCircle className="w-10 h-10 text-[#8B1B1B] mb-6 stroke-1" />
+            <h3 className="text-black font-bold text-[11px] tracking-widest uppercase mb-4">Secure Payment & Express Shipping</h3>
+            <p className="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">
+              Encrypted Razorpay checkout & complimentary express delivery.
+            </p>
+          </div>
+
         </div>
       </div>
-    </section>
+      
+    </div>
   )
 }
 
