@@ -111,9 +111,7 @@ function Nav() {
               <button onClick={() => navigate('/wishlist')} aria-label="Wishlist" className="hidden sm:block">
                 <FiHeart className="h-5 w-5 hover:text-black transition-colors" />
               </button>
-              <button aria-label="Notifications" className="hidden sm:block">
-                <FiBell className="h-5 w-5 hover:text-black transition-colors" />
-              </button>
+
               
               <button onClick={() => setShowCartSidebar(true)} className="relative" aria-label="Cart">
                 <FiShoppingCart className="h-5 w-5 hover:text-black transition-colors" />

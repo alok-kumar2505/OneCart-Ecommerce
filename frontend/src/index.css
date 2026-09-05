@@ -26,6 +26,10 @@
   a, button {
     cursor: pointer;
   }
+
+  input, textarea, select {
+    color: var(--color-velora-dark);
+  }
 }
 
 /* Custom Utilities for Velora Theme */
