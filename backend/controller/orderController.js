@@ -40,7 +40,6 @@ export const placeOrder = async (req,res) => {
 
 export const placeOrderRazorpay = async (req,res) => {
     try {
-        
          const {items , amount , address} = req.body;
          const userId = req.userId;
          const orderData = {
@@ -57,19 +56,20 @@ export const placeOrderRazorpay = async (req,res) => {
          await newOrder.save()
 
          const options = {
-            amount:amount * 100,
+            amount: amount * 100,
             currency: currency.toUpperCase(),
-            receipt : newOrder._id.toString()
+            receipt: newOrder._id.toString()
          }
-         await razorpayInstance.orders.create(options, (error,order)=>{
-            if(error) {
-                return res.status(500).json(error)
-            }
-            res.status(200).json(order)
-         })
+
+         try {
+             const order = await razorpayInstance.orders.create(options)
+             res.status(200).json({ success: true, order })
+         } catch (rzpError) {
+             console.error("Razorpay API Error:", rzpError)
+             res.status(500).json({ success: false, message: rzpError.message || "Failed to create Razorpay order" })
+         }
     } catch (error) {
-        res.status(500).json({message:error.message
-            })
+        res.status(500).json({ success: false, message: error.message })
     }
 }
 

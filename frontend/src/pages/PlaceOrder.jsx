@@ -236,7 +236,7 @@ function PlaceOrder() {
             disabled={loading}
             className="w-full bg-[#8B1B1B] hover:bg-[#6c1414] text-white text-xs font-bold tracking-widest uppercase py-5 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
           >
-            {loading ? <Loading /> : `Confirm ${method === 'cod' ? 'Cash on Delivery' : 'Online'} Order (${currency}${subtotal + delivery_fee})`}
+            {loading ? <Loading /> : `Confirm Order`}
           </button>
         </form>
 
