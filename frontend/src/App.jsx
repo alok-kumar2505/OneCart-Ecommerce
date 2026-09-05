@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Registration from './pages/Registration'
 import Home from './pages/Home'
@@ -22,9 +22,13 @@ function App() {
 let {userData} = useContext(userDataContext)
 let location = useLocation()
   
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
+
   return (
     <>
-    <ToastContainer autoClose={2000} />
+    <ToastContainer autoClose={1500} />
     {userData && <Nav/>}
       <Routes>
 

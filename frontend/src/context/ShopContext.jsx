@@ -56,8 +56,6 @@ function ShopContext({children}) {
       toast.success("Product Added")
       setLoading(false)
 
-
-       
       }
       catch (error) {
         setLoading(false)
@@ -66,6 +64,14 @@ function ShopContext({children}) {
       }
      
     } 
+
+    if (wishlist.includes(itemId)) {
+        setWishlist(prev => prev.filter(id => id !== itemId));
+        if (userData) {
+            try { await axios.post(serverUrl + "/api/wishlist/remove", { itemId }, { withCredentials: true }) } catch (error) {}
+        }
+    }
+
     }
 
 

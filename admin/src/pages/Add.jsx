@@ -48,9 +48,9 @@ function Add() {
 
   const ImageUploader = ({ img, setImg, id }) => (
     <label htmlFor={id} className="cursor-pointer group relative">
-      <div className={`h-24 w-24 rounded-xl flex items-center justify-center overflow-hidden transition-all ${!img ? 'border-2 border-dashed border-white/20 bg-white/5 hover:border-violet-500/50 hover:bg-white/10' : 'border border-white/10'}`}>
+      <div className={`h-24 w-24 flex items-center justify-center overflow-hidden transition-all ${!img ? 'border border-dashed border-gray-400 bg-gray-50 hover:border-black hover:bg-gray-100' : 'border border-gray-200'}`}>
         {!img ? (
-          <div className="flex flex-col items-center gap-2 text-gray-500 group-hover:text-violet-400">
+          <div className="flex flex-col items-center gap-2 text-gray-400 group-hover:text-black">
             <FiImage className="h-6 w-6" />
           </div>
         ) : (
@@ -62,21 +62,21 @@ function Add() {
   )
 
   return (
-    <div className="bg-obsidian-950 text-gray-200 min-h-screen">
+    <div className="bg-[#F9F9F9] text-black min-h-screen">
       <Nav />
       <Sidebar />
       <main className="ml-16 pt-20 md:ml-64 p-6 md:p-10 pb-24">
         <div className="max-w-4xl">
           <div className="mb-8">
-            <h1 className="font-display text-2xl font-bold text-white mb-2">Add New Product</h1>
-            <p className="text-sm text-gray-400">Fill in the details below to add a new product to your catalog.</p>
+            <h1 className="font-playfair text-2xl font-bold text-black mb-2">Add New Product</h1>
+            <p className="text-sm text-gray-500">Fill in the details below to add a new product to your catalog.</p>
           </div>
 
           <form onSubmit={onSubmitHandler} className="space-y-6">
             
             {/* Images */}
-            <div className="glass-panel rounded-3xl p-6 md:p-8 border-white/10">
-              <p className="text-sm font-bold uppercase tracking-wider text-white mb-6">Product Imagery</p>
+            <div className="bg-white p-6 md:p-8 border border-gray-200 shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-black mb-6">Product Imagery</p>
               <div className="flex gap-4 flex-wrap">
                 <ImageUploader img={image1} setImg={setImage1} id="image1" />
                 <ImageUploader img={image2} setImg={setImage2} id="image2" />
@@ -86,56 +86,56 @@ function Add() {
             </div>
 
             {/* General Info */}
-            <div className="glass-panel rounded-3xl p-6 md:p-8 border-white/10 space-y-5">
-              <p className="text-sm font-bold uppercase tracking-wider text-white mb-2">General Information</p>
+            <div className="bg-white p-6 md:p-8 border border-gray-200 shadow-sm space-y-5">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-black mb-2">General Information</p>
               
               <div>
-                <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-400">Product Name</label>
-                <input type="text" placeholder="Type here" className="glass-input w-full rounded-xl px-5 py-3 text-sm" required onChange={(e) => setName(e.target.value)} value={name} />
+                <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Product Name</label>
+                <input type="text" placeholder="Type here" className="w-full border border-gray-300 px-5 py-3 text-sm focus:outline-none focus:border-black" required onChange={(e) => setName(e.target.value)} value={name} />
               </div>
               
               <div>
-                <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-400">Product Description</label>
-                <textarea placeholder="Write content here" className="glass-input w-full rounded-xl px-5 py-3 text-sm h-32 resize-none" required onChange={(e) => setDescription(e.target.value)} value={description} />
+                <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Product Description</label>
+                <textarea placeholder="Write content here" className="w-full border border-gray-300 px-5 py-3 text-sm h-32 resize-none focus:outline-none focus:border-black" required onChange={(e) => setDescription(e.target.value)} value={description} />
               </div>
             </div>
 
             {/* Categories & Price */}
-            <div className="glass-panel rounded-3xl p-6 md:p-8 border-white/10">
+            <div className="bg-white p-6 md:p-8 border border-gray-200 shadow-sm">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div>
-                  <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-400">Category</label>
-                  <select className="glass-input w-full rounded-xl px-5 py-3 text-sm appearance-none" onChange={(e) => setCategory(e.target.value)}>
-                    <option value="Men" className="bg-obsidian-900">Men</option>
-                    <option value="Women" className="bg-obsidian-900">Women</option>
-                    <option value="Kids" className="bg-obsidian-900">Kids</option>
+                  <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Category</label>
+                  <select className="w-full border border-gray-300 px-5 py-3 text-sm focus:outline-none focus:border-black bg-white" onChange={(e) => setCategory(e.target.value)}>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Kids">Kids</option>
                   </select>
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-400">Sub Category</label>
-                  <select className="glass-input w-full rounded-xl px-5 py-3 text-sm appearance-none" onChange={(e) => setSubCategory(e.target.value)}>
-                    <option value="TopWear" className="bg-obsidian-900">TopWear</option>
-                    <option value="BottomWear" className="bg-obsidian-900">BottomWear</option>
-                    <option value="WinterWear" className="bg-obsidian-900">WinterWear</option>
+                  <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Sub Category</label>
+                  <select className="w-full border border-gray-300 px-5 py-3 text-sm focus:outline-none focus:border-black bg-white" onChange={(e) => setSubCategory(e.target.value)}>
+                    <option value="TopWear">TopWear</option>
+                    <option value="BottomWear">BottomWear</option>
+                    <option value="WinterWear">WinterWear</option>
                   </select>
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-400">Price</label>
-                  <input type="number" placeholder="25" className="glass-input w-full rounded-xl px-5 py-3 text-sm" required onChange={(e) => setPrice(e.target.value)} value={price} />
+                  <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-gray-500">Price</label>
+                  <input type="number" placeholder="25" className="w-full border border-gray-300 px-5 py-3 text-sm focus:outline-none focus:border-black" required onChange={(e) => setPrice(e.target.value)} value={price} />
                 </div>
               </div>
             </div>
 
             {/* Sizes & Bestseller */}
-            <div className="glass-panel rounded-3xl p-6 md:p-8 border-white/10 space-y-6">
+            <div className="bg-white p-6 md:p-8 border border-gray-200 shadow-sm space-y-6">
               <div>
-                <label className="mb-3 block text-xs font-bold uppercase tracking-wider text-white">Available Sizes</label>
+                <label className="mb-3 block text-[10px] font-bold uppercase tracking-widest text-black">Available Sizes</label>
                 <div className="flex gap-3 flex-wrap">
                   {['S', 'M', 'L', 'XL', 'XXL'].map(s => (
                     <div 
                       key={s} 
                       onClick={() => toggleSize(s)} 
-                      className={`cursor-pointer px-6 py-2 rounded-xl text-sm font-bold transition-all border ${sizes.includes(s) ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white border-violet-500/50 shadow-md shadow-violet-600/20' : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'}`}
+                      className={`cursor-pointer px-6 py-2 text-sm font-bold transition-all border ${sizes.includes(s) ? 'bg-black text-white border-black' : 'bg-gray-50 border-gray-300 text-gray-600 hover:bg-gray-100'}`}
                     >
                       {s}
                     </div>
@@ -143,13 +143,13 @@ function Add() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 mt-4 pt-6 border-t border-white/10">
-                <input type="checkbox" id="bestseller" onChange={() => setBestseller(prev => !prev)} checked={bestseller} className="w-5 h-5 accent-violet-600 rounded cursor-pointer" />
-                <label htmlFor="bestseller" className="cursor-pointer text-sm font-medium text-gray-300">Add to bestseller list</label>
+              <div className="flex items-center gap-3 mt-4 pt-6 border-t border-gray-200">
+                <input type="checkbox" id="bestseller" onChange={() => setBestseller(prev => !prev)} checked={bestseller} className="w-5 h-5 accent-black rounded-none cursor-pointer border-gray-300" />
+                <label htmlFor="bestseller" className="cursor-pointer text-sm font-medium text-black">Add to bestseller list</label>
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="w-full sm:w-auto px-10 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-gold-400 text-obsidian-950 font-extrabold text-sm uppercase shadow-xl shadow-amber-500/20 hover:scale-[1.02] transition-transform disabled:opacity-70 disabled:hover:scale-100 flex justify-center">
+            <button type="submit" disabled={loading} className="w-full sm:w-auto bg-[#8B1B1B] hover:bg-[#6c1414] text-white text-xs font-bold tracking-widest uppercase py-4 px-10 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
               {loading ? <Loading /> : 'ADD PRODUCT'}
             </button>
           </form>
