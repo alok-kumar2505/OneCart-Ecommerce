@@ -9,7 +9,7 @@ function Footer() {
         <div className="lg:pr-8">
           <h2 className="font-playfair text-3xl tracking-[0.15em] mb-6">ONECART</h2>
           <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-            Luxury fashion platform engineered with AI personal styling and high-end editorial curation.
+            Luxury fashion platform engineered with high-end editorial curation.
           </p>
         </div>
 
@@ -27,9 +27,9 @@ function Footer() {
 
         {/* AI Services Links */}
         <div>
-          <h3 className="text-xs font-bold tracking-[0.15em] uppercase mb-6">AI Services</h3>
+          <h3 className="text-xs font-bold tracking-[0.15em] uppercase mb-6">Services</h3>
           <ul className="space-y-4">
-            {['AI Personal Stylist', 'Visual Outfit Search', 'Digital Wardrobe', 'Semantic AI Search'].map(link => (
+            {['Visual Outfit Search', 'Digital Wardrobe', 'Semantic Search'].map(link => (
               <li key={link}>
                 <a href="#" className="text-gray-400 text-sm hover:text-white transition-colors">{link}</a>
               </li>

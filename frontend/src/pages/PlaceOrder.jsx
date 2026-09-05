@@ -107,9 +107,11 @@ function PlaceOrder() {
         required
         type={type}
         name={name}
+        id={name}
+        autoComplete={name === 'street' ? 'street-address' : name === 'pinCode' ? 'postal-code' : name === 'phone' ? 'tel' : name}
         onChange={handleChange}
         value={formData[name]}
-        className="border border-gray-300 p-3 text-sm focus:outline-none focus:border-black transition-colors"
+        className="border border-gray-300 p-3 text-sm text-black focus:outline-none focus:border-black transition-colors"
         placeholder={placeholder}
       />
     </div>

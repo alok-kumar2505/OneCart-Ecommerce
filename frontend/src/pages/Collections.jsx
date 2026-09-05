@@ -1,29 +1,54 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useMemo } from 'react'
 import { FaChevronDown } from 'react-icons/fa'
 import { shopDataContext } from '../context/ShopContext'
 import Card from '../component/Card'
 
 function Collections() {
-  const { products, search, showSearch } = useContext(shopDataContext)
+  const { products, search } = useContext(shopDataContext)
   const [filterProduct, setFilterProduct] = useState([])
   const [sortType, setSortType] = useState('relevant')
+  const [showFilter, setShowFilter] = useState(false)
+  const [categoryFilter, setCategoryFilter] = useState([])
+
+  const uniqueCategories = useMemo(() => {
+    const cats = new Set(products.map(p => p.category).filter(Boolean))
+    return Array.from(cats)
+  }, [products])
+
+  const toggleCategory = (e) => {
+    if (categoryFilter.includes(e.target.value)) {
+      setCategoryFilter(prev => prev.filter(item => item !== e.target.value))
+    } else {
+      setCategoryFilter(prev => [...prev, e.target.value])
+    }
+  }
 
   const applyFilter = () => {
     let copy = products.slice()
-    if (showSearch && search) copy = copy.filter(i => i.name.toLowerCase().includes(search.toLowerCase()))
+
+    // 1. Filter by Search Query
+    if (search) {
+      copy = copy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+    }
+
+    // 2. Filter by Category
+    if (categoryFilter.length > 0) {
+      copy = copy.filter(item => categoryFilter.includes(item.category))
+    }
+
+    // 3. Apply Sorting
+    if (sortType === 'low-high') {
+      copy = copy.sort((a, b) => a.price - b.price)
+    } else if (sortType === 'high-low') {
+      copy = copy.sort((a, b) => b.price - a.price)
+    }
+
     setFilterProduct(copy)
   }
 
-  const sortProducts = () => {
-    const copy = filterProduct.slice()
-    if (sortType === 'low-high') setFilterProduct(copy.sort((a, b) => a.price - b.price))
-    else if (sortType === 'high-low') setFilterProduct(copy.sort((a, b) => b.price - a.price))
-    else applyFilter()
-  }
-
-  useEffect(() => { sortProducts() }, [sortType])
-  useEffect(() => { setFilterProduct(products) }, [products])
-  useEffect(() => { applyFilter() }, [search, showSearch])
+  useEffect(() => {
+    applyFilter()
+  }, [products, search, categoryFilter, sortType])
 
   return (
     <div className="bg-white min-h-screen pt-12 pb-24 px-4 sm:px-8 max-w-[1440px] mx-auto border-t border-gray-200">
@@ -36,7 +61,10 @@ function Collections() {
 
       {/* ── Controls ── */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-gray-200 pb-4 gap-4">
-        <button className="border border-gray-300 text-black text-xs font-bold tracking-widest px-6 py-2 flex items-center gap-2 hover:bg-gray-50">
+        <button 
+          onClick={() => setShowFilter(!showFilter)}
+          className={`border border-gray-300 text-black text-xs font-bold tracking-widest px-6 py-2 flex items-center gap-2 hover:bg-gray-50 transition-colors ${showFilter ? 'bg-gray-100' : ''}`}
+        >
           <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 0H14V2H0V0ZM3 5H11V7H3V5ZM6 10H8V12H6V10Z" fill="currentColor"/>
           </svg>
@@ -59,27 +87,54 @@ function Collections() {
         </div>
       </div>
 
-      {/* ── Product Grid ── */}
-      {filterProduct.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {filterProduct.map((item, i) => (
-            <Card 
-              key={i} 
-              id={item._id} 
-              name={item.name} 
-              price={item.price} 
-              image={item.image1} 
-              category={item.category} 
-              oldPrice={item.oldPrice || Math.round(item.price * 1.2)} 
-            />
-          ))}
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* ── Filter Sidebar ── */}
+        <div className={`md:w-64 flex-shrink-0 ${showFilter ? 'block' : 'hidden md:block'}`}>
+          <div className="border border-gray-200 p-6 bg-gray-50/50">
+            <h3 className="text-sm font-bold tracking-widest uppercase mb-4 text-black">CATEGORIES</h3>
+            <div className="space-y-3">
+              {uniqueCategories.map(cat => (
+                <label key={cat} className="flex items-center gap-3 cursor-pointer text-sm text-gray-700 hover:text-black group">
+                  <input 
+                    type="checkbox" 
+                    value={cat} 
+                    className="w-4 h-4 accent-black cursor-pointer"
+                    onChange={toggleCategory}
+                  />
+                  <span className="capitalize">{cat}</span>
+                </label>
+              ))}
+              {uniqueCategories.length === 0 && (
+                <p className="text-xs text-gray-500">No categories found.</p>
+              )}
+            </div>
+          </div>
         </div>
-      ) : (
-        <div className="py-20 text-center">
-          <p className="text-xl font-playfair text-black mb-2">No products found</p>
-          <p className="text-sm text-gray-500">Try adjusting your search to find what you're looking for.</p>
+
+        {/* ── Product Grid ── */}
+        <div className="flex-1">
+          {filterProduct.length > 0 ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {filterProduct.map((item, i) => (
+                <Card 
+                  key={i} 
+                  id={item._id} 
+                  name={item.name} 
+                  price={item.price} 
+                  image={item.image1} 
+                  category={item.category} 
+                  oldPrice={item.oldPrice || Math.round(item.price * 1.2)} 
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="py-20 text-center">
+              <p className="text-xl font-playfair text-black mb-2">No products found</p>
+              <p className="text-sm text-gray-500">Try adjusting your filters or search to find what you're looking for.</p>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }

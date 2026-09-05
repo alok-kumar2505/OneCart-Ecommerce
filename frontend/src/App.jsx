@@ -22,7 +22,7 @@ let location = useLocation()
   
   return (
     <>
-    <ToastContainer />
+    <ToastContainer autoClose={3000} />
     {userData && <Nav/>}
       <Routes>
 

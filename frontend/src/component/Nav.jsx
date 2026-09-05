@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { IoSearchOutline, IoClose } from 'react-icons/io5'
+import React, { useContext, useState, useEffect, useRef } from 'react'
+import { IoSearchOutline, IoClose, IoMenuOutline } from 'react-icons/io5'
 import { FiShoppingCart, FiUser, FiPackage, FiLogOut, FiHeart, FiBell } from 'react-icons/fi'
 import { HiSparkles } from 'react-icons/hi'
 import { RiDeleteBin6Line } from 'react-icons/ri'
@@ -15,9 +15,21 @@ function Nav() {
   const { showSearch, setShowSearch, search, setSearch, getCartCount, cartItem, products, currency, updateQuantity, getCartAmount } = useContext(shopDataContext)
   const [showProfile, setShowProfile] = useState(false)
   const [showCartSidebar, setShowCartSidebar] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [cartData, setCartData] = useState([])
+  const profileRef = useRef(null)
   const navigate = useNavigate()
   const location = useLocation()
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowProfile(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   useEffect(() => {
     const tempData = []
@@ -44,6 +56,13 @@ function Nav() {
     }
   }
 
+  const navLinks = [
+    { name: 'SHOP', path: '/collection' },
+    { name: 'ABOUT US', path: '/about' },
+    { name: 'CONTACT', path: '/contact' },
+    { name: 'ORDERS', path: '/order' }
+  ]
+
   return (
     <>
       {/* ── Top Announcement Banner ── */}
@@ -55,33 +74,37 @@ function Nav() {
       <header className="w-full bg-white border-b border-gray-200">
         <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-4 sm:px-8">
 
-          {/* Left Nav */}
-          <nav className="hidden lg:flex items-center gap-6">
-            {[
-              { name: 'SHOP', path: '/collection' },
-              { name: 'ABOUT US', path: '/about' },
-              { name: 'CONTACT', path: '/contact' },
-              { name: 'ORDERS', path: '/order' }
-            ].map((item) => (
-              <button
-                key={item.name}
-                onClick={() => navigate(item.path)}
-                className="text-[11px] font-bold tracking-widest text-gray-800 hover:text-black transition-colors"
-              >
-                {item.name}
-              </button>
-            ))}
-          </nav>
+          {/* Left Nav (Mobile Menu Toggle & Desktop Links) */}
+          <div className="flex items-center gap-4">
+            <button 
+              className="lg:hidden text-gray-800 hover:text-black" 
+              onClick={() => setShowMobileMenu(true)}
+              aria-label="Menu"
+            >
+              <IoMenuOutline className="h-6 w-6" />
+            </button>
+            <nav className="hidden lg:flex items-center gap-6">
+              {navLinks.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => navigate(item.path)}
+                  className="text-[11px] font-bold tracking-widest text-gray-800 hover:text-black transition-colors"
+                >
+                  {item.name}
+                </button>
+              ))}
+            </nav>
+          </div>
 
           {/* Center Logo */}
           <div className="flex cursor-pointer items-center lg:absolute lg:left-1/2 lg:-translate-x-1/2" onClick={() => navigate('/')}>
-             <span className="font-playfair text-3xl tracking-[0.15em] text-black">ONECART</span>
+             <span className="font-playfair text-2xl sm:text-3xl tracking-[0.15em] text-black">ONECART</span>
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-4 sm:gap-5">
             {/* Icons */}
-            <div className="flex items-center gap-4 text-gray-800">
+            <div className="flex items-center gap-3 sm:gap-4 text-gray-800">
               <button onClick={() => setShowSearch(true)} aria-label="Search">
                 <IoSearchOutline className="h-5 w-5 hover:text-black transition-colors" />
               </button>
@@ -105,14 +128,13 @@ function Nav() {
             {/* Auth Buttons / Profile */}
             <div className="hidden md:flex items-center gap-2 ml-2">
               {userData ? (
-                <div className="relative">
+                <div className="relative" ref={profileRef}>
                   <button onClick={() => setShowProfile(p => !p)} className="text-[11px] font-bold tracking-widest text-gray-800 hover:text-black transition-colors">
                     {userData.name?.toUpperCase() || 'ACCOUNT'}
                   </button>
                   {showProfile && (
                     <div className="absolute right-0 top-10 w-48 bg-white border border-gray-200 shadow-xl py-2 z-50">
-                      <button onClick={() => { navigate('/order'); setShowProfile(false) }} className="w-full text-left px-4 py-2 text-xs font-semibold hover:bg-gray-50">My Orders</button>
-                      <button onClick={() => { navigate('/about'); setShowProfile(false) }} className="w-full text-left px-4 py-2 text-xs font-semibold hover:bg-gray-50">About</button>
+                      <button onClick={() => { navigate('/order'); setShowProfile(false) }} className="w-full text-left px-4 py-2 text-xs font-semibold text-black hover:bg-gray-50">My Orders</button>
                       <div className="my-1 border-t border-gray-100" />
                       <button onClick={() => { handleLogout(); setShowProfile(false) }} className="w-full text-left px-4 py-2 text-xs font-semibold text-red-600 hover:bg-gray-50">Log Out</button>
                     </div>
@@ -132,6 +154,51 @@ function Nav() {
           </div>
         </div>
       </header>
+
+      {/* ── Mobile Menu Sidebar ── */}
+      {showMobileMenu && (
+        <div className="fixed inset-0 z-[110] flex lg:hidden">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowMobileMenu(false)} />
+          <div className="relative w-64 bg-white h-full flex flex-col shadow-2xl z-10 animate-fade-in -translate-x-0 transition-transform duration-300">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+              <span className="font-playfair text-xl tracking-[0.15em] text-black">ONECART</span>
+              <button onClick={() => setShowMobileMenu(false)} className="text-gray-500 hover:text-black">
+                <IoClose className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="flex flex-col p-6 space-y-6 flex-1">
+              {navLinks.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => { setShowMobileMenu(false); navigate(item.path); }}
+                  className="text-left text-sm font-bold tracking-widest text-gray-800 hover:text-black transition-colors"
+                >
+                  {item.name}
+                </button>
+              ))}
+            </div>
+            <div className="p-6 border-t border-gray-200 space-y-4">
+              {userData ? (
+                <>
+                  <p className="text-xs text-gray-500">Logged in as {userData.name}</p>
+                  <button onClick={() => { setShowMobileMenu(false); handleLogout(); }} className="w-full bg-black text-white px-4 py-3 text-[11px] font-bold tracking-widest hover:bg-gray-800">
+                    LOG OUT
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => { setShowMobileMenu(false); navigate('/login'); }} className="w-full bg-black text-white px-4 py-3 text-[11px] font-bold tracking-widest hover:bg-gray-800">
+                    LOG IN
+                  </button>
+                  <button onClick={() => { setShowMobileMenu(false); navigate('/signup'); }} className="w-full bg-white text-black border border-black px-4 py-3 text-[11px] font-bold tracking-widest hover:bg-gray-50">
+                    REGISTER
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Search Modal ── */}
       {showSearch && (
@@ -191,7 +258,7 @@ function Nav() {
           <div className="relative w-full max-w-md bg-white h-full flex flex-col shadow-2xl z-10 animate-fade-in translate-x-0 transition-transform duration-300">
             {/* Header */}
             <div className="flex justify-between items-center p-6 border-b border-gray-200">
-              <h2 className="font-playfair text-xl tracking-wide">SHOPPING BAG ({getCartCount()})</h2>
+              <h2 className="font-playfair text-xl tracking-wide text-black">SHOPPING BAG ({getCartCount()})</h2>
               <button onClick={() => setShowCartSidebar(false)} className="text-gray-500 hover:text-black">
                 <IoClose className="h-6 w-6" />
               </button>
@@ -212,17 +279,17 @@ function Nav() {
                       </div>
                       <div className="flex-1 flex flex-col">
                         <div className="flex justify-between items-start">
-                          <p className="text-sm font-bold text-gray-900 leading-tight mb-1">{p.name}</p>
+                          <p className="text-sm font-bold text-black leading-tight mb-1">{p.name}</p>
                           <button onClick={() => updateQuantity(item._id, item.size, 0)} className="text-gray-400 hover:text-red-500 ml-2">
                             <RiDeleteBin6Line className="h-4 w-4" />
                           </button>
                         </div>
                         <p className="text-xs text-gray-500 mb-2">Size: {item.size} | Color: Default</p>
-                        <p className="text-sm font-bold mb-3">{currency}{p.price}</p>
+                        <p className="text-sm font-bold text-black mb-3">{currency}{p.price}</p>
                         
                         <div className="flex items-center border border-gray-300 w-24 rounded-sm">
                           <button onClick={() => updateQuantity(item._id, item.size, item.quantity - 1)} className="px-2 py-1 text-gray-600 hover:bg-gray-100">-</button>
-                          <span className="flex-1 text-center text-xs font-bold">{item.quantity}</span>
+                          <span className="flex-1 text-center text-xs font-bold text-black">{item.quantity}</span>
                           <button onClick={() => updateQuantity(item._id, item.size, item.quantity + 1)} className="px-2 py-1 text-gray-600 hover:bg-gray-100">+</button>
                         </div>
                       </div>
