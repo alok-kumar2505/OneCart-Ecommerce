@@ -4,7 +4,7 @@ import { shopDataContext } from '../context/ShopContext'
 import Card from '../component/Card'
 
 function Collections() {
-  const { products, search } = useContext(shopDataContext)
+  const { products, search, setSearch } = useContext(shopDataContext)
   const [filterProduct, setFilterProduct] = useState([])
   const [sortType, setSortType] = useState('relevant')
   const [showFilter, setShowFilter] = useState(false)
@@ -60,7 +60,7 @@ function Collections() {
       </div>
 
       {/* ── Controls ── */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-gray-200 pb-4 gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-gray-200 pb-4 gap-4 w-full">
         <button 
           onClick={() => setShowFilter(!showFilter)}
           className={`border border-gray-300 text-black text-xs font-bold tracking-widest px-6 py-2 flex items-center gap-2 hover:bg-gray-50 transition-colors ${showFilter ? 'bg-gray-100' : ''}`}
@@ -71,7 +71,17 @@ function Collections() {
           FILTERS
         </button>
         
-        <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-gray-500">
+        <div className="flex-1 w-full sm:px-4 sm:flex sm:justify-center">
+          <input 
+            type="text"
+            placeholder="Search collections..."
+            className="w-full sm:max-w-md border border-gray-300 px-4 py-2 text-sm text-black focus:outline-none focus:border-black transition-colors"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-gray-500 shrink-0">
           <span>Sort By:</span>
           <div className="relative">
             <select

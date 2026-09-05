@@ -12,6 +12,23 @@ import { BsCashCoin, BsCreditCard } from 'react-icons/bs'
 import { LuShieldCheck } from 'react-icons/lu'
 import Loading from '../component/Loading'
 
+const InputField = ({ name, placeholder, label, type = 'text', width = 'w-full', formData, handleChange }) => (
+  <div className={`flex flex-col ${width}`}>
+    <label className="text-[10px] font-bold tracking-widest uppercase text-black mb-2">{label}</label>
+    <input
+      required
+      type={type}
+      name={name}
+      id={name}
+      autoComplete={name === 'street' ? 'street-address' : name === 'pinCode' ? 'postal-code' : name === 'phone' ? 'tel' : name}
+      onChange={handleChange}
+      value={formData[name]}
+      className="border border-gray-300 p-3 text-sm text-black focus:outline-none focus:border-black transition-colors"
+      placeholder={placeholder}
+    />
+  </div>
+)
+
 function PlaceOrder() {
   const [method, setMethod] = useState('cod')
   const { cartItem, setCartItem, getCartAmount, delivery_fee, products, currency } = useContext(shopDataContext)
@@ -28,32 +45,6 @@ function PlaceOrder() {
     e.preventDefault()
     setLoading(true)
 
-    const initPay = (order) => {
-      const options = {
-          key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-          amount: order.amount,
-          currency: order.currency,
-          name: "Order Payment",
-          description: "Order Payment",
-          order_id: order.id,
-          receipt: order.receipt,
-          handler: async (response) => {
-              try {
-                  const { data } = await axios.post(serverUrl + '/api/order/verifyrazorpay', response, { withCredentials: true })
-                  if (data.success) {
-                      navigate('/order')
-                      setCartItem({})
-                      toast.success("Payment Successful")
-                  }
-              } catch (error) {
-                  toast.error("Payment failed")
-              }
-          }
-      }
-      const rzp = new window.Razorpay(options)
-      rzp.open()
-    }
-
     try {
       let orderItems = []
       for (const items in cartItem) {
@@ -67,9 +58,39 @@ function PlaceOrder() {
 
       const orderData = { address: formData, items: orderItems, amount: getCartAmount() + delivery_fee }
 
+      const initPay = (order) => {
+        const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+            amount: order.amount,
+            currency: order.currency,
+            name: "Order Payment",
+            description: "Order Payment",
+            order_id: order.id,
+            receipt: order.receipt,
+            handler: async (response) => {
+                try {
+                    const { data } = await axios.post(serverUrl + '/api/order/verifyrazorpay', response, { withCredentials: true })
+                    if (data.success) {
+                        setCartItem({})
+                        toast.success("Payment Successful")
+                        navigate('/confirmation', { state: { orderData, amount: order.amount / 100, method: 'Online Payment' } })
+                    }
+                } catch (error) {
+                    toast.error("Payment failed")
+                }
+            }
+        }
+        const rzp = new window.Razorpay(options)
+        rzp.open()
+      }
+
       if (method === 'cod') {
         const response = await axios.post(serverUrl + '/api/order/placeorder', orderData, { withCredentials: true })
-        if (response.data) { setCartItem({}); navigate('/order'); toast.success('Order placed successfully!') }
+        if (response.data) { 
+          setCartItem({}) 
+          toast.success('Order placed successfully!') 
+          navigate('/confirmation', { state: { orderData, amount: orderData.amount, method: 'Cash on Delivery' } })
+        }
         else { toast.error('Failed to place order') }
       } else if (method === 'razorpay') {
         const response = await axios.post(serverUrl + '/api/order/razorpay', orderData, { withCredentials: true })
@@ -99,23 +120,6 @@ function PlaceOrder() {
   
   const bagItems = getCartItems()
   const subtotal = getCartAmount()
-
-  const InputField = ({ name, placeholder, label, type = 'text', width = 'w-full' }) => (
-    <div className={`flex flex-col ${width}`}>
-      <label className="text-[10px] font-bold tracking-widest uppercase text-black mb-2">{label}</label>
-      <input
-        required
-        type={type}
-        name={name}
-        id={name}
-        autoComplete={name === 'street' ? 'street-address' : name === 'pinCode' ? 'postal-code' : name === 'phone' ? 'tel' : name}
-        onChange={handleChange}
-        value={formData[name]}
-        className="border border-gray-300 p-3 text-sm text-black focus:outline-none focus:border-black transition-colors"
-        placeholder={placeholder}
-      />
-    </div>
-  )
 
   return (
     <div className="bg-[#F9F9F9] min-h-screen border-t border-gray-200">
@@ -156,20 +160,20 @@ function PlaceOrder() {
             
             <div className="space-y-6">
               <div className="flex flex-col sm:flex-row gap-6">
-                <InputField name="firstName" label="First Name" />
-                <InputField name="lastName" label="Last Name" />
+                <InputField name="firstName" label="First Name" formData={formData} handleChange={handleChange} />
+                <InputField name="lastName" label="Last Name" formData={formData} handleChange={handleChange} />
               </div>
-              <InputField name="email" type="email" label="Email Address" />
-              <InputField name="street" label="Street Address & Apartment" />
+              <InputField name="email" type="email" label="Email Address" formData={formData} handleChange={handleChange} />
+              <InputField name="street" label="Street Address & Apartment" formData={formData} handleChange={handleChange} />
               <div className="flex flex-col sm:flex-row gap-6">
-                <InputField name="city" label="City" />
-                <InputField name="state" label="State / Province" />
+                <InputField name="city" label="City" formData={formData} handleChange={handleChange} />
+                <InputField name="state" label="State / Province" formData={formData} handleChange={handleChange} />
               </div>
               <div className="flex flex-col sm:flex-row gap-6">
-                <InputField name="pinCode" type="number" label="Pincode / Postal Code" />
-                <InputField name="country" label="Country" />
+                <InputField name="pinCode" type="number" label="Pincode / Postal Code" formData={formData} handleChange={handleChange} />
+                <InputField name="country" label="Country" formData={formData} handleChange={handleChange} />
               </div>
-              <InputField name="phone" type="number" label="Phone Number" />
+              <InputField name="phone" type="number" label="Phone Number" formData={formData} handleChange={handleChange} />
             </div>
           </div>
 
@@ -278,7 +282,7 @@ function PlaceOrder() {
 
             {/* Promo Code */}
             <div className="flex mb-8">
-              <input type="text" placeholder="PROMO CODE" className="flex-1 border border-gray-300 border-r-0 px-4 text-xs tracking-widest uppercase focus:outline-none" />
+              <input type="text" placeholder="PROMO CODE" className="flex-1 border border-gray-300 border-r-0 px-4 text-xs text-black tracking-widest uppercase focus:outline-none" />
               <button className="bg-gray-100 border border-gray-300 text-black text-[10px] font-bold tracking-widest uppercase px-6 py-3 hover:bg-gray-200 transition-colors">APPLY</button>
             </div>
 

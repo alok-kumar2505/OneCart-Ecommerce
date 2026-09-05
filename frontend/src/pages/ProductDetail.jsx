@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { shopDataContext } from '../context/ShopContext'
-import { FaStar, FaStarHalfAlt, FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import { FaStar, FaStarHalfAlt, FaChevronDown, FaChevronUp, FaHeart } from 'react-icons/fa'
 import { FiHeart } from 'react-icons/fi'
 import { HiSparkles } from 'react-icons/hi'
 import RelatedProduct from '../component/RelatedProduct'
@@ -9,11 +9,13 @@ import Footer from '../component/Footer'
 
 function ProductDetail() {
   const { productId } = useParams()
-  const { products, currency, addtoCart, loading } = useContext(shopDataContext)
+  const { products, currency, addtoCart, loading, wishlist, toggleWishlist } = useContext(shopDataContext)
   const [productData, setProductData] = useState(null)
   const [image, setImage] = useState('')
   const [size, setSize] = useState('S')
   const [expandedSection, setExpandedSection] = useState('description')
+  
+  const inWishlist = wishlist?.includes(productId)
 
   useEffect(() => {
     const found = products.find(i => i._id === productId)
@@ -105,8 +107,11 @@ function ProductDetail() {
             <button className="flex-1 bg-[#8B1B1B] text-white text-xs font-bold tracking-widest uppercase hover:bg-[#6c1414] transition-colors py-4">
               BUY NOW
             </button>
-            <button className="w-14 h-[52px] flex items-center justify-center border border-gray-300 text-gray-500 hover:text-black hover:border-black transition-colors flex-shrink-0">
-              <FiHeart className="w-5 h-5" />
+            <button 
+              onClick={() => toggleWishlist(productData._id)}
+              className={`w-14 h-[52px] flex items-center justify-center border transition-colors flex-shrink-0 ${inWishlist ? 'border-[#8B1B1B] text-[#8B1B1B]' : 'border-gray-300 text-gray-500 hover:text-black hover:border-black'}`}
+            >
+              {inWishlist ? <FaHeart className="w-5 h-5" /> : <FiHeart className="w-5 h-5" />}
             </button>
           </div>
 

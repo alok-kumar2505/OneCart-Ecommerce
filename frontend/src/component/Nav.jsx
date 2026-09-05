@@ -57,7 +57,7 @@ function Nav() {
   }
 
   const navLinks = [
-    { name: 'SHOP', path: '/collection' },
+    { name: 'ALL COLLECTIONS', path: '/collection' },
     { name: 'ABOUT US', path: '/about' },
     { name: 'CONTACT', path: '/contact' },
     { name: 'ORDERS', path: '/order' }
@@ -105,10 +105,10 @@ function Nav() {
           <div className="flex items-center gap-4 sm:gap-5">
             {/* Icons */}
             <div className="flex items-center gap-3 sm:gap-4 text-gray-800">
-              <button onClick={() => setShowSearch(true)} aria-label="Search">
+              <button onClick={() => navigate('/collection')} aria-label="Search">
                 <IoSearchOutline className="h-5 w-5 hover:text-black transition-colors" />
               </button>
-              <button aria-label="Wishlist" className="hidden sm:block">
+              <button onClick={() => navigate('/wishlist')} aria-label="Wishlist" className="hidden sm:block">
                 <FiHeart className="h-5 w-5 hover:text-black transition-colors" />
               </button>
               <button aria-label="Notifications" className="hidden sm:block">
@@ -200,53 +200,6 @@ function Nav() {
         </div>
       )}
 
-      {/* ── Search Modal ── */}
-      {showSearch && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center">
-          {/* Dimmed Background */}
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowSearch(false)} />
-          
-          {/* Modal Content */}
-          <div className="relative w-full max-w-2xl bg-white p-8 shadow-2xl z-10 animate-fade-in">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="font-playfair text-2xl tracking-wide">CATALOG SEARCH</h2>
-              <button onClick={() => setShowSearch(false)} className="text-gray-500 hover:text-black">
-                <IoClose className="h-6 w-6" />
-              </button>
-            </div>
-            
-            <div className="relative border border-gray-300 p-3 mb-4 flex items-center">
-              <IoSearchOutline className="w-5 h-5 text-gray-400 mr-3" />
-              <input
-                type="text"
-                placeholder="Search catalog or ask AI (e.g., 'Black leather jacket under 15000')"
-                className="w-full bg-transparent text-black placeholder-gray-400 text-sm focus:outline-none"
-                onChange={(e) => setSearch(e.target.value)}
-                value={search}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
-                autoFocus
-              />
-            </div>
-            
-            <div className="flex gap-4 mb-8">
-              <button onClick={handleSearchSubmit} className="bg-black text-white text-xs font-bold tracking-widest px-6 py-3 hover:bg-gray-800">
-                SEARCH CATALOG
-              </button>
-            </div>
-            
-            <div>
-              <p className="text-[10px] font-bold text-gray-500 tracking-widest uppercase mb-3">POPULAR SUGGESTIONS:</p>
-              <div className="flex flex-wrap gap-2">
-                {['Leather Jackets', 'Poplin Shirts', 'Pleated Trousers', 'Silk Slip Dress', 'Chelsea Boots'].map(tag => (
-                  <button key={tag} onClick={() => { setSearch(tag); handleSearchSubmit() }} className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs px-3 py-1.5 transition-colors">
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ── Slide-out Shopping Cart Sidebar ── */}
       {showCartSidebar && (

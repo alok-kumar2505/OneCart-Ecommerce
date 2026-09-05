@@ -13,7 +13,8 @@ function ShopContext({children}) {
     let [showSearch,setShowSearch] = useState(false)
     let {serverUrl} = useContext(authDataContext)
     let [cartItem, setCartItem] = useState({});
-      let [loading,setLoading] = useState(false)
+    let [wishlist, setWishlist] = useState([]);
+    let [loading,setLoading] = useState(false)
     let currency = '₹';
 
     const getProducts = async () => {
@@ -80,6 +81,34 @@ function ShopContext({children}) {
     }
       
     }
+
+    const toggleWishlist = async (itemId) => {
+        let updatedWishlist = [...wishlist];
+        if (updatedWishlist.includes(itemId)) {
+            updatedWishlist = updatedWishlist.filter(id => id !== itemId);
+            setWishlist(updatedWishlist);
+            toast.success("Removed from wishlist");
+            if (userData) {
+                try { await axios.post(serverUrl + "/api/wishlist/remove", { itemId }, { withCredentials: true }) } catch (error) {}
+            }
+        } else {
+            updatedWishlist.push(itemId);
+            setWishlist(updatedWishlist);
+            toast.success("Added to wishlist");
+            if (userData) {
+                try { await axios.post(serverUrl + "/api/wishlist/add", { itemId }, { withCredentials: true }) } catch (error) {}
+            }
+        }
+    }
+
+    const getUserWishlist = async () => {
+        try {
+            const result = await axios.post(serverUrl + '/api/wishlist/get', {}, { withCredentials: true })
+            if (result.data.success) {
+                setWishlist(result.data.wishlistData)
+            }
+        } catch (error) {}
+    }
     const updateQuantity = async (itemId , size , quantity) => {
       let cartData = structuredClone(cartItem);
     cartData[itemId][size] = quantity
@@ -134,7 +163,10 @@ function ShopContext({children}) {
 
     useEffect(() => {
     getUserCart()
-  },[])
+    if (userData) {
+      getUserWishlist()
+    }
+  }, [userData])
 
 
 
@@ -145,7 +177,7 @@ function ShopContext({children}) {
     const delivery_fee = cartTotal === 0 ? 0 : (cartTotal >= 1000 ? 0 : 50);
 
     let value = {
-      products, currency , delivery_fee,getProducts,search,setSearch,showSearch,setShowSearch,cartItem, addtoCart, getCartCount, setCartItem ,updateQuantity,getCartAmount,loading
+      products, currency , delivery_fee,getProducts,search,setSearch,showSearch,setShowSearch,cartItem, addtoCart, getCartCount, setCartItem ,updateQuantity,getCartAmount,loading, wishlist, setWishlist, toggleWishlist
     }
   return (
     <div>

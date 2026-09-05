@@ -15,6 +15,8 @@ import PlaceOrder from './pages/PlaceOrder'
 import Order from './pages/Order'
 import { ToastContainer } from 'react-toastify';
 import NotFound from './pages/NotFound'
+import Confirmation from './pages/Confirmation'
+import Wishlist from './pages/Wishlist'
 import Ai from './component/Ai'
 function App() {
 let {userData} = useContext(userDataContext)
@@ -22,7 +24,7 @@ let location = useLocation()
   
   return (
     <>
-    <ToastContainer autoClose={3000} />
+    <ToastContainer autoClose={2000} />
     {userData && <Nav/>}
       <Routes>
 
@@ -59,6 +61,12 @@ let location = useLocation()
         element={userData ? <PlaceOrder/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
          <Route path='/order' 
         element={userData ? <Order/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
+
+        <Route path='/confirmation' 
+        element={userData ? <Confirmation/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
+
+        <Route path='/wishlist' 
+        element={userData ? <Wishlist/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
 
         <Route path='*' element={<NotFound/>}/>
       </Routes>
