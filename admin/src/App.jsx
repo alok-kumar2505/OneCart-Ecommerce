@@ -14,7 +14,7 @@ function App() {
   return (
 
     <>
-      <ToastContainer />
+      <ToastContainer autoClose={1500}/>
     {!adminData ? <Login/> : <>
 
       <Routes>
