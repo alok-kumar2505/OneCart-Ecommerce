@@ -8,6 +8,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { authDataContext } from '../context/AuthContext'
 import { shopDataContext } from '../context/ShopContext'
+import { toast } from 'react-toastify'
+import Loading from './Loading'
 
 function Nav() {
   const { getCurrentUser, userData } = useContext(userDataContext)
@@ -16,6 +18,7 @@ function Nav() {
   const [showProfile, setShowProfile] = useState(false)
   const [showCartSidebar, setShowCartSidebar] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [cartData, setCartData] = useState([])
   const profileRef = useRef(null)
   const navigate = useNavigate()
@@ -42,11 +45,16 @@ function Nav() {
   }, [cartItem])
 
   const handleLogout = async () => {
+    setIsLoggingOut(true)
     try {
       await axios.get(serverUrl + '/api/auth/logout', { withCredentials: true })
       await getCurrentUser()
-      navigate('/login')
+      setCartItem({})
+      localStorage.removeItem('onecart_cart')
+      toast.success("Logout Successful")
+      navigate('/')
     } catch (error) {  }
+    setIsLoggingOut(false)
   }
 
   const handleSearchSubmit = () => {
@@ -69,6 +77,12 @@ function Nav() {
       <div className="w-full bg-black text-white text-[10px] font-bold tracking-widest text-center py-2 uppercase">
         Complimentary shipping & duties on all orders above ₹2,999
       </div>
+
+      {isLoggingOut && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-white/40 backdrop-blur-md">
+          <Loading className="h-12 w-12 text-[#8B1B1B]" />
+        </div>
+      )}
 
       {/* ── Main Header Navigation ── */}
       <header className="w-full bg-white border-b border-gray-200">

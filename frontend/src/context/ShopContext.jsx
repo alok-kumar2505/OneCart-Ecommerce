@@ -187,6 +187,30 @@ function ShopContext({children}) {
     localStorage.setItem('onecart_cart', JSON.stringify(cartItem))
   }, [cartItem])
 
+  const syncCartOnLogin = async () => {
+    let localCart = JSON.parse(localStorage.getItem('onecart_cart')) || {};
+    try {
+      const result = await axios.post(serverUrl + '/api/cart/get', {}, { withCredentials: true })
+      let backendCart = result.data || {};
+      
+      let hasChanges = false;
+      for (const itemId in localCart) {
+        if (!backendCart[itemId]) backendCart[itemId] = {};
+        for (const size in localCart[itemId]) {
+          if (localCart[itemId][size] > 0) {
+            const existingQty = backendCart[itemId][size] || 0;
+            const newQty = existingQty + localCart[itemId][size];
+            backendCart[itemId][size] = newQty;
+            hasChanges = true;
+            await axios.post(serverUrl + "/api/cart/update", { itemId, size, quantity: newQty }, { withCredentials: true })
+          }
+        }
+      }
+      setCartItem(backendCart);
+      localStorage.setItem('onecart_cart', JSON.stringify(backendCart));
+    } catch (error) {}
+  }
+
 
 
 
@@ -196,7 +220,7 @@ function ShopContext({children}) {
     const delivery_fee = cartTotal === 0 ? 0 : (cartTotal >= 1500 ? 0 : 50);
 
     let value = {
-      products, currency , delivery_fee,getProducts,search,setSearch,showSearch,setShowSearch,cartItem, addtoCart, getCartCount, setCartItem ,updateQuantity,getCartAmount,loading, wishlist, setWishlist, toggleWishlist, productsLoading
+      products, currency , delivery_fee,getProducts,search,setSearch,showSearch,setShowSearch,cartItem, addtoCart, getCartCount, setCartItem ,updateQuantity,getCartAmount,loading, wishlist, setWishlist, toggleWishlist, productsLoading, syncCartOnLogin
     }
   return (
     <div>

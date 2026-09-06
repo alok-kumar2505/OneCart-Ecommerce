@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import google from '../assets/google.png'
 import { IoEyeOutline, IoEye } from 'react-icons/io5'
 import { useNavigate } from 'react-router-dom'
+import { shopDataContext } from '../context/ShopContext'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
 import { signInWithPopup } from 'firebase/auth'
@@ -16,6 +17,7 @@ function Login() {
   const [password, setPassword] = useState('')
   const { serverUrl } = useContext(authDataContext)
   const { getCurrentUser } = useContext(userDataContext)
+  const { syncCartOnLogin } = useContext(shopDataContext)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -23,7 +25,9 @@ function Login() {
     setLoading(true); e.preventDefault()
     try {
       await axios.post(serverUrl + '/api/auth/login', { email, password }, { withCredentials: true })
-      setLoading(false); getCurrentUser(); navigate('/'); toast.success('Welcome back!')
+      await getCurrentUser(); 
+      await syncCartOnLogin();
+      setLoading(false); navigate('/'); toast.success('Welcome back!')
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed.'); setLoading(false)
     }
@@ -34,7 +38,9 @@ function Login() {
     try {
       const res = await signInWithPopup(auth, provider)
       await axios.post(serverUrl + '/api/auth/googlelogin', { name: res.user.displayName, email: res.user.email }, { withCredentials: true })
-      await getCurrentUser(); navigate('/')
+      await getCurrentUser(); 
+      await syncCartOnLogin();
+      navigate('/')
     } catch (error) {
       toast.error(error.response?.data?.message || 'Google login failed.')
     }

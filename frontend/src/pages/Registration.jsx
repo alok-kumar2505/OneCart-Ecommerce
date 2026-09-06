@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import google from '../assets/google.png'
 import { IoEyeOutline, IoEye } from 'react-icons/io5'
 import { useNavigate } from 'react-router-dom'
+import { shopDataContext } from '../context/ShopContext'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
 import { signInWithPopup } from 'firebase/auth'
@@ -17,6 +18,7 @@ function Registration() {
   const [password, setPassword] = useState('')
   const { serverUrl } = useContext(authDataContext)
   const { getCurrentUser } = useContext(userDataContext)
+  const { syncCartOnLogin } = useContext(shopDataContext)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -24,7 +26,9 @@ function Registration() {
     setLoading(true); e.preventDefault()
     try {
       await axios.post(serverUrl + '/api/auth/registration', { name, email, password }, { withCredentials: true })
-      getCurrentUser(); navigate('/'); toast.success('Account created!'); setLoading(false)
+      await getCurrentUser(); 
+      await syncCartOnLogin();
+      navigate('/'); toast.success('Account created!'); setLoading(false)
     } catch (error) {
       toast.error(error.response?.data?.message || 'Registration failed.'); setLoading(false)
     }
@@ -35,7 +39,9 @@ function Registration() {
     try {
       const res = await signInWithPopup(auth, provider)
       await axios.post(serverUrl + '/api/auth/googlelogin', { name: res.user.displayName, email: res.user.email }, { withCredentials: true })
-      await getCurrentUser(); navigate('/'); toast.success('Account created!')
+      await getCurrentUser(); 
+      await syncCartOnLogin();
+      navigate('/'); toast.success('Account created!')
     } catch (error) { toast.error('Google sign-up failed.') }
     setLoading(false)
   }
