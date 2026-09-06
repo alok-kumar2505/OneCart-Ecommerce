@@ -51,12 +51,7 @@ function Registration() {
     <div className="flex min-h-screen w-full items-center justify-center bg-[#F9F9F9] px-4 py-12 relative">
       <div className="w-full max-w-md relative z-10">
         
-        {/* Brand */}
-        {/* <div className="mb-8 flex cursor-pointer items-center justify-center gap-3" onClick={() => navigate('/')}>
-          <span className="font-playfair text-3xl tracking-[0.15em] text-black">ONECART</span>
-        </div> */}
-
-        <div className="bg-white p-8 sm:p-10 border border-gray-200 shadow-sm relative overflow-hidden text-center">
+        <div className="bg-white p-8 sm:p-10 border border-gray-200 shadow-sm relative overflow-hidden text-center mt-6">
 
           <h1 className="font-playfair text-2xl text-black mb-2">Create Account</h1>
           <p className="text-sm text-gray-500 mb-8">Join the exclusive world of OneCart</p>

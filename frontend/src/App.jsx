@@ -29,7 +29,7 @@ let location = useLocation()
   return (
     <>
     <ToastContainer autoClose={1500} />
-    {!['/login', '/signup'].includes(location.pathname) && <Nav/>}
+    <Nav/>
       <Routes>
 
         <Route path='/login' 
