@@ -1,20 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Nav from '../component/Nav'
 import Sidebar from '../component/Sidebar'
+import { useNavigate } from 'react-router-dom'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
-import { RiDeleteBin6Line } from 'react-icons/ri'
+import { RiDeleteBin6Line, RiEdit2Line } from 'react-icons/ri'
 import { FiBox } from 'react-icons/fi'
+import Loading from '../component/Loading'
 
 function Lists() {
   const [list, setList] = useState([])
+  const [loading, setLoading] = useState(true)
   const { serverUrl } = useContext(authDataContext)
+  const navigate = useNavigate()
 
   const fetchList = async () => {
     try {
       const result = await axios.get(serverUrl + '/api/product/list')
       setList(result.data)
     } catch (error) {
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -48,7 +54,11 @@ function Lists() {
             </a>
           </div>
 
-          {list.length === 0 ? (
+          {loading ? (
+            <div className="flex justify-center py-32">
+              <Loading />
+            </div>
+          ) : list.length === 0 ? (
             <div className="bg-white p-16 text-center border border-gray-200 mt-10 shadow-sm">
               <div className="w-20 h-20 bg-gray-50 mx-auto flex items-center justify-center mb-6 border border-gray-200 rounded-full">
                 <FiBox className="h-8 w-8 text-gray-400" />
@@ -86,13 +96,22 @@ function Lists() {
                     <span className="font-playfair text-sm font-bold text-black text-center whitespace-nowrap">
                       ₹{item.price}
                     </span>
-                    <button
-                      onClick={() => removeList(item._id)}
-                      className="flex items-center justify-center p-2 text-gray-500 hover:text-[#8B1B1B] transition-colors mx-auto"
-                      aria-label="Remove Product"
-                    >
-                      <RiDeleteBin6Line className="h-5 w-5" />
-                    </button>
+                    <div className="flex items-center justify-center gap-2 mx-auto">
+                      <button
+                        onClick={() => navigate(`/edit/${item._id}`)}
+                        className="flex items-center justify-center p-2 text-gray-500 hover:text-black transition-colors"
+                        aria-label="Edit Product"
+                      >
+                        <RiEdit2Line className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => removeList(item._id)}
+                        className="flex items-center justify-center p-2 text-gray-500 hover:text-[#8B1B1B] transition-colors"
+                        aria-label="Remove Product"
+                      >
+                        <RiDeleteBin6Line className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>

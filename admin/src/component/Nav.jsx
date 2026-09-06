@@ -1,19 +1,25 @@
 import React, { useContext } from 'react'
 import { authDataContext } from '../context/AuthContext'
+import { adminDataContext } from '../context/AdminContext'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { FiLogOut } from 'react-icons/fi'
 
 function Nav() {
-  const { serverUrl, getAdminUser } = useContext(authDataContext)
+  const { serverUrl } = useContext(authDataContext)
+  const { setAdminData } = useContext(adminDataContext)
   const navigate = useNavigate()
 
   const handleLogout = async () => {
     try {
       await axios.get(serverUrl + '/api/auth/logout', { withCredentials: true })
-      getAdminUser()
-      navigate('/login')
-    } catch (error) {  }
+      setAdminData(null)
+      toast.success("Logout Successful")
+      navigate('/')
+    } catch (error) { 
+      toast.error("Logout failed")
+    }
   }
 
   return (

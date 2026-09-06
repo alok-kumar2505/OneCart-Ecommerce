@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState, useMemo } from 'react'
 import { FaChevronDown } from 'react-icons/fa'
 import { shopDataContext } from '../context/ShopContext'
 import Card from '../component/Card'
+import Loading from '../component/Loading'
 
 function Collections() {
-  const { products, search, setSearch } = useContext(shopDataContext)
+  const { products, search, setSearch, productsLoading } = useContext(shopDataContext)
   const [filterProduct, setFilterProduct] = useState([])
   const [sortType, setSortType] = useState('relevant')
   const [showFilter, setShowFilter] = useState(false)
@@ -123,7 +124,11 @@ function Collections() {
 
         {/* ── Product Grid ── */}
         <div className="flex-1">
-          {filterProduct.length > 0 ? (
+          {productsLoading ? (
+            <div className="flex justify-center items-center py-32">
+              <Loading />
+            </div>
+          ) : filterProduct.length > 0 ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filterProduct.map((item, i) => (
                 <Card 

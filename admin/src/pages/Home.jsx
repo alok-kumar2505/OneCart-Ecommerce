@@ -3,23 +3,37 @@ import Nav from '../component/Nav'
 import Sidebar from '../component/Sidebar'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
-import { FiDollarSign, FiShoppingBag, FiUsers, FiBox } from 'react-icons/fi'
+import { FiShoppingBag, FiUsers, FiBox } from 'react-icons/fi'
+import { BiRupee } from 'react-icons/bi'
+import Loading from '../component/Loading'
 
 function Home() {
   const { serverUrl } = useContext(authDataContext)
-  const [stats, setStats] = useState({ revenue: 0, orders: 0, users: 0, products: 0 })
+  const [stats, setStats] = useState({ dailyRevenue: 0, weeklyRevenue: 0, monthlyRevenue: 0, orders: 0 })
+  const [loading, setLoading] = useState(true)
+
+  const fetchStats = async () => {
+    try {
+      const response = await axios.post(serverUrl + '/api/order/dashboard-stats', {}, { withCredentials: true })
+      if (response.data) {
+        setStats(response.data)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    // In a real app, you would fetch these stats from an endpoint.
-    // Simulating stats for the dashboard.
-    setStats({ revenue: 45230, orders: 124, users: 890, products: 45 })
+    fetchStats()
   }, [serverUrl])
 
   const statCards = [
-    { label: 'Total Revenue', value: `₹${stats.revenue.toLocaleString()}`, icon: FiDollarSign, color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-500/20' },
+    { label: 'Daily Earning', value: `₹${stats.dailyRevenue.toLocaleString()}`, icon: BiRupee, color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-500/20' },
+    { label: 'Weekly Earning', value: `₹${stats.weeklyRevenue.toLocaleString()}`, icon: BiRupee, color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-500/20' },
+    { label: 'Monthly Earning', value: `₹${stats.monthlyRevenue.toLocaleString()}`, icon: BiRupee, color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-500/20' },
     { label: 'Total Orders', value: stats.orders, icon: FiShoppingBag, color: 'text-violet-400', bg: 'bg-violet-400/10 border-violet-500/20' },
-    { label: 'Active Users', value: stats.users, icon: FiUsers, color: 'text-pink-400', bg: 'bg-pink-400/10 border-pink-500/20' },
-    { label: 'Products Listed', value: stats.products, icon: FiBox, color: 'text-amber-400', bg: 'bg-amber-400/10 border-amber-500/20' },
   ]
 
   return (
@@ -33,19 +47,25 @@ function Home() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          {statCards.map((stat, i) => (
-            <div key={i} className="bg-white rounded-none p-6 flex flex-col justify-between h-36 border border-gray-200 shadow-sm">
-              <div className="flex justify-between items-start">
-                <span className="text-[10px] font-bold tracking-widest uppercase text-gray-500">{stat.label}</span>
-                <div className={`p-2 rounded-full bg-gray-50 border border-gray-200 text-black`}>
-                  <stat.icon className="h-5 w-5" />
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <Loading />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            {statCards.map((stat, i) => (
+              <div key={i} className="bg-white rounded-none p-6 flex flex-col justify-between h-36 border border-gray-200 shadow-sm">
+                <div className="flex justify-between items-start">
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-gray-500">{stat.label}</span>
+                  <div className={`p-2 rounded-full bg-gray-50 border border-gray-200 text-black`}>
+                    <stat.icon className="h-5 w-5" />
+                  </div>
                 </div>
+                <p className="font-playfair text-3xl font-bold text-black">{stat.value}</p>
               </div>
-              <p className="font-playfair text-3xl font-bold text-black">{stat.value}</p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Recent Activity placeholder (simulated) */}
         <div className="bg-white rounded-none p-8 border border-gray-200 shadow-sm">

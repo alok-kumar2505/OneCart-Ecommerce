@@ -17,13 +17,17 @@ function ShopContext({children}) {
     let [loading,setLoading] = useState(false)
     let currency = '₹';
 
+    let [productsLoading, setProductsLoading] = useState(true)
+
     const getProducts = async () => {
         try {
+            setProductsLoading(true)
             let result = await axios.get(serverUrl + "/api/product/list")
             setProducts(result.data)
         } catch (error) {
+        } finally {
+            setProductsLoading(false)
         }
-        
     }
 
 
@@ -183,7 +187,7 @@ function ShopContext({children}) {
     const delivery_fee = cartTotal === 0 ? 0 : (cartTotal >= 1000 ? 0 : 50);
 
     let value = {
-      products, currency , delivery_fee,getProducts,search,setSearch,showSearch,setShowSearch,cartItem, addtoCart, getCartCount, setCartItem ,updateQuantity,getCartAmount,loading, wishlist, setWishlist, toggleWishlist
+      products, currency , delivery_fee,getProducts,search,setSearch,showSearch,setShowSearch,cartItem, addtoCart, getCartCount, setCartItem ,updateQuantity,getCartAmount,loading, wishlist, setWishlist, toggleWishlist, productsLoading
     }
   return (
     <div>

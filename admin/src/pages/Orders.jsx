@@ -4,6 +4,7 @@ import Sidebar from '../component/Sidebar'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
 import { FiPackage } from 'react-icons/fi'
+import Loading from '../component/Loading'
 
 const statusColors = {
   'Order Placed': 'text-blue-600 bg-blue-50 border-blue-200',
@@ -15,6 +16,7 @@ const statusColors = {
 
 function Orders() {
   const [orders, setOrders] = useState([])
+  const [loading, setLoading] = useState(true)
   const { serverUrl } = useContext(authDataContext)
 
   const fetchAllOrders = async () => {
@@ -22,6 +24,8 @@ function Orders() {
       const result = await axios.post(serverUrl + '/api/order/list', {}, { withCredentials: true })
       setOrders(result.data.reverse())
     } catch (error) {
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -47,7 +51,11 @@ function Orders() {
             <p className="text-sm text-gray-500">Track and update {orders.length} orders.</p>
           </div>
 
-          {orders.length === 0 ? (
+          {loading ? (
+            <div className="flex justify-center py-32">
+              <Loading />
+            </div>
+          ) : orders.length === 0 ? (
             <div className="bg-white p-16 text-center border border-gray-200 mt-10 shadow-sm">
               <div className="w-20 h-20 bg-gray-50 mx-auto flex items-center justify-center mb-6 border border-gray-200 rounded-full">
                 <FiPackage className="h-8 w-8 text-gray-400" />

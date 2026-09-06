@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { shopDataContext } from '../context/ShopContext'
 import Card from '../component/Card'
 import Footer from '../component/Footer'
+import Loading from '../component/Loading'
 
 function Wishlist() {
-  const { products, wishlist } = useContext(shopDataContext)
+  const { products, wishlist, productsLoading } = useContext(shopDataContext)
   const [wishlistProducts, setWishlistProducts] = useState([])
 
   useEffect(() => {
@@ -29,7 +30,11 @@ function Wishlist() {
         </div>
 
         {/* ── Product Grid ── */}
-        {wishlistProducts.length > 0 ? (
+        {productsLoading ? (
+          <div className="flex justify-center items-center py-32">
+            <Loading />
+          </div>
+        ) : wishlistProducts.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {wishlistProducts.map((item, i) => (
               <Card 

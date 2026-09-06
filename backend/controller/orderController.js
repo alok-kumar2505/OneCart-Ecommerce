@@ -139,3 +139,43 @@ try {
             })
 }
 }
+
+export const getDashboardStats = async (req, res) => {
+    try {
+        const orders = await Order.find({})
+        let dailyRevenue = 0
+        let weeklyRevenue = 0
+        let monthlyRevenue = 0
+
+        const now = new Date()
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
+        const oneWeekAgo = today - (7 * 24 * 60 * 60 * 1000)
+        const oneMonthAgo = today - (30 * 24 * 60 * 60 * 1000)
+
+        orders.forEach(order => {
+            // Count revenue if payment is done or it's COD
+            if (order.payment === true || order.paymentMethod === 'COD') {
+                const orderDate = new Date(order.date).getTime()
+                
+                if (orderDate >= today) {
+                    dailyRevenue += order.amount
+                }
+                if (orderDate >= oneWeekAgo) {
+                    weeklyRevenue += order.amount
+                }
+                if (orderDate >= oneMonthAgo) {
+                    monthlyRevenue += order.amount
+                }
+            }
+        })
+
+        res.status(200).json({
+            dailyRevenue,
+            weeklyRevenue,
+            monthlyRevenue,
+            orders: orders.length
+        })
+    } catch (error) {
+        return res.status(500).json({message: "Dashboard stats error"})
+    }
+}

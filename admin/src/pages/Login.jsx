@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { authDataContext } from '../context/AuthContext'
+import { adminDataContext } from '../context/AdminContext'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -11,7 +12,8 @@ function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [show, setShow] = useState(false)
-  const { serverUrl, getAdminUser } = useContext(authDataContext)
+  const { serverUrl } = useContext(authDataContext)
+  const { getAdmin } = useContext(adminDataContext)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
@@ -19,7 +21,7 @@ function Login() {
     e.preventDefault(); setLoading(true)
     try {
       const response = await axios.post(serverUrl + '/api/auth/adminlogin', { email, password }, { withCredentials: true })
-      if (response.data) { toast.success('Login Successful'); await getAdminUser(); navigate('/') }
+      if (response.data) { toast.success('Login Successful'); await getAdmin(); navigate('/') }
       else { toast.error('Login Failed') }
     } catch (error) { toast.error(error.response?.data?.message || 'Error occurred.') }
     setLoading(false)
