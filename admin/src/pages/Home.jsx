@@ -14,6 +14,7 @@ function Home() {
     dailyOrders: 0, weeklyOrders: 0, monthlyOrders: 0, 
     totalOrders: 0 
   })
+  const [recentOrders, setRecentOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [timeFilter, setTimeFilter] = useState('Today') // 'Today', 'Weekly', 'Monthly', 'Custom'
   const [startDate, setStartDate] = useState('')
@@ -30,6 +31,11 @@ function Home() {
       const response = await axios.post(serverUrl + '/api/order/dashboard-stats', payload, { withCredentials: true })
       if (response.data) {
         setStats(response.data)
+      }
+      const ordersResponse = await axios.post(serverUrl + '/api/order/list', {}, { withCredentials: true })
+      if (ordersResponse.data) {
+        // Reverse array so latest is first, then take top 5
+        setRecentOrders(ordersResponse.data.reverse().slice(0, 5))
       }
     } catch (error) {
       console.error(error)
@@ -152,15 +158,39 @@ function Home() {
           </div>
         )}
 
-        {/* Recent Activity placeholder (simulated) */}
+        {/* Recent Activity */}
         <div className="bg-white rounded-none p-8 border border-gray-200 shadow-sm">
           <h2 className="font-playfair text-xl font-bold text-black mb-6">Recent Activity</h2>
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-gray-200">
-              <span className="text-2xl text-gray-300">✦</span>
+          {recentOrders.length > 0 ? (
+            <div className="space-y-6">
+              {recentOrders.map((order, idx) => (
+                <div key={idx} className="flex items-center justify-between border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-gray-50 flex items-center justify-center border border-gray-200">
+                      <FiShoppingBag className="text-gray-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-black uppercase tracking-wider">{order.address.firstName} {order.address.lastName}</p>
+                      <p className="text-xs text-gray-500">Placed an order for {order.items.length} item(s)</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-playfair text-lg font-bold text-black">₹{order.amount}</p>
+                    <p className={`text-[10px] font-bold uppercase tracking-widest ${order.payment ? 'text-emerald-600' : 'text-amber-600'}`}>
+                      {order.payment ? 'Paid' : 'Pending'}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <p className="text-gray-500 text-sm">Activity feed will appear here when connected to live data.</p>
-          </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-gray-200">
+                <span className="text-2xl text-gray-300">✦</span>
+              </div>
+              <p className="text-gray-500 text-sm">Activity feed will appear here when connected to live data.</p>
+            </div>
+          )}
         </div>
       </main>
     </div>

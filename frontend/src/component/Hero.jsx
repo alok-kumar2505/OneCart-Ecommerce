@@ -113,12 +113,12 @@ function Hero() {
       <div className="absolute bottom-0 w-full bg-[#111111] border-t border-[#333] py-2 z-20">
         <div className="marquee-container">
           <div className="marquee-content text-[#C0A062] text-[10px] font-bold tracking-[0.2em] uppercase flex whitespace-nowrap">
-            <span className="mx-4">+ BESPOKE HAUTE COUTURE TAILORING</span>
-            <span className="mx-4">+ 100% ETHICAL EGYPTIAN POPLIN & ITALIAN LEATHER</span>
             <span className="mx-4">+ COMPLIMENTARY 14-DAY RETURNS PRIVILEGE</span>
-            <span className="mx-4">+ BESPOKE HAUTE COUTURE TAILORING</span>
-            <span className="mx-4">+ 100% ETHICAL EGYPTIAN POPLIN & ITALIAN LEATHER</span>
+            <span className="mx-4">+ PREMIUM QUALITY CRAFTSMANSHIP</span>
+            <span className="mx-4">+ EXCLUSIVE DESIGNER COLLECTIONS</span>
+            <span className="mx-4">+ SECURE WORLDWIDE SHIPPING</span>
             <span className="mx-4">+ COMPLIMENTARY 14-DAY RETURNS PRIVILEGE</span>
+            <span className="mx-4">+ PREMIUM QUALITY CRAFTSMANSHIP</span>
           </div>
         </div>
       </div>
