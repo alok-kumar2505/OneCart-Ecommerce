@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import google from '../assets/google.png'
 import { IoEyeOutline, IoEye } from 'react-icons/io5'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { shopDataContext } from '../context/ShopContext'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
@@ -21,14 +21,15 @@ function Registration() {
   const { syncCartOnLogin } = useContext(shopDataContext)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
 
   const handleSignup = async (e) => {
     setLoading(true); e.preventDefault()
     try {
       await axios.post(serverUrl + '/api/auth/registration', { name, email, password }, { withCredentials: true })
       await getCurrentUser(); 
-      await syncCartOnLogin();
-      navigate('/'); toast.success('Account created!'); setLoading(false)
+      await syncCartOnLogin('merge');
+      navigate(location.state?.from || '/'); toast.success('Account created!'); setLoading(false)
     } catch (error) {
       toast.error(error.response?.data?.message || 'Registration failed.'); setLoading(false)
     }
@@ -40,8 +41,8 @@ function Registration() {
       const res = await signInWithPopup(auth, provider)
       await axios.post(serverUrl + '/api/auth/googlelogin', { name: res.user.displayName, email: res.user.email }, { withCredentials: true })
       await getCurrentUser(); 
-      await syncCartOnLogin();
-      navigate('/'); toast.success('Account created!')
+      await syncCartOnLogin('merge');
+      navigate(location.state?.from || '/'); toast.success('Account created!')
     } catch (error) { toast.error('Google sign-up failed.') }
     setLoading(false)
   }
@@ -51,9 +52,9 @@ function Registration() {
       <div className="w-full max-w-md relative z-10">
         
         {/* Brand */}
-        <div className="mb-8 flex cursor-pointer items-center justify-center gap-3" onClick={() => navigate('/')}>
+        {/* <div className="mb-8 flex cursor-pointer items-center justify-center gap-3" onClick={() => navigate('/')}>
           <span className="font-playfair text-3xl tracking-[0.15em] text-black">ONECART</span>
-        </div>
+        </div> */}
 
         <div className="bg-white p-8 sm:p-10 border border-gray-200 shadow-sm relative overflow-hidden text-center">
 

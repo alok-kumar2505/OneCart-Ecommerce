@@ -18,6 +18,8 @@ function Orders() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('All') // 'All', 'Pending', 'Completed'
+  const [currentPage, setCurrentPage] = useState(1)
+  const ITEMS_PER_PAGE = 10
   const { serverUrl } = useContext(authDataContext)
 
   const fetchAllOrders = async () => {
@@ -43,9 +45,12 @@ function Orders() {
   const pendingOrders = orders.filter(o => o.status !== 'Delivered')
   const completedOrders = orders.filter(o => o.status === 'Delivered')
 
-  let displayedOrders = orders;
-  if (filter === 'Pending') displayedOrders = pendingOrders;
-  if (filter === 'Completed') displayedOrders = completedOrders;
+  let filteredOrders = orders;
+  if (filter === 'Pending') filteredOrders = pendingOrders;
+  if (filter === 'Completed') filteredOrders = completedOrders;
+
+  const totalPages = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE)
+  const displayedOrders = filteredOrders.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
 
   return (
     <div className="bg-[#F9F9F9] text-black min-h-screen">
@@ -97,7 +102,7 @@ function Orders() {
             {['All', 'Pending', 'Completed'].map(tab => (
               <button
                 key={tab}
-                onClick={() => setFilter(tab)}
+                onClick={() => { setFilter(tab); setCurrentPage(1); }}
                 className={`pb-3 px-2 text-[11px] font-bold uppercase tracking-widest transition-colors ${
                   filter === tab 
                     ? 'text-black border-b-2 border-[#8B1B1B]' 
@@ -115,7 +120,7 @@ function Orders() {
             </div>
           )}
           
-          {!loading && displayedOrders.length === 0 ? (
+          {!loading && filteredOrders.length === 0 ? (
             <div className="bg-white p-16 text-center border border-gray-200 mt-10 shadow-sm">
               <div className="w-20 h-20 bg-gray-50 mx-auto flex items-center justify-center mb-6 border border-gray-200 rounded-full">
                 <FiPackage className="h-8 w-8 text-gray-400" />
@@ -212,6 +217,29 @@ function Orders() {
               ))}
             </div>
           ) : null}
+
+          {/* Pagination Controls */}
+          {!loading && totalPages > 1 && (
+            <div className="mt-8 flex justify-between items-center bg-white p-4 border border-gray-200 shadow-sm">
+              <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">Page {currentPage} of {totalPages}</span>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 border border-gray-300 text-[10px] font-bold tracking-widest uppercase hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-black cursor-pointer disabled:cursor-not-allowed"
+                >
+                  Prev
+                </button>
+                <button 
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 border border-gray-300 text-[10px] font-bold tracking-widest uppercase hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-black cursor-pointer disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>

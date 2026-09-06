@@ -142,18 +142,25 @@ try {
 
 export const getDashboardStats = async (req, res) => {
     try {
+        const { startDate, endDate } = req.body;
         const orders = await Order.find({})
         let dailyRevenue = 0
         let weeklyRevenue = 0
         let monthlyRevenue = 0
+        let customRevenue = 0
         let dailyOrders = 0
         let weeklyOrders = 0
         let monthlyOrders = 0
+        let customOrders = 0
 
         const now = new Date()
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
         const oneWeekAgo = today - (7 * 24 * 60 * 60 * 1000)
         const oneMonthAgo = today - (30 * 24 * 60 * 60 * 1000)
+
+        let startCustom = startDate ? new Date(startDate).getTime() : null;
+        let endCustom = endDate ? new Date(endDate).getTime() : null;
+        if (endCustom) endCustom += (24 * 60 * 60 * 1000) - 1; // Include end of day
 
         orders.forEach(order => {
             const orderDate = new Date(order.date).getTime()
@@ -161,12 +168,14 @@ export const getDashboardStats = async (req, res) => {
             if (orderDate >= today) dailyOrders++
             if (orderDate >= oneWeekAgo) weeklyOrders++
             if (orderDate >= oneMonthAgo) monthlyOrders++
+            if (startCustom && endCustom && orderDate >= startCustom && orderDate <= endCustom) customOrders++
 
             // Count revenue if payment is done or it's COD
             if (order.payment === true || order.paymentMethod === 'COD') {
                 if (orderDate >= today) dailyRevenue += order.amount
                 if (orderDate >= oneWeekAgo) weeklyRevenue += order.amount
                 if (orderDate >= oneMonthAgo) monthlyRevenue += order.amount
+                if (startCustom && endCustom && orderDate >= startCustom && orderDate <= endCustom) customRevenue += order.amount
             }
         })
 
@@ -174,9 +183,11 @@ export const getDashboardStats = async (req, res) => {
             dailyRevenue,
             weeklyRevenue,
             monthlyRevenue,
+            customRevenue,
             dailyOrders,
             weeklyOrders,
             monthlyOrders,
+            customOrders,
             totalOrders: orders.length
         })
     } catch (error) {

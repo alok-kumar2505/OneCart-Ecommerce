@@ -187,22 +187,60 @@ function ShopContext({children}) {
     localStorage.setItem('onecart_cart', JSON.stringify(cartItem))
   }, [cartItem])
 
-  const syncCartOnLogin = async () => {
+  const checkCartConflict = async () => {
+    let localCart = JSON.parse(localStorage.getItem('onecart_cart')) || {};
+    let localHasItems = Object.keys(localCart).length > 0;
+    
+    if (!localHasItems) return false;
+
+    try {
+      const result = await axios.post(serverUrl + '/api/cart/get', {}, { withCredentials: true })
+      let backendCart = result.data || {};
+      let backendHasItems = Object.keys(backendCart).length > 0;
+      
+      return backendHasItems; // If backend has items and local has items, it's a conflict
+    } catch (error) {
+      return false;
+    }
+  }
+
+  const syncCartOnLogin = async (strategy = 'merge') => {
     let localCart = JSON.parse(localStorage.getItem('onecart_cart')) || {};
     try {
       const result = await axios.post(serverUrl + '/api/cart/get', {}, { withCredentials: true })
       let backendCart = result.data || {};
       
-      let hasChanges = false;
-      for (const itemId in localCart) {
-        if (!backendCart[itemId]) backendCart[itemId] = {};
-        for (const size in localCart[itemId]) {
-          if (localCart[itemId][size] > 0) {
-            const existingQty = backendCart[itemId][size] || 0;
-            const newQty = existingQty + localCart[itemId][size];
-            backendCart[itemId][size] = newQty;
-            hasChanges = true;
-            await axios.post(serverUrl + "/api/cart/update", { itemId, size, quantity: newQty }, { withCredentials: true })
+      if (strategy === 'replace') {
+        // We overwrite backend with local
+        backendCart = localCart;
+        // First we should probably clear the backend, but the API might not have a clear endpoint. 
+        // We can just iterate and update. Wait, what if we just loop localCart and call /api/cart/update?
+        // But what about items in backendCart not in localCart? We would need to set them to 0.
+        // Let's set everything in backend to 0 first.
+        for (const itemId in result.data) {
+           for (const size in result.data[itemId]) {
+              await axios.post(serverUrl + "/api/cart/update", { itemId, size, quantity: 0 }, { withCredentials: true })
+           }
+        }
+        // Then set localCart items
+        for (const itemId in localCart) {
+          for (const size in localCart[itemId]) {
+            if (localCart[itemId][size] > 0) {
+              await axios.post(serverUrl + "/api/cart/update", { itemId, size, quantity: localCart[itemId][size] }, { withCredentials: true })
+            }
+          }
+        }
+      } else {
+        // strategy === 'merge'
+        for (const itemId in localCart) {
+          if (!backendCart[itemId]) backendCart[itemId] = {};
+          for (const size in localCart[itemId]) {
+            if (localCart[itemId][size] > 0) {
+              const existingQty = backendCart[itemId][size] || 0;
+              const newQty = existingQty + localCart[itemId][size];
+              backendCart[itemId][size] = newQty;
+              await axios.post(serverUrl + "/api/cart/update", { itemId, size, quantity: newQty }, { withCredentials: true })
+            }
           }
         }
       }
@@ -220,7 +258,7 @@ function ShopContext({children}) {
     const delivery_fee = cartTotal === 0 ? 0 : (cartTotal >= 1500 ? 0 : 50);
 
     let value = {
-      products, currency , delivery_fee,getProducts,search,setSearch,showSearch,setShowSearch,cartItem, addtoCart, getCartCount, setCartItem ,updateQuantity,getCartAmount,loading, wishlist, setWishlist, toggleWishlist, productsLoading, syncCartOnLogin
+      products, currency , delivery_fee,getProducts,search,setSearch,showSearch,setShowSearch,cartItem, addtoCart, getCartCount, setCartItem ,updateQuantity,getCartAmount,loading, wishlist, setWishlist, toggleWishlist, productsLoading, syncCartOnLogin, checkCartConflict
     }
   return (
     <div>

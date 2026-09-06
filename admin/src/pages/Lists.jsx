@@ -11,6 +11,8 @@ import Loading from '../component/Loading'
 function Lists() {
   const [list, setList] = useState([])
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const ITEMS_PER_PAGE = 10
   const { serverUrl } = useContext(authDataContext)
   const navigate = useNavigate()
 
@@ -33,6 +35,9 @@ function Lists() {
   }
 
   useEffect(() => { fetchList() }, [])
+
+  const totalPages = Math.ceil(list.length / ITEMS_PER_PAGE)
+  const currentList = list.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
 
   return (
     <div className="bg-[#F9F9F9] text-black min-h-screen">
@@ -81,7 +86,7 @@ function Lists() {
               </div>
 
               <div className="divide-y divide-gray-200">
-                {list.map((item, index) => (
+                {currentList.map((item, index) => (
                   <div
                     key={index}
                     className="grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-6 px-6 py-5 hover:bg-gray-50 transition-colors"
@@ -119,6 +124,29 @@ function Lists() {
               </div>
             </div>
           ) : null}
+
+          {/* Pagination Controls */}
+          {!loading && totalPages > 1 && (
+            <div className="mt-8 flex justify-between items-center bg-white p-4 border border-gray-200 shadow-sm">
+              <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">Page {currentPage} of {totalPages}</span>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 border border-gray-300 text-[10px] font-bold tracking-widest uppercase hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-black cursor-pointer disabled:cursor-not-allowed"
+                >
+                  Prev
+                </button>
+                <button 
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 border border-gray-300 text-[10px] font-bold tracking-widest uppercase hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-black cursor-pointer disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>

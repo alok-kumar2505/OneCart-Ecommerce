@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import google from '../assets/google.png'
 import { IoEyeOutline, IoEye } from 'react-icons/io5'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { shopDataContext } from '../context/ShopContext'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
@@ -17,17 +17,40 @@ function Login() {
   const [password, setPassword] = useState('')
   const { serverUrl } = useContext(authDataContext)
   const { getCurrentUser } = useContext(userDataContext)
-  const { syncCartOnLogin } = useContext(shopDataContext)
+  const { syncCartOnLogin, checkCartConflict } = useContext(shopDataContext)
   const [loading, setLoading] = useState(false)
+  const [showConflictModal, setShowConflictModal] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const handleLoginSuccess = async () => {
+    await getCurrentUser();
+    const hasConflict = await checkCartConflict();
+    if (hasConflict) {
+      setShowConflictModal(true);
+      setLoading(false);
+    } else {
+      await syncCartOnLogin('merge');
+      toast.success('Welcome back!')
+      setLoading(false);
+      navigate(location.state?.from || '/');
+    }
+  }
+
+  const resolveConflict = async (strategy) => {
+    setLoading(true);
+    setShowConflictModal(false);
+    await syncCartOnLogin(strategy);
+    toast.success('Welcome back!')
+    setLoading(false);
+    navigate(location.state?.from || '/');
+  }
 
   const handleLogin = async (e) => {
     setLoading(true); e.preventDefault()
     try {
       await axios.post(serverUrl + '/api/auth/login', { email, password }, { withCredentials: true })
-      await getCurrentUser(); 
-      await syncCartOnLogin();
-      setLoading(false); navigate('/'); toast.success('Welcome back!')
+      await handleLoginSuccess();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed.'); setLoading(false)
     }
@@ -38,9 +61,7 @@ function Login() {
     try {
       const res = await signInWithPopup(auth, provider)
       await axios.post(serverUrl + '/api/auth/googlelogin', { name: res.user.displayName, email: res.user.email }, { withCredentials: true })
-      await getCurrentUser(); 
-      await syncCartOnLogin();
-      navigate('/')
+      await handleLoginSuccess();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Google login failed.')
     }
@@ -52,9 +73,9 @@ function Login() {
       <div className="w-full max-w-md relative z-10">
         
         {/* Brand */}
-        <div className="mb-8 flex cursor-pointer items-center justify-center gap-3" onClick={() => navigate('/')}>
+        {/* <div className="mb-8 flex cursor-pointer items-center justify-center gap-3" onClick={() => navigate('/')}>
           <span className="font-playfair text-3xl tracking-[0.15em] text-black">ONECART</span>
-        </div>
+        </div> */}
 
         <div className="bg-white p-8 sm:p-10 border border-gray-200 shadow-sm relative overflow-hidden text-center">
 
@@ -129,6 +150,31 @@ function Login() {
           </p>
         </div>
       </div>
+
+      {showConflictModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+          <div className="bg-white p-8 max-w-sm w-full text-center shadow-xl border border-gray-200 animate-fade-in">
+            <h2 className="font-playfair text-2xl font-bold text-black mb-3">Saved Cart Found</h2>
+            <p className="text-sm text-gray-600 mb-6">
+              You have items saved in your account from a previous session. How would you like to proceed?
+            </p>
+            <div className="flex flex-col gap-3">
+              <button 
+                onClick={() => resolveConflict('merge')}
+                className="w-full bg-black text-white text-[11px] font-bold tracking-widest uppercase py-3.5 hover:bg-gray-800 transition-colors"
+              >
+                Merge with current bag
+              </button>
+              <button 
+                onClick={() => resolveConflict('replace')}
+                className="w-full bg-white border border-black text-black text-[11px] font-bold tracking-widest uppercase py-3.5 hover:bg-gray-50 transition-colors"
+              >
+                Keep current bag only
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -10,6 +10,8 @@ function Collections() {
   const [sortType, setSortType] = useState('relevant')
   const [showFilter, setShowFilter] = useState(false)
   const [categoryFilter, setCategoryFilter] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const ITEMS_PER_PAGE = 12
 
   const uniqueCategories = useMemo(() => {
     const cats = new Set(products.map(p => p.category).filter(Boolean))
@@ -45,11 +47,15 @@ function Collections() {
     }
 
     setFilterProduct(copy)
+    setCurrentPage(1)
   }
 
   useEffect(() => {
     applyFilter()
   }, [products, search, categoryFilter, sortType])
+
+  const totalPages = Math.ceil(filterProduct.length / ITEMS_PER_PAGE)
+  const currentProducts = filterProduct.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
 
   return (
     <div className="bg-white min-h-screen pt-12 pb-24 px-4 sm:px-8 max-w-[1440px] mx-auto border-t border-gray-200">
@@ -128,20 +134,55 @@ function Collections() {
             <div className="flex justify-center items-center py-32">
               <Loading />
             </div>
-          ) : filterProduct.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filterProduct.map((item, i) => (
-                <Card 
-                  key={i} 
-                  id={item._id} 
-                  name={item.name} 
-                  price={item.price} 
-                  image={item.image1} 
-                  category={item.category} 
-                  oldPrice={item.oldPrice || Math.round(item.price * 1.2)} 
-                />
-              ))}
-            </div>
+          ) : currentProducts.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {currentProducts.map((item, i) => (
+                  <Card 
+                    key={i} 
+                    id={item._id} 
+                    name={item.name} 
+                    price={item.price} 
+                    image={item.image1} 
+                    category={item.category} 
+                    oldPrice={item.oldPrice || Math.round(item.price * 1.2)} 
+                  />
+                ))}
+              </div>
+              
+              {/* ── Pagination Controls ── */}
+              {totalPages > 1 && (
+                <div className="mt-16 flex justify-center items-center gap-2">
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 border border-gray-300 text-[10px] font-bold tracking-widest uppercase hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-black cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    Prev
+                  </button>
+                  
+                  <div className="flex items-center gap-1 mx-4">
+                    {Array.from({ length: totalPages }).map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setCurrentPage(idx + 1)}
+                        className={`w-8 h-8 flex items-center justify-center text-xs font-bold transition-colors ${currentPage === idx + 1 ? 'bg-black text-white' : 'bg-transparent text-gray-500 hover:text-black'}`}
+                      >
+                        {idx + 1}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 border border-gray-300 text-[10px] font-bold tracking-widest uppercase hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-black cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             <div className="py-20 text-center">
               <p className="text-xl font-playfair text-black mb-2">No products found</p>

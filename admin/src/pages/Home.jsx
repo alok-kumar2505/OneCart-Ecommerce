@@ -15,11 +15,19 @@ function Home() {
     totalOrders: 0 
   })
   const [loading, setLoading] = useState(true)
-  const [timeFilter, setTimeFilter] = useState('Today') // 'Today', 'Weekly', 'Monthly'
+  const [timeFilter, setTimeFilter] = useState('Today') // 'Today', 'Weekly', 'Monthly', 'Custom'
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
 
   const fetchStats = async () => {
     try {
-      const response = await axios.post(serverUrl + '/api/order/dashboard-stats', {}, { withCredentials: true })
+      setLoading(true)
+      const payload = {}
+      if (timeFilter === 'Custom' && startDate && endDate) {
+        payload.startDate = startDate
+        payload.endDate = endDate
+      }
+      const response = await axios.post(serverUrl + '/api/order/dashboard-stats', payload, { withCredentials: true })
       if (response.data) {
         setStats(response.data)
       }
@@ -31,8 +39,13 @@ function Home() {
   }
 
   useEffect(() => {
-    fetchStats()
-  }, [serverUrl])
+    // Re-fetch only if timeFilter is NOT custom, OR if it's custom and dates are ready (handled by an Apply button or use effect logic)
+    // Actually, it's safer to just fetchStats when we change normal filters. 
+    // For Custom, we'll fetch on 'Apply' button click.
+    if (timeFilter !== 'Custom') {
+      fetchStats()
+    }
+  }, [serverUrl, timeFilter])
 
   // Determine which stats to show based on filter
   let displayRevenue = 0;
@@ -47,6 +60,9 @@ function Home() {
   } else if (timeFilter === 'Monthly') {
     displayRevenue = stats.monthlyRevenue;
     displayOrders = stats.monthlyOrders;
+  } else if (timeFilter === 'Custom') {
+    displayRevenue = stats.customRevenue || 0;
+    displayOrders = stats.customOrders || 0;
   }
 
   const statCards = [
@@ -76,9 +92,42 @@ function Home() {
               <option value="Today">Today</option>
               <option value="Weekly">This Week</option>
               <option value="Monthly">This Month</option>
+              <option value="Custom">Custom Range</option>
             </select>
           </div>
         </div>
+
+        {timeFilter === 'Custom' && (
+          <div className="mb-8 p-4 bg-white border border-gray-200 shadow-sm flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex flex-col w-full sm:w-auto">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Start Date</label>
+              <input 
+                type="date" 
+                value={startDate} 
+                onChange={(e) => setStartDate(e.target.value)} 
+                className="border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-black"
+              />
+            </div>
+            <div className="flex flex-col w-full sm:w-auto">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">End Date</label>
+              <input 
+                type="date" 
+                value={endDate} 
+                onChange={(e) => setEndDate(e.target.value)} 
+                className="border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-black"
+              />
+            </div>
+            <div className="flex flex-col w-full sm:w-auto mt-auto">
+              <button 
+                onClick={fetchStats}
+                disabled={!startDate || !endDate}
+                className="bg-black text-white px-6 py-2.5 text-[11px] font-bold tracking-widest uppercase hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Stats Grid */}
         {loading && (
