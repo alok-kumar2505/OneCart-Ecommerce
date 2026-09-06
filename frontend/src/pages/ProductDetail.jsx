@@ -146,6 +146,22 @@ function ProductDetail() {
                 </div>
               )}
             </div>
+
+            <div className="py-4">
+              <button 
+                className="w-full flex justify-between items-center text-xs font-bold tracking-widest uppercase text-black"
+                onClick={() => setExpandedSection(expandedSection === 'shipping' ? '' : 'shipping')}
+              >
+                SHIPPING & DELIVERY
+                {expandedSection === 'shipping' ? <FaChevronUp className="w-3 h-3" /> : <FaChevronDown className="w-3 h-3" />}
+              </button>
+              {expandedSection === 'shipping' && (
+                <div className="mt-4 text-sm text-gray-500 leading-relaxed">
+                  <p className="mb-2"><strong className="text-black">Expected Delivery:</strong> 5-7 business days.</p>
+                  <p><strong className="text-black">Shipping Cost:</strong> Free on orders over ₹1500. Otherwise, a flat rate of ₹50 applies.</p>
+                </div>
+              )}
+            </div>
           </div>
 
         </div>

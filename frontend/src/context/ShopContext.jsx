@@ -12,7 +12,10 @@ function ShopContext({children}) {
     let {userData} = useContext(userDataContext)
     let [showSearch,setShowSearch] = useState(false)
     let {serverUrl} = useContext(authDataContext)
-    let [cartItem, setCartItem] = useState({});
+    let [cartItem, setCartItem] = useState(() => {
+      const saved = localStorage.getItem('onecart_cart');
+      return saved ? JSON.parse(saved) : {};
+    });
     let [wishlist, setWishlist] = useState([]);
     let [loading,setLoading] = useState(false)
     let currency = '₹';
@@ -67,7 +70,9 @@ function ShopContext({children}) {
        
       }
      
-    } 
+    } else {
+      toast.success("Product Added")
+    }
 
     if (wishlist.includes(itemId)) {
         setWishlist(prev => prev.filter(id => id !== itemId));
@@ -172,11 +177,15 @@ function ShopContext({children}) {
     },[])
 
     useEffect(() => {
-    getUserCart()
     if (userData) {
+      getUserCart()
       getUserWishlist()
     }
   }, [userData])
+
+  useEffect(() => {
+    localStorage.setItem('onecart_cart', JSON.stringify(cartItem))
+  }, [cartItem])
 
 
 
@@ -184,7 +193,7 @@ function ShopContext({children}) {
 
 
     const cartTotal = getCartAmount();
-    const delivery_fee = cartTotal === 0 ? 0 : (cartTotal >= 1000 ? 0 : 50);
+    const delivery_fee = cartTotal === 0 ? 0 : (cartTotal >= 1500 ? 0 : 50);
 
     let value = {
       products, currency , delivery_fee,getProducts,search,setSearch,showSearch,setShowSearch,cartItem, addtoCart, getCartCount, setCartItem ,updateQuantity,getCartAmount,loading, wishlist, setWishlist, toggleWishlist, productsLoading

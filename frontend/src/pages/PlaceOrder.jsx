@@ -7,7 +7,7 @@ import { authDataContext } from '../context/AuthContext'
 import Footer from '../component/Footer'
 import { FaCheckCircle, FaRegCircle, FaStar } from 'react-icons/fa'
 import { IoLocationOutline, IoLockClosedOutline } from 'react-icons/io5'
-import { FiGift } from 'react-icons/fi'
+import { FiGift, FiTruck } from 'react-icons/fi'
 import { BsCashCoin, BsCreditCard } from 'react-icons/bs'
 import { LuShieldCheck } from 'react-icons/lu'
 import Loading from '../component/Loading'
@@ -120,6 +120,13 @@ function PlaceOrder() {
   
   const bagItems = getCartItems()
   const subtotal = getCartAmount()
+
+  const deliveryDate = new Date()
+  deliveryDate.setDate(deliveryDate.getDate() + 5)
+  const maxDeliveryDate = new Date()
+  maxDeliveryDate.setDate(maxDeliveryDate.getDate() + 7)
+  const formattedDate = deliveryDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  const formattedMaxDate = maxDeliveryDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 
   return (
     <div className="bg-[#F9F9F9] min-h-screen border-t border-gray-200">
@@ -290,17 +297,24 @@ function PlaceOrder() {
             <div className="space-y-3 mb-6 pb-6 border-b border-gray-200 text-sm">
               <div className="flex justify-between text-gray-600">
                 <span>Subtotal</span>
-                <span className="font-bold text-black">{currency}{subtotal}</span>
+                <span className="font-bold text-black">{currency}{subtotal.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between items-center text-gray-600">
                 <span>Express Shipping</span>
                 <span className="font-bold text-black">{delivery_fee === 0 ? <span className="text-[#10B981] tracking-widest text-[10px] uppercase">COMPLIMENTARY</span> : `${currency}${delivery_fee}`}</span>
+              </div>
+              <div className="mt-4 bg-gray-50 p-4 border border-gray-200 flex items-start gap-3">
+                <FiTruck className="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Expected Delivery</p>
+                  <p className="text-sm font-bold text-black">{formattedDate} - {formattedMaxDate}</p>
+                </div>
               </div>
             </div>
 
             <div className="flex justify-between items-center text-lg font-bold text-black mb-8">
               <span>Grand Total</span>
-              <span>{currency}{subtotal + delivery_fee}</span>
+              <span>{currency}{(subtotal + delivery_fee).toLocaleString()}</span>
             </div>
 
             <div className="flex items-center justify-center gap-6 text-[10px] font-bold text-gray-500 tracking-widest uppercase">

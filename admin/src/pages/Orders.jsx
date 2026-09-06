@@ -3,7 +3,7 @@ import Nav from '../component/Nav'
 import Sidebar from '../component/Sidebar'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
-import { FiPackage } from 'react-icons/fi'
+import { FiPackage, FiCheckCircle, FiClock } from 'react-icons/fi'
 import Loading from '../component/Loading'
 
 const statusColors = {
@@ -17,6 +17,7 @@ const statusColors = {
 function Orders() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
+  const [filter, setFilter] = useState('All') // 'All', 'Pending', 'Completed'
   const { serverUrl } = useContext(authDataContext)
 
   const fetchAllOrders = async () => {
@@ -39,6 +40,13 @@ function Orders() {
 
   useEffect(() => { fetchAllOrders() }, [])
 
+  const pendingOrders = orders.filter(o => o.status !== 'Delivered')
+  const completedOrders = orders.filter(o => o.status === 'Delivered')
+
+  let displayedOrders = orders;
+  if (filter === 'Pending') displayedOrders = pendingOrders;
+  if (filter === 'Completed') displayedOrders = completedOrders;
+
   return (
     <div className="bg-[#F9F9F9] text-black min-h-screen">
       <Nav />
@@ -48,24 +56,76 @@ function Orders() {
         <div className="max-w-6xl">
           <div className="mb-8">
             <h1 className="font-playfair text-2xl font-bold text-black mb-2">Order Management</h1>
-            <p className="text-sm text-gray-500">Track and update {orders.length} orders.</p>
+            <p className="text-sm text-gray-500">Track, filter, and update customer orders.</p>
           </div>
 
-          {loading ? (
-            <div className="flex justify-center py-32">
-              <Loading />
+          {/* Statistics Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white p-6 border border-gray-200 shadow-sm flex items-center justify-between">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Total Orders</p>
+                <p className="font-playfair text-3xl font-bold text-black">{orders.length}</p>
+              </div>
+              <div className="p-3 bg-gray-50 border border-gray-200 rounded-full">
+                <FiPackage className="h-6 w-6 text-black" />
+              </div>
             </div>
-          ) : orders.length === 0 ? (
+            
+            <div className="bg-white p-6 border border-gray-200 shadow-sm flex items-center justify-between">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Pending</p>
+                <p className="font-playfair text-3xl font-bold text-amber-600">{pendingOrders.length}</p>
+              </div>
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-full">
+                <FiClock className="h-6 w-6 text-amber-600" />
+              </div>
+            </div>
+
+            <div className="bg-white p-6 border border-gray-200 shadow-sm flex items-center justify-between">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Completed</p>
+                <p className="font-playfair text-3xl font-bold text-emerald-600">{completedOrders.length}</p>
+              </div>
+              <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-full">
+                <FiCheckCircle className="h-6 w-6 text-emerald-600" />
+              </div>
+            </div>
+          </div>
+
+          {/* Filter Tabs */}
+          <div className="flex items-center gap-4 mb-6 border-b border-gray-200 pb-px">
+            {['All', 'Pending', 'Completed'].map(tab => (
+              <button
+                key={tab}
+                onClick={() => setFilter(tab)}
+                className={`pb-3 px-2 text-[11px] font-bold uppercase tracking-widest transition-colors ${
+                  filter === tab 
+                    ? 'text-black border-b-2 border-[#8B1B1B]' 
+                    : 'text-gray-500 hover:text-black border-b-2 border-transparent'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {loading && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/40 backdrop-blur-md">
+              <Loading className="h-12 w-12 text-[#8B1B1B]" />
+            </div>
+          )}
+          
+          {!loading && displayedOrders.length === 0 ? (
             <div className="bg-white p-16 text-center border border-gray-200 mt-10 shadow-sm">
               <div className="w-20 h-20 bg-gray-50 mx-auto flex items-center justify-center mb-6 border border-gray-200 rounded-full">
                 <FiPackage className="h-8 w-8 text-gray-400" />
               </div>
-              <p className="font-playfair text-xl font-bold text-black mb-2">No orders yet</p>
-              <p className="text-sm text-gray-500 max-w-sm mx-auto">Orders will appear here once customers start checking out.</p>
+              <p className="font-playfair text-xl font-bold text-black mb-2">No {filter !== 'All' ? filter.toLowerCase() : ''} orders found</p>
+              <p className="text-sm text-gray-500 max-w-sm mx-auto">Orders will appear here once customers start checking out and their status matches.</p>
             </div>
-          ) : (
+          ) : !loading ? (
             <div className="space-y-6">
-              {orders.map((order, index) => (
+              {displayedOrders.map((order, index) => (
                 <div
                   key={index}
                   className="bg-white border border-gray-200 shadow-sm p-6 md:p-8"

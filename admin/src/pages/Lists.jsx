@@ -54,11 +54,13 @@ function Lists() {
             </a>
           </div>
 
-          {loading ? (
-            <div className="flex justify-center py-32">
-              <Loading />
+          {loading && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/40 backdrop-blur-md">
+              <Loading className="h-12 w-12 text-[#8B1B1B]" />
             </div>
-          ) : list.length === 0 ? (
+          )}
+
+          {!loading && list.length === 0 ? (
             <div className="bg-white p-16 text-center border border-gray-200 mt-10 shadow-sm">
               <div className="w-20 h-20 bg-gray-50 mx-auto flex items-center justify-center mb-6 border border-gray-200 rounded-full">
                 <FiBox className="h-8 w-8 text-gray-400" />
@@ -67,7 +69,7 @@ function Lists() {
               <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">You haven't added any products yet. Start by creating your first product.</p>
               <a href="/add" className="text-black hover:text-[#8B1B1B] font-bold underline underline-offset-4 tracking-wider text-[11px] uppercase">Add your first product</a>
             </div>
-          ) : (
+          ) : !loading ? (
             <div className="bg-white border border-gray-200 shadow-sm">
               {/* Table Header */}
               <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-6 border-b border-gray-200 bg-gray-50 px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-black">

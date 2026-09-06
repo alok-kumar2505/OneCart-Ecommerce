@@ -112,11 +112,13 @@ function Edit() {
       <Nav />
       <Sidebar />
       <main className="ml-16 pt-20 md:ml-64 p-6 md:p-10 pb-24">
-        {pageLoading ? (
-          <div className="flex justify-center py-32">
-            <Loading />
+        {pageLoading && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/40 backdrop-blur-md">
+            <Loading className="h-12 w-12 text-[#8B1B1B]" />
           </div>
-        ) : (
+        )}
+        
+        {!pageLoading && (
           <div className="max-w-4xl">
             <div className="mb-8 flex justify-between items-center">
               <div>

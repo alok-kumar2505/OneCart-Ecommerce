@@ -146,6 +146,9 @@ export const getDashboardStats = async (req, res) => {
         let dailyRevenue = 0
         let weeklyRevenue = 0
         let monthlyRevenue = 0
+        let dailyOrders = 0
+        let weeklyOrders = 0
+        let monthlyOrders = 0
 
         const now = new Date()
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
@@ -153,19 +156,17 @@ export const getDashboardStats = async (req, res) => {
         const oneMonthAgo = today - (30 * 24 * 60 * 60 * 1000)
 
         orders.forEach(order => {
+            const orderDate = new Date(order.date).getTime()
+            
+            if (orderDate >= today) dailyOrders++
+            if (orderDate >= oneWeekAgo) weeklyOrders++
+            if (orderDate >= oneMonthAgo) monthlyOrders++
+
             // Count revenue if payment is done or it's COD
             if (order.payment === true || order.paymentMethod === 'COD') {
-                const orderDate = new Date(order.date).getTime()
-                
-                if (orderDate >= today) {
-                    dailyRevenue += order.amount
-                }
-                if (orderDate >= oneWeekAgo) {
-                    weeklyRevenue += order.amount
-                }
-                if (orderDate >= oneMonthAgo) {
-                    monthlyRevenue += order.amount
-                }
+                if (orderDate >= today) dailyRevenue += order.amount
+                if (orderDate >= oneWeekAgo) weeklyRevenue += order.amount
+                if (orderDate >= oneMonthAgo) monthlyRevenue += order.amount
             }
         })
 
@@ -173,7 +174,10 @@ export const getDashboardStats = async (req, res) => {
             dailyRevenue,
             weeklyRevenue,
             monthlyRevenue,
-            orders: orders.length
+            dailyOrders,
+            weeklyOrders,
+            monthlyOrders,
+            totalOrders: orders.length
         })
     } catch (error) {
         return res.status(500).json({message: "Dashboard stats error"})

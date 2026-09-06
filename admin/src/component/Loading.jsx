@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Loading() {
+function Loading({ className }) {
   return (
-   <div className="animate-spin h-8 w-8 border-4 border-white border-t-transparent rounded-full"></div>
+   <div className={`animate-spin border-4 border-current border-t-transparent rounded-full ${className || 'h-8 w-8'}`}></div>
   )
 }
 
