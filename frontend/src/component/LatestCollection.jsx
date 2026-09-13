@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { shopDataContext } from '../context/ShopContext'
 import { useNavigate } from 'react-router-dom'
 import { FiHeart } from 'react-icons/fi'
+import Loading from './Loading'
 
 function LatestCollection() {
-  const { products, currency } = useContext(shopDataContext)
+  const { products, currency, productsLoading } = useContext(shopDataContext)
   const [latestProduct, setLatestProducts] = useState([])
   const navigate = useNavigate()
 
@@ -28,8 +29,13 @@ function LatestCollection() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {latestProduct.map((item, index) => (
-          <div key={index} className="group cursor-pointer bg-white" onClick={() => navigate(`/productdetail/${item._id}`)}>
+        {productsLoading ? (
+          <div className="col-span-full flex justify-center py-16">
+            <Loading />
+          </div>
+        ) : (
+          latestProduct.map((item, index) => (
+            <div key={index} className="group cursor-pointer bg-white" onClick={() => navigate(`/productdetail/${item._id}`)}>
             {/* Image Container */}
             <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 mb-4">
               <img src={item.image1} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -69,7 +75,8 @@ function LatestCollection() {
               </div>
             </div>
           </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   )

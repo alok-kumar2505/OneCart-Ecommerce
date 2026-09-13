@@ -3,9 +3,10 @@ import { shopDataContext } from '../context/ShopContext'
 import { useNavigate } from 'react-router-dom'
 import { FiHeart } from 'react-icons/fi'
 import { IoChevronForwardOutline, IoChevronBackOutline } from 'react-icons/io5'
+import Loading from './Loading'
 
 function BestSeller() {
-  const { products, currency } = useContext(shopDataContext)
+  const { products, currency, productsLoading } = useContext(shopDataContext)
   const [bestSeller, setBestSeller] = useState([])
   const navigate = useNavigate()
   const scrollRef = useRef(null)
@@ -39,12 +40,18 @@ function BestSeller() {
       </div>
 
       <div className="relative">
-        <div 
-          ref={scrollRef} 
-          className="flex overflow-x-auto gap-6 snap-x snap-mandatory hide-scrollbar" 
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {bestSeller.map((item, index) => (
+        {productsLoading ? (
+          <div className="flex justify-center py-16">
+            <Loading />
+          </div>
+        ) : (
+          <>
+          <div 
+            ref={scrollRef} 
+            className="flex overflow-x-auto gap-6 snap-x snap-mandatory hide-scrollbar" 
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {bestSeller.map((item, index) => (
             <div 
               key={index} 
               className="flex-none w-[85vw] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] snap-start group cursor-pointer bg-white" 
@@ -98,6 +105,8 @@ function BestSeller() {
         >
           <IoChevronBackOutline className="w-6 h-6" />
         </button>
+        </>
+        )}
       </div>
       <style dangerouslySetInnerHTML={{__html: `
         .hide-scrollbar::-webkit-scrollbar {
